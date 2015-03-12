@@ -1,0 +1,23 @@
+{
+  "name": "TweetStream",
+  "version": "1.0.0",
+  "description": "Querying the social Web to accomplish Web Intelligent assignment",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/faizshukri/webint-twt.git"
+  },
+  "author": "Faiz Shukri <faizshukri90@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/faizshukri/webint-twt/issues"
+  },
+  "homepage": "https://github.com/faizshukri/webint-twt",
+  "dependencies": {
+    "twit": "^1.1.20"
+  }
+}
