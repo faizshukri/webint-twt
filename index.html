@@ -16,7 +16,7 @@
           <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -26,10 +26,10 @@
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="collapse navbar-collapse" id="main-navbar">
               <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Keywords</a></li>
-                <li><a href="#">Users</a></li>
+                <li class="active" data-target="#keywords-container"><a href="#">Keywords</a></li>
+                <li data-target="#users-container"><a href="#">Users</a></li>
               </ul>
             </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
@@ -37,9 +37,15 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <h1>Container</h1>
-                </div>
+                <!-- Section for keywords -->
+                <section id="keywords-container" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 active">
+                    <h1>Keywords</h1>
+                </section>
+
+                <!-- Section for users -->
+                <section id="users-container" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: none;">
+                    <h1>Users</h1>
+                </section>
             </div>
         </div>
 
