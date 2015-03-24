@@ -1,0 +1,25 @@
+{
+    "default": {
+        "twitter": {
+            "consumer_key"        : "",
+            "consumer_secret"     : "",
+            "access_token"        : "",
+            "access_token_secret" : ""
+        },
+        "foursquare": {
+            "client_id"     : "",
+            "client_secret" : "",
+            "redirect_url"  : "",
+            "mode"          : "swarm",
+            "access_token"  : ""
+        }
+    },
+
+    "development": { },
+
+    "test": { },
+
+    "staging": { },
+
+    "production": { }
+}
