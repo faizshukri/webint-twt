@@ -12,7 +12,9 @@ nav.navbar.navbar-default
     // Collect the nav links, forms, and other content for toggling
     #main-navbar.collapse.navbar-collapse
       ul.nav.navbar-nav
-        li(data-target='#keywords-container', class=path=='/'?'active':'')
-          a(href='/') Keywords
-        li(data-target='#users-container', class=path=='users'?'active':'')
-          a(href='/users') Users
+        li(class=path=='/'?'active':'')
+          a(href='/') Home
+        li(class=path=='tweet'?'active':'')
+          a(href='/tweet') Tweet
+        li(class=path=='user'?'active':'')
+          a(href='/user') User
