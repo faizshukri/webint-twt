@@ -1,4 +1,19 @@
 extends ../layouts/main
 
 block content
-    h1 Users #{username}
+  h1 Users visit #{place}
+
+  each status, i in statuses
+    if i % 2 == 0
+      .row
+        each elementInRow, j in statuses.slice(i, i+2)
+          .col-sm-6
+            .row
+              .col-xs-2
+                .pull-right
+                  img(src=elementInRow.user.profile_image_url)
+              .col-xs-10
+                blockquote
+                  p #{elementInRow.text}
+                    footer @#{elementInRow.user.screen_name} 
+                      cite(title='Source Title') via !{elementInRow.source}
