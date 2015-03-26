@@ -1,0 +1,18 @@
+{
+    "default": {
+        "mysql": {
+            "host"     : "",
+            "user"     : "",
+            "password" : "",
+            "database" : ""
+        }
+    },
+
+    "development": { },
+
+    "test": { },
+
+    "staging": { },
+
+    "production": { }
+}
