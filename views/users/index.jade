@@ -1,4 +1,42 @@
 extends ../layouts/main
 
 block content
-    h1 Users Index
+  h3 Users Index
+  .row
+    .col-sm-4.col-xs-12
+      .jumbotron
+        form(action='', method='POST', role='form')
+          legend Discussion
+          .form-group
+            label(for='username') Username
+            input.form-control(id='username' type='text', placeholder='Username')
+          .form-group
+            label(for='keywords_limit') Keywords Limit
+            input.form-control(id='keywords_limit' type='number', min=1, max=5, placeholder='Keywords Limit')
+          .form-group
+            label(for='days_limit') Days Limit
+            input.form-control(id='days_limit' type='number', min=1, max=5, placeholder='Days Limit')
+          button.btn.btn-primary.btn-block.btn-lg(type='submit') Submit 
+          
+    .col-sm-4.col-xs-12
+      .jumbotron
+        form(action='', method='POST', role='form')
+          legend Point of interest
+          .form-group
+            label(for='username') Username
+            input.form-control(id='username' type='text', placeholder='Username')
+          .form-group
+            label(for='days_limit') Days Limit
+            input.form-control(id='days_limit' type='number', min=1, max=5, placeholder='Days Limit')
+          button.btn.btn-primary.btn-block.btn-lg(type='submit') Submit 
+    .col-sm-4.col-xs-12
+      .jumbotron
+        form(action='', method='POST', role='form')
+          legend Venue visitor
+          .form-group
+            label(for='location') Location
+            input.form-control(id='location' type='text', placeholder='Location')
+          .form-group
+            label(for='days_limit') Days Limit
+            input.form-control(id='days_limit' type='number', min=1, max=5, placeholder='Days Limit')
+          button.btn.btn-primary.btn-block.btn-lg(type='submit') Submit 
