@@ -75,19 +75,22 @@ block footer
     });
 
     $('#location').select2({
-        ajax: {
-          url: '/search/places',
-          dataType: 'json',
-          data: function(params){
-            return {
-              location: 'sheffield'
-            }
-          },
-          results: function (data) {
-            return { results: data };
+      ajax: {
+        delay: 2000,
+        url: '/search/places',
+        dataType: 'json',
+        data: function(params){
+          return {
+            location: params
           }
-        }
-      });
+        },
+        results: function (data) {
+          return { results: data };
+        },
+        cache: true
+      },
+      minimumInputLength: 3
+    });
 
     function setTabActive(currentTab){
       currentTab = $(currentTab);

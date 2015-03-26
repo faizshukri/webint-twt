@@ -37,8 +37,8 @@ function search_coordinates(latitude, longitude){
 function pluckselect2(obj, key) {
     return obj.map(function(elem){
         return {
-            key   : elem[key[0]],
-            value : elem[key[1]]
+            id   : elem[key[0]],
+            text : elem[key[1]]
         };
     });
 };
