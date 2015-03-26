@@ -35,9 +35,28 @@ block content
       .jumbotron
         form(action='', method='POST', role='form')
           legend Venue visitor
-          .form-group
-            label(for='location') Location
-            input.form-control(id='location' type='text', placeholder='Location')
+          div(role='tabpanel')
+            .nav(role='tablist')
+              .btn-group(role='presentation')
+                a.btn.btn-info.active(href='#home', aria-controls='home', role='tab', data-toggle='tab', onclick='setTabActive(this)') Place
+                a.btn.btn-info(href='#profile', aria-controls='profile', role='tab', data-toggle='tab', onclick='setTabActive(this)') Coordinate
+
+            .tab-content
+              #home.tab-pane.fade.in.active(role='tabpanel')
+                .form-group
+                  label(for='location') Place
+                  input.form-control(id='location' type='text', placeholder='Location')
+              #profile.tab-pane.fade(role='tabpanel')
+                .row
+                  .col-xs-12.col-sm-6
+                    .form-group
+                      label(for='latitude') Latitude
+                      input.form-control(id='latitude' type='text', placeholder='Latitude')
+                  .col-xs-12.col-sm-6
+                    .form-group
+                      label(for='longitude') Longitude
+                      input.form-control(id='longitude' type='text', placeholder='Longitude')
+
           .form-group
             label(for='days_limit') Days Limit
             input.form-control(id='days_limit' type='number', min=1, max=5, placeholder='Days Limit')
@@ -54,3 +73,9 @@ block footer
           dropdownCssClass: 'select2-hidden'
         });
     });
+
+    function setTabActive(currentTab){
+      currentTab = $(currentTab);
+      currentTab.parent().find('.active').removeClass('active');
+      currentTab.addClass('active');
+    }

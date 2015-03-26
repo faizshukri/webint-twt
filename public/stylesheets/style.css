@@ -6,6 +6,8 @@ a {
 
 .tweetstream .jumbotron {
   padding: 10px 15px; }
+.tweetstream .tab-content {
+  padding-top: 15px; }
 
 .select2-hidden {
   display: none !important; }
