@@ -59,7 +59,7 @@ block content
 
           .form-group
             label(for='days_limit') Days Limit
-            input.form-control(id='days_limit' type='number', min=1, max=5, placeholder='Days Limit')
+            input.form-control(id='days_limit' type='number', min=0, max=5, placeholder='Days Limit')
           button.btn.btn-primary.btn-block.btn-lg(type='submit') Search 
 
 block footer
@@ -73,6 +73,21 @@ block footer
           dropdownCssClass: 'select2-hidden'
         });
     });
+
+    $('#location').select2({
+        ajax: {
+          url: '/search/places',
+          dataType: 'json',
+          data: function(params){
+            return {
+              location: 'sheffield'
+            }
+          },
+          results: function (data) {
+            return { results: data };
+          }
+        }
+      });
 
     function setTabActive(currentTab){
       currentTab = $(currentTab);
