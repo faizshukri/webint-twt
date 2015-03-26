@@ -7,4 +7,7 @@ a {
 .tweetstream .jumbotron {
   padding: 10px 15px; }
 
+.select2-hidden {
+  display: none !important; }
+
 /*# sourceMappingURL=style.css.map */
