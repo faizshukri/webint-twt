@@ -25,3 +25,29 @@ block content
               div
                 b About me
               div #{author.description}
+  .row
+    .col-sm-12.col-md-10.col-md-offset-1
+      each status, i in tweets
+        if i % 2 == 0
+          .row
+            each tweet, j in tweets.slice(i, i+2)
+              .col-sm-6.col-xs-12
+                - var colors = ['success','info','danger','warning'];
+                - var color = colors[Math.floor(Math.random() * colors.length)];
+                .alert(class='alert-'+color)
+                  .row
+                    .col-xs-10
+                        div #{tweet.text}
+                        footer
+                          cite &#8212; 
+                            span.created_at #{tweet.created_at}
+                    .col-xs-2
+                      h2 #{i+j+1}
+
+
+block footer
+  script.
+    $(function(){
+      var created_at = $('.created_at');
+      created_at.text(moment(created_at.text(), 'ddd MMM DD HH:mm:ss ZZ YYYY').fromNow());
+    })
