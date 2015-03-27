@@ -13,13 +13,20 @@ a {
     .tab-content {
         padding-top: 15px;
     }
-    .user_status {
+    .user_status, .user_profile {
         h3 {
             margin-top: 0px;
         }
 
         hr {
             margin: 10px 0px;
+        }
+    }
+    .user_profile {
+        img {
+            padding: 2px;
+            border: 1px solid #BBB;
+            background-color: white;
         }
     }
 

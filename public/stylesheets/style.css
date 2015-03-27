@@ -8,10 +8,14 @@ a {
   padding: 10px 15px; }
 .tweetstream .tab-content {
   padding-top: 15px; }
-.tweetstream .user_status h3 {
+.tweetstream .user_status h3, .tweetstream .user_profile h3 {
   margin-top: 0px; }
-.tweetstream .user_status hr {
+.tweetstream .user_status hr, .tweetstream .user_profile hr {
   margin: 10px 0px; }
+.tweetstream .user_profile img {
+  padding: 2px;
+  border: 1px solid #BBB;
+  background-color: white; }
 .tweetstream cite a {
   color: white; }
 
