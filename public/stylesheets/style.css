@@ -8,6 +8,10 @@ a {
   padding: 10px 15px; }
 .tweetstream .tab-content {
   padding-top: 15px; }
+.tweetstream .user_status h3 {
+  margin-top: 0px; }
+.tweetstream .user_status hr {
+  margin: 10px 0px; }
 
 .select2-hidden {
   display: none !important; }

@@ -1,19 +1,32 @@
 extends ../layouts/main
 
 block content
-  h1 Users visit #{place}
+  h2 Users visit #{place} within last #{days} days.
+  hr
 
   each status, i in statuses
     if i % 2 == 0
       .row
         each elementInRow, j in statuses.slice(i, i+2)
-          .col-sm-6
+          .col-sm-6.col-xs-12
             .row
               .col-xs-2
                 .pull-right
-                  img(src=elementInRow.user.profile_image_url)
-              .col-xs-10
+                  img(src=elementInRow.user.profile_image_url.replace('normal', 'bigger'))
+              .col-xs-10.user_status
                 blockquote
+                  h3 
+                    a(href='/user/profile/'+elementInRow.user.screen_name) #{elementInRow.user.name}
+                    span(style='color: gray; font-size: 0.7em;') &nbsp;@#{elementInRow.user.screen_name} 
+
+                  p(style='font-size: 0.8em; color: gray; margin-top: -5px;')
+                    i #{elementInRow.user.description}
+                      if elementInRow.user.location
+                        if elementInRow.user.description
+                          br
+                        | - from 
+                        b #{elementInRow.user.location}
+                  hr
                   p #{elementInRow.text}
-                    footer @#{elementInRow.user.screen_name} 
-                      cite(title='Source Title') via !{elementInRow.source}
+                    footer
+                      cite(title='Source Title') via !{elementInRow.source}, near #{elementInRow.place.full_name}
