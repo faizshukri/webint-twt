@@ -29,4 +29,16 @@ block content
                   hr
                   p #{elementInRow.text}
                     footer
-                      cite(title='Source Title') via !{elementInRow.source}, near #{elementInRow.place.full_name}
+                      cite(title='Source Title') &nbsp;
+                        span.label.label-warning.created_at #{elementInRow.created_at}
+                        | &nbsp;near 
+                        span.label.label-warning #{elementInRow.place.full_name}
+                        | &nbsp;via 
+                        span.label.label-warning !{elementInRow.source}
+                        
+block footer
+  script.
+    $(function(){
+      var created_at = $('.created_at');
+      created_at.text(moment(created_at.text(), 'ddd MMM DD HH:mm:ss ZZ YYYY').fromNow());
+    })
