@@ -1,5 +1,11 @@
 {
     "default": {
+        "mysql": {
+            "host"     : "",
+            "user"     : "",
+            "password" : "",
+            "database" : ""
+        },
         "twitter": {
             "consumer_key"        : "",
             "consumer_secret"     : "",
