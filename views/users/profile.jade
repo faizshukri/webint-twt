@@ -49,5 +49,7 @@ block footer
   script.
     $(function(){
       var created_at = $('.created_at');
-      created_at.text(moment(created_at.text(), 'ddd MMM DD HH:mm:ss ZZ YYYY').fromNow());
+      $.each(created_at, function(index, value){
+        $(value).text(moment($(value).text(), 'ddd MMM DD HH:mm:ss ZZ YYYY').fromNow());
+      });
     })
