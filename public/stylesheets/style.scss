@@ -7,6 +7,9 @@ a {
 }
 
 .tweetstream {
+
+    padding-top: 70px;
+
     .jumbotron {
         padding: 10px 15px;
     }
@@ -22,6 +25,17 @@ a {
             margin: 10px 0px;
         }
     }
+
+    .user_status {
+        footer {
+            margin-top: -8px;
+            
+            cite {
+                line-height: 2.2em;
+            }
+        }
+    }
+
     .user_profile {
         img {
             padding: 2px;
@@ -35,6 +49,7 @@ a {
             color: white;
         }
     }
+
 }
 
 .select2-hidden {

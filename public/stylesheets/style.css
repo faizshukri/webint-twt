@@ -4,20 +4,26 @@ body {
 a {
   color: #00B7FF; }
 
-.tweetstream .jumbotron {
-  padding: 10px 15px; }
-.tweetstream .tab-content {
-  padding-top: 15px; }
-.tweetstream .user_status h3, .tweetstream .user_profile h3 {
-  margin-top: 0px; }
-.tweetstream .user_status hr, .tweetstream .user_profile hr {
-  margin: 10px 0px; }
-.tweetstream .user_profile img {
-  padding: 2px;
-  border: 1px solid #BBB;
-  background-color: white; }
-.tweetstream cite a {
-  color: white; }
+.tweetstream {
+  padding-top: 70px; }
+  .tweetstream .jumbotron {
+    padding: 10px 15px; }
+  .tweetstream .tab-content {
+    padding-top: 15px; }
+  .tweetstream .user_status h3, .tweetstream .user_profile h3 {
+    margin-top: 0px; }
+  .tweetstream .user_status hr, .tweetstream .user_profile hr {
+    margin: 10px 0px; }
+  .tweetstream .user_status footer {
+    margin-top: -8px; }
+    .tweetstream .user_status footer cite {
+      line-height: 2.2em; }
+  .tweetstream .user_profile img {
+    padding: 2px;
+    border: 1px solid #BBB;
+    background-color: white; }
+  .tweetstream cite a {
+    color: white; }
 
 .select2-hidden {
   display: none !important; }
