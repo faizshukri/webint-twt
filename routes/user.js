@@ -35,7 +35,7 @@ router.get('/interesting-venues', function(req, res, next) {
 
 router.get('/venue-visitors', function(req, res, next) {
   var params = req.query;
-  user.getVenueVisitors(params.location, params.days_limit, function(data){
+  user.getVenueVisitors(params, function(data){
     var statuses = data.statuses;
     res.render('users/venue_visitors', { path: 'user', place: params.place_name, statuses: statuses, days: params.days_limit });
   });
