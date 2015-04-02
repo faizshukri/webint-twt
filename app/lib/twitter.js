@@ -1,4 +1,9 @@
+/**
+*   Twitter object
+*/
+
 var Twitter = require('twit');
+
 var client = new Twitter({
     consumer_key        : config.app.twitter.consumer_key,
     consumer_secret     : config.app.twitter.consumer_secret,

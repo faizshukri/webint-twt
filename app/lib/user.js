@@ -2,6 +2,10 @@ var twitter = require('./twitter');
 
 var user = {};
 
+/**
+*   Get date of last X day provided
+*   @return Date object
+*/
 user.getLastFewDaysDate = function(days){
     var today = new Date();
     var newDate = new Date(today.setDate(today.getDate()-days));
@@ -16,6 +20,10 @@ user.getInterestingVenues = function(){
 
 }
 
+/**
+*   Get tweets posted at a place, within days limit
+*   @return Array of tweets
+*/
 user.getVenueVisitors = function(params, count, callback){
     if(params.location){
         twitter.get('search/tweets', { q: 'place:' + params.location + ' since:' + this.getLastFewDaysDate(params.days_limit), count: count }, function(err, data, response) {
@@ -28,14 +36,32 @@ user.getVenueVisitors = function(params, count, callback){
     }
 }
 
+/**
+*   Get tweets of a user
+*   @return Array of tweets
+*/
 user.getUserTweets = function(username, count, callback){
     twitter.get('search/tweets', { q: 'from:' + username, count: count }, function(err, data, response){
         callback(data);
     });
 }
 
+/**
+*   Get user from username provided
+*   @return User object
+*/
 user.getUser = function(username, callback){
     twitter.get('users/show', { screen_name: username }, function(err, data, response){
+        callback(data);
+    });
+}
+
+/**
+*   Search for users by using username passed
+*   @return Array of users
+*/
+user.searchUser = function(username, callback){
+    twitter.get('users/search', { q: username }, function(err, data, response){
         callback(data);
     });
 }
