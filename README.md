@@ -3,7 +3,7 @@ Twit project
 
 Installation
 ------------
-1. Copy `config/app.sample.json` to `config/app.json` and update configuration details to that file accordingly.
+1. Copy `app/config/app.sample.json` to `app/config/app.json` and update configuration details to that file accordingly.
 
 2. Install dependencies
 
