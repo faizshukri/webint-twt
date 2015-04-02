@@ -22,10 +22,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', require('./app/routes/index'));
-app.use('/user', require('./app/routes/user'));
-app.use('/tweet', require('./app/routes/tweet'));
-app.use('/search', require('./app/routes/search'));
+['','user','tweet','search'].forEach(function(root){
+  app.use('/'+root, require('./app/routes/'+(root ? root : 'index')));
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
