@@ -1,4 +1,15 @@
 extends ../layouts/main
 
 block content
-    h1 Tweet index
+    form(accept-charset='UTF-8')
+    h3 Track Discussions:
+    br
+    |     
+    input.form-control(type='text', name='keyword', value='Input your keyword (topics or hashtags)')
+    br
+    |     
+    input.btn.btn-primary(type='submit', value='Submit')
+
+
+//- block footer
+//- 	script(src='/sockets.js', type='text/javascript')
