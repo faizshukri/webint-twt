@@ -41,7 +41,7 @@ user.getVenueVisitors = function(params, count, callback){
 *   @return Array of tweets
 */
 user.getUserTweets = function(username, count, callback){
-    twitter.get('search/tweets', { q: 'from:' + username, count: count }, function(err, data, response){
+    twitter.get('statuses/user_timeline', { screen_name: username, count: count }, function(err, data, response){
         callback(data);
     });
 }

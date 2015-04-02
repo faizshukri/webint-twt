@@ -22,9 +22,9 @@ router.get('/profile/:username', function(req, res, next) {
   user.getUserTweets(username, 100, function(data){
 
     // If the user has tweet, grab the user object from the first tweet
-    if(data.statuses.length > 0){
-        var author = data.statuses[0].user;
-        res.render('users/profile', { path: 'user', author: author, tweets: data.statuses });
+    if(data.length > 0){
+        var author = data[0].user;
+        res.render('users/profile', { path: 'user', author: author, tweets: data });
     // If the user does not have any tweet, search from twitter again
     } else {
         user.getUser(username, function(data){
