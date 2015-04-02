@@ -2,7 +2,8 @@ var express = require('express'),
     router  = express.Router();
 
 var db      = require('../lib/db'),
-    user    = require('../lib/user');
+    user    = require('../lib/user'),
+    utils   = require('../lib/utils');
 
 /* GET user page. */
 router.get('/', function(req, res, next) {
@@ -42,10 +43,13 @@ router.get('/interesting-venues', function(req, res, next) {
 
 router.get('/venue-visitors', function(req, res, next) {
   var params = req.query;
+
+  // If some parameter is not exist, we redirect back to /user
   if(!params.location && ( !params.latitude || !params.longitude ) && !params.days_limit)
     res.redirect('/user');
-  user.getVenueVisitors(params, 10, function(data){
-    var statuses = data.statuses;
+
+  user.getVenueVisitors(params, 50, function(data){
+    var statuses = utils.removeDuplicateObjectInArray(data.statuses, 'user.id');
     res.render('users/venue_visitors', { path: 'user', place: params.place_name, statuses: statuses, days: params.days_limit });
   });
 });
