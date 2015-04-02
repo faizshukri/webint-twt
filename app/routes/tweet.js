@@ -1,7 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var twitter = require('../lib/twitter');
-var tweet = require('../lib/tweet');
+var express = require('express'),
+    router  = express.Router();
+
+var twitter = require('../lib/twitter'),
+    tweet   = require('../lib/tweet');
 
 /* GET tweet page. */
 router.get('/', function(req, res, next) {

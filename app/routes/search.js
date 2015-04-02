@@ -1,8 +1,8 @@
 var express = require('express'),
     router  = express.Router();
 
-var utils  = require('../lib/utils'),
-    search = require('../lib/search');
+var utils   = require('../lib/utils'),
+    search  = require('../lib/search');
 
 /* GET tweet page. */
 router.get('/places', function(req, res, next) {
