@@ -56,14 +56,4 @@ user.getUser = function(username, callback){
     });
 }
 
-/**
-*   Search for users by using username passed
-*   @return Array of users
-*/
-user.searchUser = function(username, callback){
-    twitter.get('users/search', { q: username }, function(err, data, response){
-        callback(data);
-    });
-}
-
 module.exports = user;

@@ -36,7 +36,8 @@ router.get('/profile/:username', function(req, res, next) {
 });
 
 router.get('/interesting-venues', function(req, res, next) {
-  res.render('users/interesting_venues', { path: 'user'});
+  var params = req.query;
+  res.render('users/interesting_venues', { path: 'user', username: params.username, days: params.days_limit });
 });
 
 router.get('/venue-visitors', function(req, res, next) {

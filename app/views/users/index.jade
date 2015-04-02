@@ -22,14 +22,14 @@ block content
           
     .col-sm-4.col-xs-12
       .jumbotron
-        form(action='', method='POST', role='form')
+        form(action='/user/interesting-venues', method='GET', role='form')
           legend Interesting Venues
           .form-group
             label(for='username') Username
-            input.form-control(id='username' type='text', placeholder='Username')
+            input.form-control(id='username' type='text', name='username', placeholder='Username')
           .form-group
             label(for='days_limit') Days Limit
-            input.form-control(id='days_limit' type='number', min=1, max=5, placeholder='Days Limit')
+            input.form-control(id='days_limit' type='number', name='days_limit', min=1, placeholder='Days Limit')
           button.btn.btn-primary.btn-block.btn-lg(type='submit') Search 
     .col-sm-4.col-xs-12
       .jumbotron
@@ -75,25 +75,8 @@ block footer
           dropdownCssClass: 'select2-hidden'
       });
 
-      $('#location').select2({
-        placeholder: "Search for place",
-        minimumInputLength: 3,
-        allowClear: true,
-        ajax: {
-          quietMillis: 500,
-          url: '/search/places',
-          dataType: 'json',
-          data: function(params){
-            return {
-              location: params
-            }
-          },
-          results: function (data) {
-            return { results: data };
-          },
-          cache: true
-        }
-      });
+      initializeSelect2AjaxSearch('location', 'search/places', 'Search for place');
+      initializeSelect2AjaxSearch('username', 'search/users', 'Search for users');
 
       // Listen to input changes. Place name is needed to be pass to the next view
       $('#location, #latitude, #longitude').change(function(){
@@ -116,4 +99,26 @@ block footer
       // Disable field for inactive tab content
       $('.tab-content').find('input, select, textarea').prop('disabled', true);
       $('#'+currentTab.attr('aria-controls')).find('input, select, textarea').prop('disabled', false);
+    }
+
+    function initializeSelect2AjaxSearch(id, url, placeholder){
+      $('#'+id).select2({
+        placeholder: placeholder,
+        minimumInputLength: 3,
+        allowClear: true,
+        ajax: {
+          quietMillis: 500,
+          url: url,
+          dataType: 'json',
+          data: function(params){
+            var obj = {};
+            obj[id] = params
+            return obj;
+          },
+          results: function (data) {
+            return { results: data };
+          },
+          cache: true
+        }
+      });
     }
