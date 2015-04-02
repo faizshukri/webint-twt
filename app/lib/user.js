@@ -16,9 +16,9 @@ user.getInterestingVenues = function(){
 
 }
 
-user.getVenueVisitors = function(params, callback){
+user.getVenueVisitors = function(params, count, callback){
     if(params.location){
-        twitter.get('search/tweets', { q: 'place:' + params.location + ' since:' + this.getLastFewDaysDate(params.days_limit), count: 10 }, function(err, data, response) {
+        twitter.get('search/tweets', { q: 'place:' + params.location + ' since:' + this.getLastFewDaysDate(params.days_limit), count: count }, function(err, data, response) {
           callback(data);
         });
     } else if (params.latitude && params.longitude){
@@ -28,8 +28,8 @@ user.getVenueVisitors = function(params, callback){
     }
 }
 
-user.getUserTweets = function(username, callback){
-    twitter.get('search/tweets', { q: 'from:' + username, count: 100 }, function(err, data, response){
+user.getUserTweets = function(username, count, callback){
+    twitter.get('search/tweets', { q: 'from:' + username, count: count }, function(err, data, response){
         callback(data);
     });
 }

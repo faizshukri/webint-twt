@@ -17,7 +17,7 @@ router.get('/profile/:username', function(req, res, next) {
 
   var username = req.params.username;
 
-  user.getUserTweets(username, function(data){
+  user.getUserTweets(username, 100, function(data){
 
     // If the user has tweet, grab the user object from the first tweet
     if(data.statuses.length > 0){
@@ -42,7 +42,7 @@ router.get('/venue-visitors', function(req, res, next) {
   var params = req.query;
   if(!params.location && ( !params.latitude || !params.longitude ) && !params.days_limit)
     res.redirect('/user');
-  user.getVenueVisitors(params, function(data){
+  user.getVenueVisitors(params, 10, function(data){
     var statuses = data.statuses;
     res.render('users/venue_visitors', { path: 'user', place: params.place_name, statuses: statuses, days: params.days_limit });
   });
