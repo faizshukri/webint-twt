@@ -8,6 +8,11 @@ router.get('/', function(req, res, next) {
   res.render('users/index', { path: 'user'});
 });
 
+router.get('/topic-discussed', function(req, res, next) {
+  console.log(req.query.username+"yipee");
+  res.render('users/topic-discussed',{ path: 'user'});
+});
+
 router.get('/profile/:username', function(req, res, next) {
 
   var username = req.params.username;

@@ -5,19 +5,19 @@ block content
   .row
     .col-sm-4.col-xs-12
       .jumbotron
-        form(action='', method='POST', role='form')
+        form(action='/user/topic-discussed', method='GET', role='form')
           legend Discussion
           .form-group
             label(for='usernames') Username
-            input.form-control(id='usernames' type='text', placeholder='Username')
+            input.form-control(id='usernames' type='text', placeholder='Username',name='username')
             span(style='color: gray; font-size: 0.85em;')
               i Press Enter and you can add more username
           .form-group
             label(for='keywords_limit') Keywords Limit
-            input.form-control(id='keywords_limit' type='number', min=1, max=5, placeholder='Keywords Limit')
+            input.form-control(id='keywords_limit' type='number', min=1, max=5, placeholder='Keywords Limit',name="word_limit")
           .form-group
             label(for='days_limit') Days Limit
-            input.form-control(id='days_limit' type='number', min=1, max=5, placeholder='Days Limit')
+            input.form-control(id='days_limit' type='number', min=1, max=5, placeholder='Days Limit', name="days_limit")
           button.btn.btn-primary.btn-block.btn-lg(type='submit') Search 
           
     .col-sm-4.col-xs-12
