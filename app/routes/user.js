@@ -1,9 +1,9 @@
 var express = require('express'),
     router  = express.Router();
 
-var db      = require('../lib/db'),
-    user    = require('../lib/user'),
-    utils   = require('../lib/utils');
+var db         = require('../services/db'),
+    user       = require('../lib/user'),
+    utils      = require('../lib/utils');
 
 /* GET user page. */
 router.get('/', function(req, res, next) {

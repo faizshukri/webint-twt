@@ -1,4 +1,4 @@
-var twitter = require('./twitter');
+var twitter = require('../services/twitter');
 
 var tweet = {};
 
