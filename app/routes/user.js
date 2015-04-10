@@ -3,6 +3,7 @@ var express = require('express'),
 
 var db         = require('../services/db'),
     user       = require('../lib/user'),
+    place      = require('../lib/place'),
     utils      = require('../lib/utils');
 
 /* GET user page. */
@@ -44,7 +45,25 @@ router.get('/profile/:username', function(req, res, next) {
 
 router.get('/interesting-venues', function(req, res, next) {
   var params = req.query;
-  res.render('users/interesting_venues', { path: 'user', username: params.username, days: params.days_limit });
+
+  user.getUserTweetSince(params.username, params.days_limit, 300, function(data){
+
+    var tweets  = user.filterPlaceName(data.statuses),
+        counter = 0;
+
+    tweets.forEach(function(tweet, index){
+      place.getInterestingPlaces(tweet.place_name, function(data){
+
+        // Assign photo to tweet data
+        tweets[index].gplace = data;
+        counter++;
+
+        if(counter == tweets.length)
+          res.render('users/interesting_venues', { path: 'user', username: params.username, tweets: tweets, days: params.days_limit, api_key: config.app.google.api_key });
+      
+      });
+    });
+  });
 });
 
 router.get('/venue-visitors', function(req, res, next) {

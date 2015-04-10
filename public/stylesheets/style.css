@@ -24,6 +24,23 @@ a {
     background-color: white; }
   .tweetstream cite a {
     color: white; }
+  .tweetstream .interesting-venues p {
+    font-size: 16px; }
+  .tweetstream .interesting-venues table {
+    width: 100%; }
+  .tweetstream .interesting-venues table td {
+    padding-bottom: 15px;
+    vertical-align: top; }
+  .tweetstream .interesting-venues table td:first-child {
+    width: 100px; }
+  .tweetstream .interesting-venues img {
+    padding: 3px;
+    background-color: white;
+    border: 1px solid #ccc; }
+  .tweetstream .interesting-venues .type {
+    text-transform: capitalize; }
+  .tweetstream .interesting-venues iframe.map {
+    border: 1px solid #ccc; }
 
 .select2-hidden {
   display: none !important; }

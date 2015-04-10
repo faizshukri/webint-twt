@@ -6,6 +6,12 @@
             "password" : "",
             "database" : ""
         },
+        "google" : {
+            "api_key"  : "Get API key from https://console.developers.google.com/project",
+            "place"    : {
+                "format" : "json"
+            }
+        },
         "twitter": {
             "consumer_key"        : "",
             "consumer_secret"     : "",

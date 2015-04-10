@@ -20,11 +20,11 @@ utils.pluckselect2 = function(obj, key) {
 */
 utils.removeDuplicateObjectInArray = function(arr, path){
 
-    var array_keys = path.split('.');
     var arrayResult = {};
 
     arr.forEach(function(elem, index){
-        arrayResult[ getValue(elem, array_keys) ] = elem;
+        var value = getValue(elem, path);
+        if(value) arrayResult[ value ] = elem;
     });
 
     return Object.keys(arrayResult).map(function (key) {
@@ -32,12 +32,27 @@ utils.removeDuplicateObjectInArray = function(arr, path){
     });
 }
 
-// Private. Only accessible from this file.
-function getValue(obj, array_keys) {
-    for (i = 0; i < array_keys.length - 1; i++)
-        obj = obj[array_keys[i]];
+utils.removeDuplicateValuesInArray = function(arr){
+    var hash = {}, result = [];
+    for ( var i = 0, l = arr.length; i < l; ++i ) {
+        if ( !hash.hasOwnProperty(arr[i]) ) { //it works with objects! in FF, at least
+            hash[ arr[i] ] = true;
+            result.push(arr[i]);
+        }
+    }
+    return result;
+}
 
-    return obj[array_keys[i]];
+// Private. Only accessible from this file.
+function getValue(obj, path) {
+
+    path = path.split('.');
+
+    for (i = 0; i < path.length - 1; i++){
+        if(typeof(obj[path[i]]) === 'undefined' || obj[path[i]] === NaN || obj[path[i]] === null) return null;
+        obj = obj[path[i]]
+    }
+    return obj[path[i]];
 }
 
 module.exports = utils;

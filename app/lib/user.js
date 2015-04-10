@@ -1,5 +1,6 @@
-var twitter = require('../services/twitter');
-var connection= require('../services/db');
+var twitter    = require('../services/twitter'),
+    connection = require('../services/db'),
+    utils      = require('./utils');
 
 var user = {};
 
@@ -21,6 +22,36 @@ user.getInterestingVenues = function(){
 
 }
 
+/**
+*   Get user tweets since last few days
+*   @return Array of tweet object
+*/
+user.getUserTweetSince = function(username, days, count, callback){
+    twitter.get('search/tweets', { q: 'from:' + username + ' since:' + this.getLastFewDaysDate(days), count: count }, function(err, data, response) {
+      callback(data);
+    });
+}
+
+/**
+*   Reduce tweet that contain place only
+*   @return Array of tweet object that contain place and unique
+*/
+user.filterPlaceName = function(tweets){
+
+    tweets.forEach(function(tweet, index){
+
+        // If the tweet come from foursquare, get the location from foursquare instead
+        if( tweet.source.indexOf('Foursquare') != -1){
+            tweets[index].place_name = tweet.text.match(/I\'m at (.*) http|\(\@\ (.*)\)/).filter(function(n){ return n != undefined })[1].replace(/-\ \@(.*?)\ /, '');
+
+        // If not, we get from twitter place
+        } else {
+            tweets[index].place_name = tweet.full_name;
+        }
+    });
+
+    return utils.removeDuplicateObjectInArray(tweets, 'place_name');
+}
 /**
 *   Get tweets posted at a place, within days limit
 *   @return Array of tweets
