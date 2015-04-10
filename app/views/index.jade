@@ -1,5 +1,43 @@
 extends layouts/main
 
 block content
-  h1 Home
-  p Sweet home
+  .jumbotron.homejumbo(align='center')
+    h1 Querying the social Web!
+    p 
+      b The University of Sheffield
+    p Assignment 2014-2015
+    p COM3504/COM6504 Intelligent Web
+    p
+      i Profesor Fabio Ciravegna
+
+  .page-header
+    h1(align='center') Our awesome team members
+  p &nbsp;
+  .row
+    .col-sm-4(align='right')
+      .ih-item.circle.effect17
+        a(href='#')
+          .img
+            img(src='images/faiz.jpg', alt='Faiz Shukri')
+          .info
+            h3 Faiz Shukri
+            p Project Leader
+    .col-sm-4(align='center')
+      .ih-item.circle.effect17
+        a(href='#')
+          .img
+            img(src='images/ain.jpg', alt='Ain Zain')
+          .info
+            h3 Ain Zain
+            p Project Member
+    .col-sm-4(align='left')
+      .ih-item.circle.effect17
+        a(href='#')
+          .img
+            img(src='images/ishita.jpg', alt='Ishita Agrawal')
+          .info
+            h3 Ishita Agrawal
+            p Project Member
+ 
+block header
+  link(href='/assets/ihover/src/ihover.min.css', rel='stylesheet', media='screen')

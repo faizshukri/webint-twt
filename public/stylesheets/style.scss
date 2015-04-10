@@ -1,5 +1,5 @@
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 14px "Roboto", Helvetica, Arial, sans-serif;
 }
 
 a {
@@ -10,9 +10,10 @@ a {
 
     padding-top: 70px;
 
-    .jumbotron {
+    .jumbotron:not(.homejumbo) {
         padding: 10px 15px;
     }
+
     .tab-content {
         padding-top: 15px;
     }
@@ -88,4 +89,8 @@ a {
 
 .select2-hidden {
     display: none !important;
+}
+
+footer {
+    padding-bottom: 20px;
 }

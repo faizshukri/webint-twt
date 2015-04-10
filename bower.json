@@ -23,6 +23,7 @@
     "bootstrap": "~3.3.4",
     "select2": "~3.5.2",
     "select2-bootstrap-css": "~1.4.6",
-    "momentjs": "~2.9.0"
+    "momentjs": "~2.9.0",
+    "ihover": "~1.0.0"
   }
 }
