@@ -1,4 +1,4 @@
-var twitter = require('../lib/twitter');
+var twitter = require('../services/twitter');
 
 var search = {};
 

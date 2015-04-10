@@ -1,7 +1,7 @@
 var express = require('express'),
     router  = express.Router();
 
-var twitter = require('../lib/twitter'),
+var twitter = require('../services/twitter'),
     tweet   = require('../lib/tweet');
 
 /* GET tweet page. */
