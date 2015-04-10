@@ -9,13 +9,13 @@ var user = {};
 *   @return Date object
 */
 user.getLastFewDaysDate = function(days){
-    var today = new Date();
-    var newDate = new Date(today.setDate(today.getDate()-days));
-    var y = newDate.getFullYear(),
-        m = newDate.getMonth() + 1,
-        d = newDate.getDate();
+  var today = new Date();
+  var newDate = new Date(today.setDate(today.getDate()-days));
+  var y = newDate.getFullYear(),
+      m = newDate.getMonth() + 1,
+      d = newDate.getDate();
 
-    return y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+  return y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
 }
 
 user.getInterestingVenues = function(){
@@ -27,9 +27,9 @@ user.getInterestingVenues = function(){
 *   @return Array of tweet object
 */
 user.getUserTweetSince = function(username, days, count, callback){
-    twitter.get('search/tweets', { q: 'from:' + username + ' since:' + this.getLastFewDaysDate(days), count: count }, function(err, data, response) {
-      callback(data);
-    });
+  twitter.get('search/tweets', { q: 'from:' + username + ' since:' + this.getLastFewDaysDate(days), count: count }, function(err, data, response) {
+    callback(data);
+  });
 }
 
 /**
@@ -38,34 +38,34 @@ user.getUserTweetSince = function(username, days, count, callback){
 */
 user.filterPlaceName = function(tweets){
 
-    tweets.forEach(function(tweet, index){
+  tweets.forEach(function(tweet, index){
 
-        // If the tweet come from foursquare, get the location from foursquare instead
-        if( tweet.source.indexOf('Foursquare') != -1){
-            tweets[index].place_name = tweet.text.match(/I\'m at (.*) http|\(\@\ (.*)\)/).filter(function(n){ return n != undefined })[1].replace(/-\ \@(.*?)\ /, '');
+    // If the tweet come from foursquare, get the location from foursquare instead
+    if( tweet.source.indexOf('Foursquare') != -1){
+      tweets[index].place_name = tweet.text.match(/I\'m at (.*) http|\(\@\ (.*)\)/).filter(function(n){ return n != undefined })[1].replace(/-\ \@(.*?)\ /, '');
 
-        // If not, we get from twitter place
-        } else {
-            tweets[index].place_name = tweet.full_name;
-        }
-    });
+    // If not, we get from twitter place
+    } else {
+      tweets[index].place_name = tweet.full_name;
+    }
+  });
 
-    return utils.removeDuplicateObjectInArray(tweets, 'place_name');
+  return utils.removeDuplicateObjectInArray(tweets, 'place_name');
 }
 /**
 *   Get tweets posted at a place, within days limit
 *   @return Array of tweets
 */
 user.getVenueVisitors = function(params, count, callback){
-    if(params.location){
-        twitter.get('search/tweets', { q: 'place:' + params.location + ' since:' + this.getLastFewDaysDate(params.days_limit), count: count }, function(err, data, response) {
-          callback(data);
-        });
-    } else if (params.latitude && params.longitude){
-        twitter.get('search/tweets', { geocode: params.latitude + ',' + params.longitude + ',' + '15mi', q: ' since:' + this.getLastFewDaysDate(params.days_limit), count: 10 }, function(err, data, response) {
-          callback(data);
-        });
-    }
+  if(params.location){
+    twitter.get('search/tweets', { q: 'place:' + params.location + ' since:' + this.getLastFewDaysDate(params.days_limit), count: count }, function(err, data, response) {
+      callback(data);
+    });
+  } else if (params.latitude && params.longitude){
+    twitter.get('search/tweets', { geocode: params.latitude + ',' + params.longitude + ',' + '15mi', q: ' since:' + this.getLastFewDaysDate(params.days_limit), count: 10 }, function(err, data, response) {
+      callback(data);
+    });
+  }
 }
 
 /**
@@ -73,9 +73,9 @@ user.getVenueVisitors = function(params, count, callback){
 *   @return Array of tweets
 */
 user.getUserTweets = function(username, count, callback){
-    twitter.get('statuses/user_timeline', { screen_name: username, count: count }, function(err, data, response){
-        callback(data);
-    });
+  twitter.get('statuses/user_timeline', { screen_name: username, count: count }, function(err, data, response){
+    callback(data);
+  });
 }
 
 /**
@@ -83,9 +83,9 @@ user.getUserTweets = function(username, count, callback){
 *   @return User object
 */
 user.getUser = function(username, callback){
-    twitter.get('users/show', { screen_name: username }, function(err, data, response){
-        callback(data);
-    });
+  twitter.get('users/show', { screen_name: username }, function(err, data, response){
+    callback(data);
+  });
 }
 
 user.getUserTopics= function(params,callback)
@@ -211,6 +211,5 @@ user.getUserTopics= function(params,callback)
             })(usr)
 
 }
-
 
 module.exports = user;

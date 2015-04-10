@@ -30,14 +30,15 @@ router.get('/profile/:username', function(req, res, next) {
 
     // If the user has tweet, grab the user object from the first tweet
     if(data.length > 0){
-        var author = data[0].user;
-        res.render('users/profile', { path: 'user', author: author, tweets: data });
+      var author = data[0].user;
+      res.render('users/profile', { path: 'user', author: author, tweets: data });
+      
     // If the user does not have any tweet, search from twitter again
     } else {
-        user.getUser(username, function(data){
-          var author = data;
-          res.render('users/profile', { path: 'user', author: author, tweets: [] });
-        });
+      user.getUser(username, function(data){
+        var author = data;
+        res.render('users/profile', { path: 'user', author: author, tweets: [] });
+      });
     }
   });
   
@@ -78,7 +79,5 @@ router.get('/venue-visitors', function(req, res, next) {
     res.render('users/venue_visitors', { path: 'user', place: params.place_name, statuses: statuses, days: params.days_limit });
   });
 });
-
-
 
 module.exports = router;

@@ -1,37 +1,37 @@
 {
-    "default": {
-        "mysql": {
-            "host"     : "",
-            "user"     : "",
-            "password" : "",
-            "database" : ""
-        },
-        "google" : {
-            "api_key"  : "Get API key from https://console.developers.google.com/project",
-            "place"    : {
-                "format" : "json"
-            }
-        },
-        "twitter": {
-            "consumer_key"        : "",
-            "consumer_secret"     : "",
-            "access_token"        : "",
-            "access_token_secret" : ""
-        },
-        "foursquare": {
-            "client_id"     : "",
-            "client_secret" : "",
-            "redirect_url"  : "",
-            "mode"          : "swarm",
-            "access_token"  : ""
-        }
+  "default": {
+    "mysql": {
+      "host"     : "",
+      "user"     : "",
+      "password" : "",
+      "database" : ""
     },
+    "google" : {
+      "api_key"  : "Get API key from https://console.developers.google.com/project",
+      "place"    : {
+        "format" : "json"
+      }
+    },
+    "twitter": {
+      "consumer_key"        : "",
+      "consumer_secret"     : "",
+      "access_token"        : "",
+      "access_token_secret" : ""
+    },
+    "foursquare": {
+      "client_id"     : "",
+      "client_secret" : "",
+      "redirect_url"  : "",
+      "mode"          : "swarm",
+      "access_token"  : ""
+    }
+  },
 
-    "development": { },
+  "development": { },
 
-    "test": { },
+  "test": { },
 
-    "staging": { },
+  "staging": { },
 
-    "production": { }
+  "production": { }
 }
