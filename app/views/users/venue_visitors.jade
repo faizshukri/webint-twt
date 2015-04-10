@@ -10,10 +10,10 @@ block content
         each tweet, j in statuses.slice(i, i+2)
           .col-sm-6.col-xs-12
             .row
-              .col-xs-2
+              .col-xs-3
                 .pull-right
                   img(src=tweet.user.profile_image_url.replace('normal', 'bigger'))
-              .col-xs-10.user_status
+              .col-xs-9.user_status
                 blockquote
                   h3 
                     a(href='/user/profile/'+tweet.user.screen_name) #{tweet.user.name}
