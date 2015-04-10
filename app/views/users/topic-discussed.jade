@@ -1,4 +1,50 @@
 extends ../layouts/main
 
 block content
-	h1 hello world
+	h2 What Different users are talking about
+	hr
+	each User,i in datasent
+		if i%2==0
+			.row
+				each User,j in datasent.slice(i,i+2)
+					.col-sm-6.col-xs-12
+						.row
+							.col-xs-2
+								.pull-right
+									img(src=User.data.profile_image_url.replace('normal', 'bigger'))
+							.col-xs-10.user_status
+								blockquote
+									h3 
+										a(href='/user/profile/'+User.data.screen_name) 
+										span(style='color: gray; font-size: 0.7em;') &nbsp;@#{User.data.screen_name}
+									p(style='font-size: 0.7em; color: gray; margin-top: -5px;')
+										i #{User.data.description}
+										if User.data.location
+											if User.data.description
+												br
+											| - from 
+											b #{User.data.location}
+										br
+										div
+											table(style='font-size: 0.7em; color: gray; margin-top: -5px;')
+												tr
+													td
+														b word &nbsp;
+													td
+														b Frequency &nbsp;
+													td
+														b Total Frequency 
+												each word,k in User.words
+													tr
+														td 
+															i #{word.word} &nbsp;
+														td
+															i #{word.freq} &nbsp;
+														td
+															i #{word.totalFreq}
+													
+									hr
+
+
+		
+			

@@ -11,8 +11,14 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/topic-discussed', function(req, res, next) {
-  console.log(req.query.username+"yipee");
-  res.render('users/topic-discussed',{ path: 'user'});
+  var params = req.query
+  user.getUserTopics(params,function(data,users_freq)
+  {
+    console.log("callback called");
+    //console.log(data,users_freq);
+    res.render('users/topic-discussed',{ path: 'user',datasent:users_freq});
+  })
+  
 });
 
 router.get('/profile/:username', function(req, res, next) {

@@ -11,13 +11,13 @@ block content
             label(for='usernames') Username
             input.form-control(id='usernames' type='text', placeholder='Username',name='username')
             span(style='color: gray; font-size: 0.85em;')
-              i Press Enter and you can add more username
+              i Press Enter and you can add upto 10 usernames
           .form-group
             label(for='keywords_limit') Keywords Limit
-            input.form-control(id='keywords_limit' type='number', min=1, max=5, placeholder='Keywords Limit',name="word_limit")
+            input.form-control(id='keywords_limit' type='number', min=1, placeholder='Keywords Limit',name="word_limit")
           .form-group
             label(for='days_limit') Days Limit
-            input.form-control(id='days_limit' type='number', min=1, max=5, placeholder='Days Limit', name="days_limit")
+            input.form-control(id='days_limit' type='number', min=1, placeholder='Days Limit', name="days_limit")
           button.btn.btn-primary.btn-block.btn-lg(type='submit') Search 
           
     .col-sm-4.col-xs-12
@@ -68,10 +68,13 @@ block footer
   script.
     $(function(){
       $('#usernames').select2({
+          maximumSelectionSize: 4,
           tags: [],
-          formatNoMatches: function() {
+          
+          //maximumSelectionSize=2,
+          /*formatNoMatches: function() {
               return '';
-          },
+          },*/
           dropdownCssClass: 'select2-hidden'
       });
 
