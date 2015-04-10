@@ -1,5 +1,5 @@
 var twitter = require('../services/twitter');
-var connection= require('./db');
+var connection= require('../services/db');
 
 var user = {};
 
