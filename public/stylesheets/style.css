@@ -1,13 +1,12 @@
 body {
-  font: 14px "Roboto", Helvetica, Arial, sans-serif; }
+  font: 14px "Roboto", Helvetica, Arial, sans-serif;
+  line-height: 1.4; }
 
 a {
   color: #00B7FF; }
 
 .tweetstream {
   padding-top: 70px; }
-  .tweetstream .jumbotron:not(.homejumbo) {
-    padding: 10px 15px; }
   .tweetstream .tab-content {
     padding-top: 15px; }
   .tweetstream .user_status h3, .tweetstream .user_profile h3 {

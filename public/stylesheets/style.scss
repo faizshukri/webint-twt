@@ -1,5 +1,6 @@
 body {
   font: 14px "Roboto", Helvetica, Arial, sans-serif;
+  line-height: 1.4;
 }
 
 a {
@@ -10,9 +11,9 @@ a {
 
     padding-top: 70px;
 
-    .jumbotron:not(.homejumbo) {
-        padding: 10px 15px;
-    }
+    // .jumbotron:not(.homejumbo) {
+    //     padding: 10px 15px;
+    // }
 
     .tab-content {
         padding-top: 15px;

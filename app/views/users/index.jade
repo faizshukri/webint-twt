@@ -4,7 +4,7 @@ block content
   h3 Users Index
   .row
     .col-sm-4.col-xs-12
-      .jumbotron
+      .well
         form(action='/user/topic-discussed', method='GET', role='form')
           legend Discussion
           .form-group
@@ -21,7 +21,7 @@ block content
           button.btn.btn-primary.btn-block.btn-lg(type='submit') Search 
           
     .col-sm-4.col-xs-12
-      .jumbotron
+      .well
         form(action='/user/interesting-venues', method='GET', role='form')
           legend Interesting Venues
           .form-group
@@ -32,7 +32,7 @@ block content
             input.form-control(id='days_limit' type='number', name='days_limit', min=0, max=9, placeholder='Days Limit')
           button.btn.btn-primary.btn-block.btn-lg(type='submit') Search 
     .col-sm-4.col-xs-12
-      .jumbotron
+      .well
         form(action='/user/venue-visitors', method='GET', role='form')
           legend Venue visitors
           div(role='tabpanel')
