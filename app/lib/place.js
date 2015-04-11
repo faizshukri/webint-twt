@@ -6,6 +6,11 @@ var place = {};
 place.getInterestingPlaces = function(name, callback){
   locations.textSearch({ query: name }, function(error, response) {
 
+    if(response.status == 'ZERO_RESULTS'){
+      callback({});
+      return;
+    }
+
     place.getPlaceDetails(response.results[0].place_id, function(result){
 
       result.photo_urls = [];
