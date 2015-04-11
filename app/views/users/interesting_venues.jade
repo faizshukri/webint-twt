@@ -1,7 +1,9 @@
 extends ../layouts/main
 
 block content
-  h2 Place visited by @#{username} within last #{days} days.
+  h2 Place visited by 
+    a(href='/user/profile/'+username) @#{username} 
+    | within last #{days} days.
   hr
 
   if tweets.length <= 0
