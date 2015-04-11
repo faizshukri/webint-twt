@@ -1,16 +1,16 @@
 nav.navbar.navbar-default.navbar-fixed-top
   .container
-    // Brand and toggle get grouped for better mobile display
+    //- Brand and toggle get grouped for better mobile display
     .navbar-header
       button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#main-navbar')
-      span.sr-only Toggle navigation
-      span.icon-bar
-      span.icon-bar
-      span.icon-bar
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
       a.navbar-brand(href='/') 
         img(alt='Web Intelligent - Querying the social Web', src='/images/logo.png', style='height: 30px; margin-top: -5px;')
 
-    // Collect the nav links, forms, and other content for toggling
+    //- Collect the nav links, forms, and other content for toggling
     #main-navbar.collapse.navbar-collapse
       ul.nav.navbar-nav
         li(class=path=='/'?'active':'')
@@ -19,3 +19,5 @@ nav.navbar.navbar-default.navbar-fixed-top
           a(href='/tweet') Tweet
         li(class=path=='user'?'active':'')
           a(href='/user') User
+        li(class=path=='database'?'active':'')
+          a(href='/database') Database

@@ -1,6 +1,5 @@
 var twitter    = require('../services/twitter'),
-    connection = require('../services/db'),
-    utils      = require('./utils');
+    connection = require('../services/db');
 
 var user = {};
 
@@ -32,26 +31,6 @@ user.getUserTweetSince = function(username, days, count, callback){
   });
 }
 
-/**
-*   Reduce tweet that contain place only
-*   @return Array of tweet object that contain place and unique
-*/
-user.filterPlaceName = function(tweets){
-
-  tweets.forEach(function(tweet, index){
-
-    // If the tweet come from foursquare, get the location from foursquare instead
-    if( tweet.source.indexOf('Foursquare') != -1){
-      tweets[index].place_name = tweet.text.match(/I\'m at (.*) http|\(\@\ (.*)\)/).filter(function(n){ return n != undefined })[1].replace(/-\ \@(.*?)\ /, '');
-
-    // If not, we get from twitter place
-    } else {
-      tweets[index].place_name = tweet.full_name;
-    }
-  });
-
-  return utils.removeDuplicateObjectInArray(tweets, 'place_name');
-}
 /**
 *   Get tweets posted at a place, within days limit
 *   @return Array of tweets

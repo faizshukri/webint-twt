@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-['','user','tweet','search'].forEach(function(root){
+['','user','tweet','search', 'database'].forEach(function(root){
   app.use('/'+root, require('./app/routes/'+(root ? root : 'index')));
 });
 

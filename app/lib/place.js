@@ -1,11 +1,18 @@
 var locations   = require('../services/google_place'),
-    querystring = require("querystring"),
-    https       = require('https'); 
+    utils       = require('./utils'),
+    querystring = require('querystring'),
+    entities    = require('entities');
+
 
 var place = {};
 
 place.getInterestingPlaces = function(name, callback){
   locations.textSearch({ query: name }, function(error, response) {
+
+    if(response.status == 'ZERO_RESULTS'){
+      callback({});
+      return;
+    }
 
     place.getPlaceDetails(response.results[0].place_id, function(result){
 
@@ -44,6 +51,32 @@ place.getPlacePhoto = function(photo_reference, callback){
     if (error) throw error;
     callback(response);
   });
+}
+
+/**
+*   Reduce tweets that contain place only
+*   @return Array of tweet object that contain place and unique
+*/
+place.filterPlaceName = function(tweets){
+
+  tweets.forEach(function(tweet, index){
+
+    // If the tweet come from foursquare, get the location from foursquare instead
+    if( tweet.source.indexOf('Foursquare') != -1){
+      tweets[index].place_name = tweet.text.match(/I\'m at (.*) http|\(\@\ (.*)\)/).filter(function(n){ return n != undefined })[1].replace(/-\ \@(.*?)\ /, '');
+
+    // If not, we get from twitter place
+    } else if(tweet.place){
+      tweets[index].place_name = tweet.place.full_name;
+    }
+
+    if(typeof(tweets[index].place_name) != 'undefined'){
+      tweets[index].place_name       = entities.decodeHTML(tweets[index].place_name);
+      tweets[index].place_name_query = querystring.escape(tweets[index].place_name);
+    }
+  });
+
+  return utils.removeDuplicateObjectInArray(tweets, 'place_name');
 }
 
 module.exports = place;
