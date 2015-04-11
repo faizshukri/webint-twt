@@ -52,6 +52,10 @@ router.get('/interesting-venues', function(req, res, next) {
     var tweets  = place.filterPlaceName(data.statuses),
         counter = 0;
 
+    // If no tweet found, render the page with a notice
+    if(tweets.length <= 0)
+      res.render('users/interesting_venues', { path: 'user', username: params.username, tweets: [], days: params.days_limit });
+ 
     tweets.forEach(function(tweet, index){
       place.getInterestingPlaces(tweet.place_name, function(data){
 
@@ -61,7 +65,6 @@ router.get('/interesting-venues', function(req, res, next) {
 
         if(counter == tweets.length)
           res.render('users/interesting_venues', { path: 'user', username: params.username, tweets: tweets, days: params.days_limit, api_key: config.app.google.api_key });
-      
       });
     });
   });
