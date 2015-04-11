@@ -49,7 +49,7 @@ router.get('/interesting-venues', function(req, res, next) {
 
   user.getUserTweetSince(params.username, params.days_limit, 300, function(data){
 
-    var tweets  = user.filterPlaceName(data.statuses),
+    var tweets  = place.filterPlaceName(data.statuses),
         counter = 0;
 
     tweets.forEach(function(tweet, index){
