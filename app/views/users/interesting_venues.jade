@@ -6,9 +6,10 @@ block content
 
   if tweets.length <= 0
     .row
-      .col-sm-8.col-sm-offset-2
-        .well.well-sm
-          h4(align='center') No place was found
+      .col-sm-12
+        .alert.alert-danger
+          strong Aw, Snap! &nbsp;
+          | No places found
   else
     each tweet in tweets
       .row
