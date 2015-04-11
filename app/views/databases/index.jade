@@ -1,4 +1,23 @@
 extends ../layouts/main
 
 block content
-  h1 Database interface
+  h3 Database interface
+  .row
+    .col-sm-6.col-xs-12
+      .well
+        form(action='/database/userDetails', method='GET', role='form')
+          legend User Details
+          .form-group
+            label(for='usernames') Username
+            input.form-control(id='usernames' type='text', placeholder='Username',name='username')
+            span(style='color: gray; font-size: 0.85em;')
+           button.btn.btn-primary.btn-block.btn-lg(type='submit') Search
+    .col-sm-6.col-xs-12
+      .well
+        form(action='/database/getUsers', method='GET', role='form')
+          legend Users by Venue
+          .form-group
+            label(for='venue') Venue
+            input.form-control(id='venue' type='text', placeholder='Venue',name='Venue')
+            span(style='color: gray; font-size: 0.85em;')
+           button.btn.btn-primary.btn-block.btn-lg(type='submit') Search
