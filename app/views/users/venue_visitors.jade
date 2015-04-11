@@ -1,49 +1,121 @@
 extends ../layouts/main
 
 block content
-  h2 Users visit #{place} within last #{days} days.
+  h2 Users visit #{place_name} within last #{days} days &nbsp;
+    span.label.label-primary.counter(style='display: none;') 0
   hr
 
-  each status, i in statuses
-    if i % 2 == 0
-      .row
-        each tweet, j in statuses.slice(i, i+2)
-          .col-sm-6.col-xs-12
-            .row
-              .col-xs-3
-                .pull-right
-                  img(src=tweet.user.profile_image_url.replace('normal', 'bigger'))
-              .col-xs-9.user_status
-                blockquote
-                  h3 
-                    a(href='/user/profile/'+tweet.user.screen_name) #{tweet.user.name}
-                    span(style='color: gray; font-size: 0.7em;') &nbsp;@#{tweet.user.screen_name} 
+  .statuses
+    each status, i in statuses
+      if i % 2 == 0
+        .row
+          each tweet, j in statuses.slice(i, i+2)
+            .col-sm-6.col-xs-12
+              .row
+                .col-xs-3
+                  .pull-right
+                    img(src=tweet.user.profile_image_url.replace('normal', 'bigger'))
+                .col-xs-9.user_status
+                  blockquote
+                    h3 
+                      a(href='/user/profile/'+tweet.user.screen_name) #{tweet.user.name}
+                      span(style='color: gray; font-size: 0.7em;') &nbsp;@#{tweet.user.screen_name} 
 
-                  p(style='font-size: 0.7em; color: gray; margin-top: -5px;')
-                    i #{tweet.user.description}
-                      if tweet.user.location
-                        if tweet.user.description
-                          br
-                        | - from 
-                        b #{tweet.user.location}
-                  hr
-                  p #{tweet.text}
-                    footer
-                      cite(title='Source Title') &nbsp;
-                        span.label.label-warning.created_at #{tweet.created_at}
-                        | &nbsp;near 
-                        span.label.label-warning #{tweet.place ? tweet.place.full_name : tweet.retweeted_status ? tweet.retweeted_status.place.full_name : ''}
-                        | &nbsp;via 
-                        span.label.label-warning !{tweet.source}
-                        if tweet.retweeted_status
-                          | &nbsp;
-                          span.label.label-success Retweet
+                    p(style='font-size: 0.7em; color: gray; margin-top: -5px;')
+                      i #{tweet.user.description}
+                        if tweet.user.location
+                          if tweet.user.description
+                            br
+                          | - from 
+                          b #{tweet.user.location}
+                    hr
+                    p #{tweet.text}
+                      footer
+                        cite(title='Source Title') &nbsp;
+                          span.label.label-warning.created_at #{tweet.created_at}
+                          | &nbsp;near 
+                          span.label.label-warning #{tweet.place ? tweet.place.full_name : tweet.retweeted_status ? tweet.retweeted_status.place.full_name : ''}
+                          | &nbsp;via 
+                          span.label.label-warning !{tweet.source}
+                          if tweet.retweeted_status
+                            | &nbsp;
+                            span.label.label-success Retweet
                         
 append footer
+
+  //- Integrate socket io only when days is 0
+  if days == 0
+    script(src='/socket.io/socket.io.js')
+    script.
+      var socket = io.connect('http://localhost:3000');
+
+      socket.emit('start_stream', '#{location}');
+
+      var counter  = 0,
+          col      = 2;
+
+      $('.counter').show();
+
+      socket.on('tweet', function(val){
+        counter++;
+        row = Math.ceil(counter/col);
+
+        if($('.row-'+row).length === 0)
+          $('.statuses').prepend('<div class="row row-'+row+'"></div>');
+
+        var description = '<i>'+(val.user.description?val.user.description:'');
+        if(val.user.location){
+          if(val.user.description){
+            description += '<br />';
+          }
+          description += ' - from <b>'+val.user.location+'</b>'; 
+        }
+        description += '</i>';         
+
+        $(
+          '<div class="col-xs-12 col-sm-'+(12/col)+'" style="display: none;">'+
+            '<div class="row">'+
+              '<div class="col-xs-3">'+
+                '<div class="pull-right">'+
+                  '<img src="'+val.user.profile_image_url.replace('normal', 'bigger')+'" />'+
+                '</div>'+
+              '</div>'+
+              '<div class="col-xs-9 user_status">'+
+                '<blockquote>'+
+                  '<h3>'+
+                    '<a href="/user/profile/'+val.user.screen_name+'">'+val.user.name+'</a>'+
+                    '<span style="color: gray; font-size: 0.7em;"> @'+val.user.screen_name+'</span>'+ 
+                  '</h3>'+
+                  '<p style="font-size: 0.7em; color: gray; margin-top: -5px;">'+
+                    description+
+                  '</p>'+
+                  '<hr />'+
+                  '<p>'+val.text+
+                    '<footer>'+
+                      '<cite title="Source Title">'+
+                        ' <span class="label label-warning created_at">'+moment(val.created_at, 'ddd MMM DD HH:mm:ss ZZ YYYY').fromNow()+'</span>'+
+                        ' near <span class="label label-warning">'+(val.place ? val.place.full_name : val.retweeted_status ? val.retweeted_status.place.full_name : '')+'</span>'+
+                        ' via <span class="label label-warning">'+val.source+'</span>'+
+                        (val.retweeted_status ? ' <span class="label label-success">Retweet</span>' : '')+
+                      '</cite>'+
+                    '</footer>'+
+                  '</p>'+
+                '</blockquote>'+
+              '</div>'+
+            '</div>'+
+          '</div>'
+        ).appendTo('.row-'+row).slideDown();
+
+        $('.counter').text(counter);
+      });
+
   script.
     $(function(){
+      //- var statusss = !{JSON.stringify(statuses)};
+      //- console.log('tweet', statusss);
       var created_at = $('.created_at');
       $.each(created_at, function(index, value){
         $(value).text(moment($(value).text(), 'ddd MMM DD HH:mm:ss ZZ YYYY').fromNow());
       });
-    })
+    });
+

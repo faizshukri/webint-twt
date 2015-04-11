@@ -22,12 +22,18 @@ app.set('port', port);
 var server = http.createServer(app);
 
 /**
+ * Create SocketIO server
+ */
+var io = require('socket.io')(server);
+
+/**
  * Listen on provided port, on all network interfaces.
  */
 
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+io.on('connection', require('../app/lib/socketio').connection);
 
 /**
  * Normalize a port into a number, string, or false.
