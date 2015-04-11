@@ -1,15 +1,23 @@
 extends ../layouts/main
 
 block content
-    form(accept-charset='UTF-8')
+
+  
+  form(action='/tweet/discussions', accept-charset='UTF-8')
     h3 Track Discussions:
     br
     |     
-    input.form-control(type='text', name='keyword', value='Input your keyword (topics or hashtags)')
+    input.form-control(id= 'keyword', type='text', name='keyword', placeholder='Input your keyword (topics or hashtags)')
     br
     |     
     input.btn.btn-primary(type='submit', value='Submit')
 
 
+
+
+
+
+
 //- block footer
 //- 	script(src='/sockets.js', type='text/javascript')
+
