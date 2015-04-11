@@ -102,6 +102,7 @@ user.getUserTopics= function(params,callback)
     var users=params.username.split(",");
     var numKeywords=params.word_limit;
     var date=this.getLastFewDaysDate(params.days_limit);
+    console.log(date);
     connection.query('SELECT * FROM stopwords', function(err, rows)
     {
     for (words in rows)
@@ -136,22 +137,22 @@ user.getUserTopics= function(params,callback)
             for (var j=0;j<keywords.length;j++)
             {
                 
-                console.log(data.screen_name);
-                    console.log(keywords[j].word);
+               // console.log(data.screen_name);
+                 //   console.log(keywords[j].word);
                 if (invIndex.get(keywords[j].word).get(usr))
                 {
-                    console.log("in if")
+                    //console.log("in if")
                 temp_ar.push({'word':keywords[j].word,'freq':invIndex.get(keywords[j].word).get(usr),'totalFreq':keywords[j].freq})
                 }
                 else
                 {
-                    console.log("in else");
+                    //console.log("in else");
                    temp_ar.push({'word':keywords[j].word,'freq':0,'totalFreq':keywords[j].freq}) 
                 }
                
             }
-            console.log("temp Arrat",temp_ar)
-            finalArray.push({'User':data.screen_name,'data':data,'words':temp_ar})
+            //console.log("temp Arrat",temp_ar)
+            finalArray.push({'User':usr,'data':data,'words':temp_ar})
 
 
             count_callback++;
@@ -177,6 +178,7 @@ user.getUserTopics= function(params,callback)
                             for (var indx in data.statuses) 
                             {
                                 var words= data.statuses[indx].text.split(" ");
+
                                 for (indx in words)
                                 { 
                                     words[indx] = words[indx].replace(/[^\w\s]|_/g, "").toLowerCase();

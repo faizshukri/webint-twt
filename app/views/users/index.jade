@@ -17,7 +17,7 @@ block content
             input.form-control(id='keywords_limit' type='number', min=1, placeholder='Keywords Limit',name="word_limit")
           .form-group
             label(for='days_limit') Days Limit
-            input.form-control(id='days_limit' type='number', min=1, placeholder='Days Limit', name="days_limit")
+            input.form-control(id='days_limit' type='number', min=1, max=6,placeholder='Days Limit', name="days_limit")
           button.btn.btn-primary.btn-block.btn-lg(type='submit') Search 
           
     .col-sm-4.col-xs-12
@@ -67,17 +67,8 @@ block content
 block footer
   script.
     $(function(){
-      $('#usernames').select2({
-          maximumSelectionSize: 4,
-          tags: [],
-          
-          //maximumSelectionSize=2,
-          /*formatNoMatches: function() {
-              return '';
-          },*/
-          dropdownCssClass: 'select2-hidden'
-      });
 
+      initializeSelect2AjaxSearch('usernames', 'search/users', 'Search for users', true);
       initializeSelect2AjaxSearch('location', 'search/places', 'Search for place');
       initializeSelect2AjaxSearch('username', 'search/users', 'Search for users');
 
@@ -104,8 +95,8 @@ block footer
       $('#'+currentTab.attr('aria-controls')).find('input, select, textarea').prop('disabled', false);
     }
 
-    function initializeSelect2AjaxSearch(id, url, placeholder){
-      $('#'+id).select2({
+    function initializeSelect2AjaxSearch(id, url, placeholder, tag){
+      var options = {
         placeholder: placeholder,
         minimumInputLength: 3,
         allowClear: true,
@@ -123,5 +114,12 @@ block footer
           },
           cache: true
         }
-      });
+      };
+
+      if(tag){
+        options['tag'] = true;
+        options['multiple'] = true;
+        options['maximumSelectionSize']=10;
+      }
+      $('#'+id).select2(options);
     }

@@ -15,7 +15,7 @@ block content
 							.col-xs-10.user_status
 								blockquote
 									h3 
-										a(href='/user/profile/'+User.data.screen_name) 
+										a(href='/user/profile/'+User.data.screen_name) #{User.data.name}
 										span(style='color: gray; font-size: 0.7em;') &nbsp;@#{User.data.screen_name}
 									p(style='font-size: 0.7em; color: gray; margin-top: -5px;')
 										i #{User.data.description}
