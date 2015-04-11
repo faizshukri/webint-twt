@@ -40,7 +40,7 @@ block content
                     td #{tweet.gplace.name}, #{tweet.gplace.formatted_address}
                       br
                       br
-                      iframe.map(width='100%', height=250, frameborder=0, src='https://www.google.com/maps/embed/v1/place?key=#{api_key}&q=#{tweet.place_name}')
+                      iframe.map(width='100%', height=250, frameborder=0, src='https://www.google.com/maps/embed/v1/place?key=#{api_key}&q=#{tweet.place_name_query}')
                   tr
                     td
                      .pull-right URL: &nbsp;

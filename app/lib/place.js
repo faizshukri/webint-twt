@@ -1,5 +1,8 @@
 var locations   = require('../services/google_place'),
-    utils       = require('./utils');
+    utils       = require('./utils'),
+    querystring = require('querystring'),
+    entities    = require('entities');
+
 
 var place = {};
 
@@ -63,8 +66,13 @@ place.filterPlaceName = function(tweets){
       tweets[index].place_name = tweet.text.match(/I\'m at (.*) http|\(\@\ (.*)\)/).filter(function(n){ return n != undefined })[1].replace(/-\ \@(.*?)\ /, '');
 
     // If not, we get from twitter place
-    } else {
-      tweets[index].place_name = tweet.full_name;
+    } else if(tweet.place){
+      tweets[index].place_name = tweet.place.full_name;
+    }
+
+    if(typeof(tweets[index].place_name) != 'undefined'){
+      tweets[index].place_name       = entities.decodeHTML(tweets[index].place_name);
+      tweets[index].place_name_query = querystring.escape(tweets[index].place_name);
     }
   });
 
