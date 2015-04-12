@@ -11,10 +11,19 @@ Installation
 
 2. Install dependencies
 
-        bower install
-        npm install
+    ```bash
+    bower install
+    npm install
 
-3. Start the server
+    # run only if you don't have db-migrate yet
+    npm install -g db-migrate
+    ```
+
+3. Migrate database structure. Before you can do this, make sure you have install db-migrate package.
+        
+        db-migrate up
+
+4. Start the server
 
         npm start
     
