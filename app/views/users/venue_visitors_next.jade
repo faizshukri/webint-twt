@@ -1,0 +1,37 @@
+each status, i in statuses
+  if i % 2 == 0
+    .row
+      each tweet, j in statuses.slice(i, i+2)
+        .col-sm-6.col-xs-12
+          .row
+            .col-xs-3
+              .pull-right
+                img(src=tweet.user.profile_image_url.replace('normal', 'bigger'))
+            .col-xs-9.user_status
+              blockquote
+                h3 
+                  a(href='/user/profile/'+tweet.user.screen_name) #{tweet.user.name}
+                  span(style='color: gray; font-size: 0.7em;') &nbsp;@#{tweet.user.screen_name} 
+
+                p(style='font-size: 0.7em; color: gray; margin-top: -5px;')
+                  i #{tweet.user.description}
+                    if tweet.user.location
+                      if tweet.user.description
+                        br
+                      | - from 
+                      b #{tweet.user.location}
+                hr
+                p #{tweet.text}
+                  footer
+                    cite(title='Source Title') &nbsp;
+                      span.label.label-warning.created_at #{tweet.created_at}
+                      | &nbsp;near 
+                      span.label.label-warning #{tweet.place ? tweet.place.full_name : tweet.retweeted_status ? tweet.retweeted_status.place.full_name : ''}
+                      | &nbsp;via 
+                      span.label.label-warning !{tweet.source}
+                      if tweet.retweeted_status
+                        | &nbsp;
+                        span.label.label-success Retweet
+
+#pagination
+  a.next(href='/search/tweets?url='+next_results) Next result

@@ -1,4 +1,5 @@
-var twitter = require('../services/twitter');
+var twitter     = require('../services/twitter'),
+    querystring = require('querystring');
 
 var search = {};
 
@@ -13,6 +14,16 @@ search.searchPlaces = function(location, count, callback){
   });
 }
 
+/**
+*   Search tweet from next_result url
+*   @return Array of tweets object
+*/
+search.searchTweetNextResult = function(url, callback){
+    var options = querystring.parse(url.slice(1));
+    twitter.get('search/tweets', options, function(err, data, response){
+        callback(data);
+    });
+}
 /**
 *   Search users by using username provided
 *   @return Array of users object

@@ -40,6 +40,9 @@ block content
                           if tweet.retweeted_status
                             | &nbsp;
                             span.label.label-success Retweet
+
+    #pagination
+      a.next(href='/search/tweets?url='+next_results) Next result
                         
 append footer
 
@@ -108,14 +111,23 @@ append footer
 
         $('.counter').text(counter);
       });
+  
+  else
+    script(src='/assets/jquery.jscroll/jquery.jscroll.js')
+    script.
+      
+      $(function(){
+        var created_at = $('.created_at');
+        $.each(created_at, function(index, value){
+          $(value).text(moment($(value).text(), 'ddd MMM DD HH:mm:ss ZZ YYYY').fromNow());
+        });
 
-  script.
-    $(function(){
-      //- var statusss = !{JSON.stringify(statuses)};
-      //- console.log('tweet', statusss);
-      var created_at = $('.created_at');
-      $.each(created_at, function(index, value){
-        $(value).text(moment($(value).text(), 'ddd MMM DD HH:mm:ss ZZ YYYY').fromNow());
+        $('.statuses').jscroll({
+            loadingHtml: '<div class="well" align="center"><h3>Behold, new tweets are coming&nbsp;&nbsp;<i class="fa fa-refresh fa-spin"></i></h3></p>',
+            padding: 20,
+            debug: true,
+            nextSelector: '#pagination a.next'
+          });
       });
-    });
+
 

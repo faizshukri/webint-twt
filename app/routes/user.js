@@ -89,9 +89,9 @@ router.get('/venue-visitors', function(req, res, next) {
   if(!params.location && ( !params.latitude || !params.longitude ) && !params.days_limit)
     res.redirect('/user');
 
-  user.getVenueVisitors(params, 50, function(data){
+  user.getVenueVisitors(params, 20, function(data){
     var statuses = utils.removeDuplicateObjectInArray(data.statuses, 'user.id');
-    res.render('users/venue_visitors', { path: 'user', place_name: params.place_name, statuses: statuses, days: params.days_limit });
+    res.render('users/venue_visitors', { path: 'user', place_name: params.place_name, statuses: statuses, days: params.days_limit, next_results: require('querystring').escape(data.search_metadata.next_results) });
   });
 });
 
