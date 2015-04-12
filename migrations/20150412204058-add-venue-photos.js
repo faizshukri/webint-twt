@@ -2,14 +2,14 @@ var dbm = global.dbm || require('db-migrate');
 var type = dbm.dataType;
 
 exports.up = function(db, callback) {
-  db.createTable('tweets', {
+  db.createTable('venue_photos', {
     id: { type: 'int', primaryKey: true ,autoIncrement: true},
-    text: 'string',
-    user_id: { 
+    link: 'string',
+    venue_id: { 
         type: 'int', 
         foreignKey: { 
-            name: 'tweets_user_id_fk', 
-            table: 'users', 
+            name: 'venue_photo_id_fk', 
+            table: 'venues', 
             mapping: 'id', 
             rules: {
                 onDelete: 'CASCADE',
@@ -21,5 +21,5 @@ exports.up = function(db, callback) {
 };
 
 exports.down = function(db, callback) {
-  db.dropTable('tweets', callback);
+  db.dropTable('venue_photos', callback);
 };
