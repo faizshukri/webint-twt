@@ -34,4 +34,4 @@ Authors
 -------
 - Faiz
 - Ain
-- Ishitap
+- Ishita
