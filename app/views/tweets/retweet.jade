@@ -19,6 +19,12 @@ block content
 
 				.panel-body
 					center #{tweets[0].retweeted_status.text}
+						br
+					center
+						if tweets[0].extended_entities && tweets[0].extended_entities.media
+							each media in tweets[0].extended_entities.media
+								if media.type=='photo'
+									img(style='width: 50%;', src=media.media_url)
 
 				ul.list-group
 					each tweet in tweets
