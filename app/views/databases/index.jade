@@ -3,7 +3,7 @@ extends ../layouts/main
 block content
   h3 Database interface
   .row
-    .col-sm-6.col-xs-12
+    .col-sm-5.col-xs-12.col-sm-offset-1
       .well
         form(action='/database/userDetails', method='GET', role='form')
           legend User Details
@@ -12,7 +12,7 @@ block content
             input.form-control(id='usernames' type='text', placeholder='Username',name='username')
             span(style='color: gray; font-size: 0.85em;')
            button.btn.btn-primary.btn-block.btn-lg(type='submit') Search
-    .col-sm-6.col-xs-12
+    .col-sm-5.col-xs-12
       .well
         form(action='/database/getUsers', method='GET', role='form')
           legend Users by Venue
@@ -21,3 +21,32 @@ block content
             input.form-control(id='venue' type='text', placeholder='Venue',name='Venue')
             span(style='color: gray; font-size: 0.85em;')
            button.btn.btn-primary.btn-block.btn-lg(type='submit') Search
+append footer
+  script.
+    $(function(){
+      initializeSelect2AjaxSearch('usernames', 'database/usernames', 'Search for users');
+      initializeSelect2AjaxSearch('venue', 'database/venues', 'Search for venues');
+      });
+
+    function initializeSelect2AjaxSearch(id, url, placeholder, tag){
+      var options = {
+        placeholder: placeholder,
+        minimumInputLength: 3,
+        allowClear: true,
+        ajax: {
+          quietMillis: 500,
+          url: url,
+          dataType: 'json',
+          data: function(params){
+            var obj = {};
+            obj[id] = params
+            return obj;
+          },
+          results: function (data) {
+            return { results: data };
+          },
+          cache: true
+        }
+      };
+      $('#'+id).select2(options);
+    }
