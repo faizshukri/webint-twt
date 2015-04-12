@@ -1,0 +1,28 @@
+extends ../layouts/main
+
+block content
+  .row
+   each user in user_details
+    .col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3
+      .well.user_profile
+        .row
+          .col-xs-4
+            .pull-right
+              img(style='width: 100%;', src=user.photo.replace('_normal', ''))
+          .col-xs-8
+            h3 #{user.name}
+            .row
+              .col-xs-6
+                div
+                  b Username
+                div @#{user.id}
+              .col-xs-6
+              if user.location
+                div 
+                  b From 
+                div #{user.location}
+            br
+            if author.description
+              div
+                b About me
+              div #{user.description}

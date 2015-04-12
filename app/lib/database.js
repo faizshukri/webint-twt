@@ -57,4 +57,55 @@ database.storeKeywords= function (user,keyword,frequency,callback,nextcallback)
                         });
    
 }
+
+database.getUserDetails = function(user,callback)
+{
+	var user_table=[];
+	var user_contacted=[];
+	var venues=[];
+	var count=0;
+
+	function counting()
+	{
+		count=count+1
+		if (count==3)
+		{
+			callback(user_table,venues,user_contacted)
+		}
+	}
+
+    connection.query('select * from Users where Users.id="'+user+'"',function(err, rows)
+    {
+    	if (err)
+    		console.log(err)
+    	else
+    		console.log(rows)
+    		user_table=rows;
+    	counting()
+    });
+
+    connection.query('select venues.name from venues join user_venues on (user_venues.venue_id=venues.venue_id) where user_venues.user_id="'+user+'"',function(err, rows)
+    {
+    	if (err)
+    		console.log(err)
+    	else
+    		console.log(rows)
+    		venues=rows;
+    	counting()
+    });
+
+     connection.query('select * from user_contacts where originalUser="'+user+'"',function(err, rows)
+    {
+    	if (err)
+    		console.log(err)
+    	else
+    		console.log(rows)
+    		user_contacted=rows;
+    	counting()
+    });
+}
+
+
+
+
 module.exports = database;
