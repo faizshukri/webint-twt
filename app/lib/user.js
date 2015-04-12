@@ -1,5 +1,6 @@
 var twitter    = require('../services/twitter'),
     connection = require('../services/db');
+    db = require('./database');
 
 var user = {};
 
@@ -67,77 +68,94 @@ user.getUser = function(username, callback){
   });
 }
 
+
+
 user.getUserTopics= function(params,callback)
 {
 
     var keywords=[]
-    var invIndex=new Map();
     var freq_arr=[];
-    var count =0;
     var finalArray=[];
     var stopwords =[]
+    var invIndex=new Map();
+    
+    var count =0;
     var count_callback=1;
 
     var users=params.username.split(",");
     var numKeywords=params.word_limit;
     var date=this.getLastFewDaysDate(params.days_limit);
-    console.log(date);
+
+    // read the list of stop words from database into the array stopwords
     connection.query('SELECT * FROM stopwords', function(err, rows)
     {
     for (words in rows)
         stopwords.push(rows[words].words);
         
     });
+
+    //calculate total freuency of each keyword used from inverted index and store in the array "freq_arr"
     function termFrequency(invIndex)
-{
+    {
     count+=1;
     if (count==users.length)
     {
     for (var key of invIndex.keys()) 
         {
             var total_freq=0;
+            // callculating total frequncy of each keyword
             for (var value of invIndex.get(key).values())
                 {
                     total_freq+=value
                 }
             freq_arr.push({'word':key,'freq':total_freq});
-        }        
+        } 
+    // sorting the freq_array according to frequency        
     freq_arr.sort(function(a, b) 
         {
             return ((a.freq > b.freq) ? -1 : ((a.freq == b.freq) ? 0 : 1));
         });
-        keywords=freq_arr.slice(0,numKeywords++);
+    // choosing the most frequent x keywords as specified in input
+    keywords=freq_arr.slice(0,numKeywords++);
     count_callback = 0;
+    // storing the data in "finalArray", sorted accordint to each user.
+    /** In finalArray usernames can be accessed by finalArray[i].User, profile informatoin of user as finalArray[i].data
+        information relating to keywords tracked by fialArray[i].words
+        **/
     users.forEach(function(usr){
         user.getUser(usr,function(data)
         {
+            db.storeUser(data);
             var temp_ar=[];
             
             for (var j=0;j<keywords.length;j++)
             {
-                
-               // console.log(data.screen_name);
-                 //   console.log(keywords[j].word);
                 if (invIndex.get(keywords[j].word).get(usr))
                 {
-                    //console.log("in if")
                 temp_ar.push({'word':keywords[j].word,'freq':invIndex.get(keywords[j].word).get(usr),'totalFreq':keywords[j].freq})
+                
+                //connection.query('SELECT * FROM keywords where keyword ="'+keywords[j].word+'"', function(err, rows)
+                
+                /*connection.query('insert into user_keywords (user_id,keyword_id,frequency,since_days) values("'+ keywords[j].word+'")', function(err, rows)
+                         {
+                            if (err)
+                                console.log("duplicate entry");
+                        });*/
+                db.storeKeywords(usr,keywords[j].word,keywords[j].freq,db.getKeywordID,db.storeUserKeyword);
+
+
+            
                 }
                 else
                 {
-                    //console.log("in else");
                    temp_ar.push({'word':keywords[j].word,'freq':0,'totalFreq':keywords[j].freq}) 
-                }
-               
+
+                }  
             }
-            //console.log("temp Arrat",temp_ar)
             finalArray.push({'User':usr,'data':data,'words':temp_ar})
-
-
             count_callback++;
             if (count_callback==users.length)
             {
-                
                 callback(keywords,finalArray);
             }
         })
@@ -146,7 +164,7 @@ user.getUserTopics= function(params,callback)
 }
 
 }
-
+// creating inverted index to track keywords
     for (usr in users)
 
      (function(usr) 
@@ -160,7 +178,8 @@ user.getUserTopics= function(params,callback)
 
                                 for (indx in words)
                                 { 
-                                    words[indx] = words[indx].replace(/[^\w\s]|_/g, "").toLowerCase();
+                                    words[indx] = words[indx].replace(/[^\w^{@#}\s]|_/g, "").toLowerCase();
+                                    // removing stopwords from the tweets
                                     if (stopwords.indexOf(words[indx])==-1)
                                     {
                                     
@@ -186,7 +205,7 @@ user.getUserTopics= function(params,callback)
                                     }
                             }}
                         }(invIndex);
-                       
+                       // calling the next function for further processing
                         termFrequency(invIndex);
                     })
             })(usr)
