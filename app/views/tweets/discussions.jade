@@ -25,12 +25,20 @@ block content
            
                   .panel-body
                     p Tweeted on 
-                      b #{date}
+                      span.created_at(style='font-weight: bold;') #{tweet.created_at}
                         |:
-                      center #{tweet.text}
+                      center 
+                        if tweet.retweeted_status
+                          a(href='/tweet/retweet?id='+tweet.retweeted_status.id_str) #{tweet.text}
+                        else
+                          | #{tweet.text}
+                    p Retweet Count: #{tweet.retweet_count}
 
-                    
-
-
-
-  
+append footer
+  script.
+    $(function(){
+      var created_at = $('.created_at');
+      $.each(created_at, function(index, value){
+        $(value).text(moment($(value).text(), 'ddd MMM DD HH:mm:ss ZZ YYYY').format('dddd DD MMM'));
+      });
+    })  

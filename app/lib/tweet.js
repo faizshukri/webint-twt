@@ -15,6 +15,15 @@ tweet.searchKeywordTweets = function(keyword_string, count, callback)
     });
 }
 
+tweet.getRetweetNum = function(id_str, count, callback)
+{
+	twitter.get('statuses/retweets/:id', {id: id_str, count: count},
+
+		function(err, data, response)
+		{
+			callback(data)
+		});
+}
 // keyword_string, count:count
 
 module.exports = tweet;

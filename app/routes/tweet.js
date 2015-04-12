@@ -14,26 +14,24 @@ router.get('/', function(req, res, next) {
 router.get('/discussions', function(req, res, next) 
 {
 	var input = req.query;
-	var status;
-	var date;
-	var created;
 
 	tweet.searchKeywordTweets(input.keyword, 21, function(result)
 	 {
-	 	status = result.statuses;
-	 	status.forEach(function(res){
-	 		console.log(res.created_at);
-	 		created = res.created_at;
-	 	})
-
-	 	//date = created.substring(4,11);
-		//console.log(date);
-
-	 	res.render('tweets/discussions', { path: 'tweet', keyword: input.keyword, date: date, tweets: status});
+	 	// pass to view
+	 	res.render('tweets/discussions', { path: 'tweet', keyword: input.keyword, tweets: result.statuses});
   	});
-	
-  	// nak pass to view 
+});	
   	
+
+router.get('/retweet', function(req, res, next) 
+{
+	var params = req.query;
+
+	tweet.getRetweetNum(params.id, 10, function(result)
+	 {
+	 	// nak pass to view
+	 	res.render('tweets/retweet', { path: 'tweet', tweets: result});
+ 	});	
  });
 
 //keyword: params.keyword, tweets: result.statuses 

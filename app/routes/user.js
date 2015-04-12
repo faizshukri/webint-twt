@@ -43,6 +43,7 @@ router.get('/profile/:username', function(req, res, next) {
     } else {
       user.getUser(username, function(data){
         var author = data;
+        
         res.render('users/profile', { path: 'user', author: author, tweets: [] });
       });
     }

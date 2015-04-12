@@ -1,0 +1,37 @@
+extends ../layouts/main
+
+block content
+
+	.page-header
+		center
+			h1 User Retweets
+
+	.row
+		.col-sm-6.col-sm-offset-3
+			.panel.panel-info
+				.panel-heading
+					center 
+						img.img-circle(src=tweets[0].retweeted_status.user.profile_image_url.replace('normal', 'bigger'))
+					center
+							b #{tweets[0].retweeted_status.user.name}
+								br
+							a(href='/user/profile/'+tweets[0].retweeted_status.user.screen_name) @#{tweets[0].retweeted_status.user.screen_name}
+
+				.panel-body
+					center #{tweets[0].retweeted_status.text}
+
+				ul.list-group
+					each tweet in tweets
+						li.list-group-item 
+							a(href='/user/profile/'+tweet.user.screen_name) @#{tweet.user.screen_name} 
+							|retweeted 
+							span.created_at(style='font-weight: bold;') #{tweet.created_at}
+
+append footer
+	script.
+		$(function(){
+			var created_at = $('.created_at');
+			$.each(created_at, function(index, value){
+				$(value).text(moment($(value).text(), 'ddd MMM DD HH:mm:ss ZZ YYYY').fromNow());
+			});
+		})
