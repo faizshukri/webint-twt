@@ -3,6 +3,6 @@
 */
 
 var GooglePlaces = require("googleplaces");
-var google_place = new GooglePlaces(config.app.google.api_key, config.app.google.place.format);
+var google_place = new GooglePlaces(config.google.api_key, config.google.place.format);
 
 module.exports = google_place;

@@ -1,5 +1,15 @@
 // set global config
-global.config = require('konfig')({ path: 'app/config' });
+(function(){
+  var config   = require('./app/config/app.json'),
+      database = require('./database.json'),
+      env_map  = {'development': 'dev', 'production': 'prod'},
+      node_env = process.env.NODE_ENV || 'development';
+
+  config = config[node_env];
+  config.database = database[env_map[node_env]];
+
+  global.config = config;
+})();
 
 var express = require('express');
 var path = require('path');
@@ -56,6 +66,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;

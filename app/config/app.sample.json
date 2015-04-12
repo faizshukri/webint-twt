@@ -1,11 +1,5 @@
 {
-  "default": {
-    "mysql": {
-      "host"     : "",
-      "user"     : "",
-      "password" : "",
-      "database" : ""
-    },
+  "development": {
     "google" : {
       "api_key"  : "Get API key from https://console.developers.google.com/project",
       "place"    : {
@@ -26,8 +20,6 @@
       "access_token"  : ""
     }
   },
-
-  "development": { },
 
   "test": { },
 

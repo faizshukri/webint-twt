@@ -3,7 +3,7 @@ Twit project
 
 Installation
 ------------
-1. Copy `app/config/app.sample.json` to `app/config/app.json` and update configuration details to that file accordingly.
+1. Copy `app/config/app.sample.json` to `app/config/app.json` and `./database.sample.json` to `./database.json`. Update configuration details to those files accordingly.
     
     In **Google API Developers Console**, make sure you have enabled these services
     * **Google Maps Embed API**

@@ -5,10 +5,10 @@
 var mysql = require('mysql');
 
 var connection = mysql.createConnection({
-  host     : config.app.mysql.host,
-  user     : config.app.mysql.user,
-  password : config.app.mysql.password,
-  database : config.app.mysql.database
+  host     : config.database.host,
+  user     : config.database.user,
+  password : config.database.password,
+  database : config.database.database
 });
 
 connection.connect();
