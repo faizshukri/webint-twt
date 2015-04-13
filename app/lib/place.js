@@ -9,7 +9,7 @@ var place = {};
 place.getInterestingPlaces = function(name, callback){
   locations.textSearch({ query: name }, function(error, response) {
 
-    if(response.status == 'ZERO_RESULTS'){
+    if(response.status == 'ZERO_RESULTS' || response.status == 'OVER_QUERY_LIMIT'){
       callback({});
       return;
     }
