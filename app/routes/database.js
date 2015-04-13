@@ -31,7 +31,7 @@ router.get('/usernames', function(req, res, next) {
   //console.log(req.query.usernames);
 	database.getUsernames(req.query.usernames,function(users)
 	{
- 	  users = utils.pluckselect2( users, ['id', 'id'] );
+ 	  users = utils.pluckselect2( users, ['twitter_id', 'twitter_id'] );
       users = users.map(function(obj){
         obj['text'] = '@'+obj['text'];
         return obj;

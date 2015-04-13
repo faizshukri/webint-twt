@@ -14,13 +14,15 @@ database.storeUser= function (users, callback)
         query += values.join(', ');
     // users is a User object only 
     } else {
+        //console.log(users.entities.screen_name);
         query += "("+connection.escape(users.screen_name)+","+connection.escape(users.name)+","+connection.escape(users.description)+", "+connection.escape(users.location)+", "+connection.escape(users.profile_image_url)+")";
     }
 
     connection.query(query, function(err, rows)
     {
         if (err){
-            throw err;
+            //throw err;
+            console.log("user is already stored");
         }else{
             console.log('user is stored');
             if(callback) callback(rows);
@@ -109,14 +111,29 @@ database.storeTweets = function(tweets){
 }*/
 
 /* store relation between user and keywords*/
+
+database.getUserID= function (user, callback)
+{
+    connection.query('select id from Users where twitter_id = "'+user+'"',function(err, rows)
+     {
+        if(err)
+            console.log(err)
+
+        if(callback) callback(rows);
+       } );    
+           
+}
 database.storeUserKeyword= function(keyword,user,frequncy)
 {
 
-	connection.query('insert into user_keywords (user_id,keyword_id,frequency) values("'+ user+'","'+keyword+'","'+frequncy+'")', function(err, rows)
-     {
-        if(err)
-            console.log("user_keyword"+err)
-   	 });                     
+    database.getUserID(user, function(data){
+        //console.log(data[0].id);
+    	 connection.query('insert into user_keywords (user_id,keyword_id,frequency) values("'+ data[0].id+'","'+keyword+'","'+frequncy+'")', function(err, rows)
+         {
+             if(err)
+                 console.log("relation already stored")
+        	 });                     
+    });
 }
 
 /* Get id of keyword from database*/
@@ -134,7 +151,7 @@ database.getKeywordID = function(keyword,user,frequency,callback)
 /* Get users id's from database*/
 database.getUsernames = function(usr,callback)
     {
-    var query= 'select id from Users where id LIKE "' + usr+ '%"'
+    var query= 'select twitter_id from Users where twitter_id LIKE "' + usr+ '%"'
                                 + 'OR id LIKE "% ' +usr+ '%"';
     connection.query(query,function(err, rows)
     {
@@ -177,7 +194,7 @@ database.storeKeywords= function (user,keyword,frequency,callback,nextcallback)
     connection.query('insert into keywords (keyword) values("'+ keyword+'")', function(err, rows)
                          {
                             if (err)
-                                console.log("keyword err"+err);
+                                console.log("keyword already stored");
                             callback(keyword,user,frequency,nextcallback);
                         });
    
