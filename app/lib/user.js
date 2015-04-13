@@ -76,8 +76,9 @@ user.getUserTopics= function(params,callback)
     var keywords=[]
     var freq_arr=[];
     var finalArray=[];
-    var stopwords =[]
-    var invIndex=new Map();
+    var stopwords =[];
+    var shim = require('es6-shim');
+    var invIndex=new shim.Map();
     
     var count =0;
     var count_callback=1;
@@ -103,6 +104,7 @@ user.getUserTopics= function(params,callback)
     for (var key in invIndex.keys()) 
         {
             var total_freq=0;
+            if(!invIndex.get(key)) continue;
             // callculating total frequncy of each keyword
             for (var value in invIndex.get(key).values())
                 {
