@@ -9,15 +9,15 @@ block content
           legend Discussion
           .form-group
             label(for='usernames') Username
-            input.form-control(id='usernames' type='text', placeholder='Username',name='username')
+            input.form-control(id='usernames' type='text', placeholder='Username',name='username',required)
             span(style='color: gray; font-size: 0.85em;')
               i Press Enter and you can add upto 10 usernames
           .form-group
             label(for='keywords_limit') Keywords Limit
-            input.form-control(id='keywords_limit' type='number', min=1, placeholder='Keywords Limit',name="word_limit")
+            input.form-control(id='keywords_limit' type='number', min=1, placeholder='Keywords Limit',name="word_limit",required)
           .form-group
             label(for='days_limit') Days Limit
-            input.form-control(id='days_limit' type='number', min=1, max=6,placeholder='Days Limit', name="days_limit")
+            input.form-control(id='days_limit' type='number', min=1, max=6,placeholder='Days Limit', name="days_limit",required)
           button.btn.btn-primary.btn-block.btn-lg(type='submit') Search 
           
     .col-sm-4.col-xs-12

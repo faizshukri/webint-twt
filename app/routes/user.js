@@ -13,14 +13,19 @@ router.get('/', function(req, res, next) {
 
 router.get('/topic-discussed', function(req, res, next) {
   var params = req.query
-  user.getUserTopics(params,function(data,users_freq)
-  { 
-    if(!params.username)
+  if(!params.username)
     {
       res.redirect('/user');
     }
+  else
+  {
+  user.getUserTopics(params,function(data,users_freq)
+  { 
+    
+
     res.render('users/topic-discussed',{ path: 'user',datasent:users_freq});
   })
+}
   
 });
 
