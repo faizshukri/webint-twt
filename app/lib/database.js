@@ -1,6 +1,6 @@
 var connection = require('../services/db');
 var database = {};
-
+/* store user details in database in the USERS table*/
 database.storeUser= function (data)
 {
     var query = 'insert into Users (id,name,description,location,photo) values("'+ data.screen_name+'""'+data.name+'""'+data.description+'""'+data.location+'""'+data.profile_image_url+'")';
@@ -10,6 +10,7 @@ database.storeUser= function (data)
             console.log("duplicate entry");
     });                         
 }
+/* store relation between user and keywords*/
 database.storeUserKeyword= function(keyword,user,frequncy)
 {
 
@@ -19,7 +20,7 @@ database.storeUserKeyword= function(keyword,user,frequncy)
                                 console.log("duplicate entry")
                        	 });                     
 }
-
+/* Get id of keyword from database*/
 database.getKeywordID = function(keyword,user,frequency,callback)
     {
     var query= 'select id from keywords where keyword = "'+keyword+'"';
@@ -31,7 +32,7 @@ database.getKeywordID = function(keyword,user,frequency,callback)
     });
    
     }
-
+/* Get users id's from database*/
 database.getUsernames = function(usr,callback)
     {
     var query= 'select id from Users where id LIKE "' + usr+ '%"'
@@ -44,10 +45,9 @@ database.getUsernames = function(usr,callback)
     });
    
     }
-
+/* Get users who visited a particular venue from database*/
   database.userByVenues = function(venue,callback)
     {
-        console.log("m here")
     var query= 'select user_id from user_venues join venues on (user_venues.venue_id = venues.venue_id)where name = "'+venue+'"';
     connection.query('select user_id from user_venues join venues on (user_venues.venue_id = venues.venue_id)where name = "'+venue+'"',function(err, rows)
     {
@@ -58,7 +58,7 @@ database.getUsernames = function(usr,callback)
     });
    
     }
-
+/* GET venue names from database*/
 database.getVenues = function(venue,callback)
     {
     
@@ -72,7 +72,7 @@ database.getVenues = function(venue,callback)
     });
    
     }
-
+/*store keywords used by any user in the database*/
 database.storeKeywords= function (user,keyword,frequency,callback,nextcallback)
 {
     connection.query('insert into keywords (keyword) values("'+ keyword+'")', function(err, rows)
@@ -83,7 +83,7 @@ database.storeKeywords= function (user,keyword,frequency,callback,nextcallback)
                         });
    
 }
-
+/* GET details of a particular user from databse including the venues visited and users contacted from database */
 database.getUserDetails = function(user,callback)
 {
 	var user_table=[];

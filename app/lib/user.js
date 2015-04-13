@@ -69,7 +69,10 @@ user.getUser = function(username, callback){
 }
 
 
-
+/**
+* Get keywords used by user
+  @return array of user details and top x keywords
+*/
 user.getUserTopics= function(params,callback)
 {
 
@@ -103,14 +106,14 @@ user.getUserTopics= function(params,callback)
     if (count==users.length)
     {
 
-    invIndex.forEach(function(val,sum){
+    invIndex.forEach(function(val,word){
         var total_freq=0;
         val.forEach(function(value){
             total_freq+=value
-            console.log(sum,value);
+            
         });
         
-        freq_arr.push({'word':sum,'freq':total_freq});
+        freq_arr.push({'word':word,'freq':total_freq});
     });
 
     // sorting the freq_array according to frequency        
@@ -120,15 +123,15 @@ user.getUserTopics= function(params,callback)
         });
     // choosing the most frequent x keywords as specified in input
     keywords=freq_arr.slice(0,numKeywords++);
-    console.log(keywords);
     count_callback = 0;
-    // storing the data in "finalArray", sorted accordint to each user.
-    /** In finalArray usernames can be accessed by finalArray[i].User, profile informatoin of user as finalArray[i].data
-        information relating to keywords tracked by fialArray[i].words
-        **/
+    /** storing the data in "finalArray", sorted accordint to each user.
+        * In finalArray usernames can be accessed by finalArray[i].User, profile informatoin of user as finalArray[i].data
+        * information relating to keywords tracked by fialArray[i].words
+    **/
     users.forEach(function(usr){
         user.getUser(usr,function(data)
         {
+            // storing general information about user in database
             db.storeUser(data);
             var temp_ar=[];
             

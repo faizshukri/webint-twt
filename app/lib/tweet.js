@@ -5,9 +5,9 @@ var twitter = require('../services/twitter');
 var tweet = {};
 
 // keyword_string, count, 
-tweet.searchKeywordTweets = function(keyword_string, count, callback)
+tweet.searchKeywordTweets = function(keyword_string,  geocode, count, callback)
 {
-    twitter.get('search/tweets', {q: keyword_string, count: count }, 
+    twitter.get('search/tweets', {q: keyword_string, geocode: geocode, count: count }, 
 
     function(err, data, response)
     {

@@ -14,15 +14,11 @@ router.get('/', function(req, res, next) {
 router.get('/topic-discussed', function(req, res, next) {
   var params = req.query
   user.getUserTopics(params,function(data,users_freq)
-  {
-    console.log("callback called");
-    console.log(params);
+  { 
     if(!params.username)
     {
-      console.log("in if");
       res.redirect('/user');
     }
-    //console.log(data,users_freq);
     res.render('users/topic-discussed',{ path: 'user',datasent:users_freq});
   })
   

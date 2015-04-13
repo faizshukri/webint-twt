@@ -15,7 +15,7 @@ router.get('/discussions', function(req, res, next)
 {
 	var input = req.query;
 
-	tweet.searchKeywordTweets(input.keyword, 21, function(result)
+	tweet.searchKeywordTweets(input.keyword, input.geocode, input.count, function(result)
 	 {
 	 	// pass to view
 	 	res.render('tweets/discussions', { path: 'tweet', keyword: input.keyword, tweets: result.statuses});
@@ -27,7 +27,7 @@ router.get('/retweet', function(req, res, next)
 {
 	var params = req.query;
 
-	tweet.getRetweetNum(params.id, 10, function(result)
+	tweet.getRetweetNum(params.id, 12, function(result)
 	 {
 	 	// nak pass to view
 	 	res.render('tweets/retweet', { path: 'tweet', tweets: result});
