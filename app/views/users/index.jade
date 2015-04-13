@@ -30,6 +30,8 @@ block content
           .form-group
             label(for='days_limit') Days Limit
             input.form-control(id='days_limit' type='number', name='days_limit', min=0, max=9, placeholder='Days Limit')
+            span(style='color: gray; font-size: 0.85em;')
+              i Enter 0 for streaming places
           button.btn.btn-primary.btn-block.btn-lg(type='submit') Search 
     .col-sm-4.col-xs-12
       .well
@@ -60,6 +62,8 @@ block content
           .form-group
             label(for='days_limit') Days Limit
             input.form-control(id='days_limit' type='number', name='days_limit', min=0, max=9, placeholder='Days Limit')
+            span(style='color: gray; font-size: 0.85em;')
+              i Enter 0 for streaming tweets
             input(id='place_name', name='place_name', hidden)
 
           button.btn.btn-primary.btn-block.btn-lg(type='submit') Search 
