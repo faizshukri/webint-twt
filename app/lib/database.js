@@ -14,7 +14,6 @@ database.storeUser= function (users, callback)
         query += values.join(', ');
     // users is a User object only 
     } else {
-        //console.log(users.entities.screen_name);
         query += "("+connection.escape(users.screen_name)+","+connection.escape(users.name)+","+connection.escape(users.description)+", "+connection.escape(users.location)+", "+connection.escape(users.profile_image_url)+")";
     }
 
@@ -51,6 +50,7 @@ database.storeVenues = function(place, gplace, callback){
     connection.query(query, function(err, rows){
         if (err){
             connection.query("SELECT * FROM venues WHERE `place_id`="+connection.escape(place.id), function(err, data){
+                console.log(err);
                 if(callback){
                     if(data.length > 0) callback(data[0]);
                     else callback({});
@@ -120,19 +120,6 @@ database.storeTweets = function(tweets){
     
 }
 
-/* store user details in database in the USERS table*/
-/*database.storeUser= function (data)
-{
-    var query = 'insert into Users (twitter_id,,name,description,location,photo) values("'+ data.screen_name+'""'+data.name+'""'+data.description+'""'+data.location+'""'+data.profile_image_url+'")';
-    connection.query('insert into Users (twitter_id,name,description,location,photo) values("'+ data.screen_name+'","'+data.name+'","'+data.description+'","'+data.location+'","'+data.profile_image_url+'")', function(err, rows)
-    {
-        if (err)
-            console.log("users insertion "+err);
-    });   
-    //console.log(data.user_mentions.length); 
-    //database.storeUserConnection(day)                     
-}*/
-
 /* store relation between user and keywords*/
 
 database.getUserID= function (user, callback)
@@ -150,7 +137,6 @@ database.storeUserKeyword= function(keyword,user,frequncy)
 {
 
     database.getUserID(user, function(data){
-        //console.log(data[0].id);
     	 connection.query('insert into user_keywords (user_id,keyword_id,frequency) values("'+ data[0].id+'","'+keyword+'","'+frequncy+'")', function(err, rows)
          {
              if(err)
@@ -294,7 +280,6 @@ database.initializeStopwords = function(callback){
 }
 
 function startQuery(query){
-    console.log('the query: ', query);
     connection.query(query, function(err, rows)
     {
         if (err)
