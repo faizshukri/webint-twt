@@ -11,7 +11,7 @@ exports.up = function(db, callback) {
             rules: {
                 onDelete: 'CASCADE',
                 onUpdate: 'RESTRICT'
-            } },
+            } } },
     area_id: {type:'int', primaryKey:true,
 				foreignKey: { 
 	            name: 'area_user_fk', 
@@ -20,7 +20,7 @@ exports.up = function(db, callback) {
 	            rules: {
 	                onDelete: 'CASCADE',
 	                onUpdate: 'RESTRICT'
-            } },
+            } } },
 
   }, callback);
 };

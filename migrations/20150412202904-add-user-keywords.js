@@ -11,7 +11,7 @@ exports.up = function(db, callback) {
             rules: {
                 onDelete: 'CASCADE',
                 onUpdate: 'RESTRICT'
-            } },
+            } } },
     keyword_id: {type:'int', primaryKey:true,
 				foreignKey: { 
 	            name: 'keyword_user_fk', 
@@ -20,7 +20,7 @@ exports.up = function(db, callback) {
 	            rules: {
 	                onDelete: 'CASCADE',
 	                onUpdate: 'RESTRICT'
-            } },
+            } } },
     frequency:'int',
     since_days:'int'
   }, callback);

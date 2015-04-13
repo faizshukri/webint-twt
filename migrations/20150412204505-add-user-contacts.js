@@ -11,7 +11,7 @@ exports.up = function(db, callback) {
             rules: {
                 onDelete: 'CASCADE',
                 onUpdate: 'RESTRICT'
-            } },
+            } } },
 	contactedUser: { type: 'string', primaryKey: true,
 				foreignKey: { 
 	            name: 'user_keywords_fk', 
@@ -20,7 +20,7 @@ exports.up = function(db, callback) {
 	            rules: {
 	                onDelete: 'CASCADE',
 	                onUpdate: 'RESTRICT'
-	            } }
+	            } } }
   }, callback);
 };
 
