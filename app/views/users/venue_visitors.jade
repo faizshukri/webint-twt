@@ -41,8 +41,9 @@ block content
                             | &nbsp;
                             span.label.label-success Retweet
 
-    #pagination
-      a.next(href='/search/tweets?url='+next_results) Next result
+    if next_results
+      #pagination
+        a.next(href='/search/tweets?url='+next_results) Next result
                         
 append footer
 
@@ -52,7 +53,12 @@ append footer
     script.
       var socket = io.connect('http://localhost:3000');
 
-      socket.emit('start_stream', '#{location}');
+      socket.on('connect', function(){
+        var options = {};
+        if('#{location}') options.location = '#{location}';
+        else options.coordinates = '#{place_name}';
+        socket.emit('start_stream', options);
+      });
 
       var counter  = 0,
           col      = 2;
