@@ -1,25 +1,102 @@
 var connection = require('../services/db');
 var database = {};
 /* store user details in database in the USERS table*/
-database.storeUser= function (data)
+database.storeUser= function (users, callback)
 {
-    var query = 'insert into Users (id,name,description,location,photo) values("'+ data.screen_name+'""'+data.name+'""'+data.description+'""'+data.location+'""'+data.profile_image_url+'")';
-    connection.query('insert into Users (id,name,description,location,photo) values("'+ data.screen_name+'","'+data.name+'","'+data.description+'","'+data.location+'","'+data.profile_image_url+'")', function(err, rows)
+    var query = "INSERT INTO users (`twitter_id`, `name`,`description`,`location`,`photo`) VALUES ";
+    
+    // If user pass array of user
+    if(users instanceof Array){
+        var values = [];
+        users.forEach(function(user){
+            values.push( "("+connection.escape(user.id_str)+","+connection.escape(user.screen_name)+","+connection.escape(user.description)+", "+connection.escape(user.location)+", "+connection.escape(user.profile_image_url)+")" );
+        });
+        query += values.join(', ');
+    // users is a User object only 
+    } else {
+        query += "("+connection.escape(users.id_str)+","+connection.escape(users.screen_name)+","+connection.escape(users.description)+", "+connection.escape(users.location)+", "+connection.escape(users.profile_image_url)+")";
+    }
+
+    connection.query(query, function(err, rows)
+    {
+        if (err){
+            throw err;
+        }else{
+            console.log('user is stored');
+            callback(rows);
+        }
+
+    });                         
+}
+
+database.storeVenues = function(place, gplace){
+
+    if(!place || !gplace) return;
+
+    var query = "INSERT INTO venues (`name`,`description`,`category`,`address`) VALUES "+
+                "('"+connection.escape(place.name)+"','"+connection.escape(place.full_name)+"', '"+connection.escape(place.place_type)+"', '"+connection.escape(gplace.name)+", "+connection.escape(gplace.formatted_address)+"')";
+
+    connection.query(query, function(err, rows)
     {
         if (err)
             console.log("duplicate entry");
-    });                         
+        else
+            console.log('venue is stored');
+    });
 }
+
+database.storeTweets = function(tweets){
+
+    console.log('try to store tweets');
+
+    var start = "INSERT INTO tweets (`text`,`user_id`,`retweeted`,`retweeted_user_id`) VALUES ";
+    
+    // If user pass array of user
+    if(tweets instanceof Array){
+        var values = [];
+        var count = 0;
+        tweets.forEach(function(tweet, index){
+            count++;
+            database.storeUser(tweet.user, function(data){
+                var retweeted = tweet.retweeted_status ? 1 : 0;
+                var retweeted_user_id = retweeted ? tweet.retweeted_status.user.id_str : "";
+                console.log(data.insertId);
+                // values.push( "("+connection.escape(tweet.text)+","+connection.escape(data.insertId)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+")" );
+                
+                query = start + "("+connection.escape(tweet.text)+","+connection.escape(data.insertId)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+")"
+                // if(count === tweets.length){
+                    query += values.join(', ');
+                    console.log('array tweets');
+                    startQuery(query);
+                // }
+            });
+        });
+        
+    // users is a User object only 
+    } else {
+        database.storeUser(tweet.user, function(data){
+            var retweeted = tweets.retweeted_status ? 1 : 0;
+            var retweeted_user_id = retweeted ? tweets.retweeted_status.user.id_str : "";
+            console.log(data.insertId);
+            query += "("+connection.escape(tweets.text)+","+connection.escape(data.insertId)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+")";
+            console.log('object tweet');
+            startQuery(query);
+        });
+    }
+    
+}
+
 /* store relation between user and keywords*/
 database.storeUserKeyword= function(keyword,user,frequncy)
 {
 
 	connection.query('insert into user_keywords (user_id,keyword_id,frequency) values("'+ user+'","'+keyword+'","'+frequncy+'")', function(err, rows)
-                         {
-                            if(err)
-                                console.log("duplicate entry")
-                       	 });                     
+     {
+        if(err)
+            console.log("duplicate entry")
+   	 });                     
 }
+
 /* Get id of keyword from database*/
 database.getKeywordID = function(keyword,user,frequency,callback)
     {
@@ -151,6 +228,17 @@ database.initializeStopwords = function(callback){
         }
     });
     
+}
+
+function startQuery(query){
+    console.log('the query: ', query);
+    connection.query(query, function(err, rows)
+    {
+        if (err)
+            console.log(err);
+        else
+            console.log('tweets is stored');
+    });
 }
 
 module.exports = database;

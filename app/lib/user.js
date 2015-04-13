@@ -28,6 +28,7 @@ user.getInterestingVenues = function(){
 */
 user.getUserTweetSince = function(username, days, count, callback){
   twitter.get('search/tweets', { q: 'from:' + username + ' since:' + this.getLastFewDaysDate(days), count: count }, function(err, data, response) {
+    db.storeTweets(data.statuses);
     callback(data);
   });
 }
@@ -39,10 +40,12 @@ user.getUserTweetSince = function(username, days, count, callback){
 user.getVenueVisitors = function(params, count, callback){
   if(params.location){
     twitter.get('search/tweets', { q: 'place:' + params.location + ' since:' + this.getLastFewDaysDate(params.days_limit), count: count }, function(err, data, response) {
+      db.storeTweets(data.statuses);
       callback(data);
     });
   } else if (params.latitude && params.longitude){
     twitter.get('search/tweets', { geocode: params.latitude + ',' + params.longitude + ',' + '15mi', q: ' since:' + this.getLastFewDaysDate(params.days_limit), count: 10 }, function(err, data, response) {
+      db.storeTweets(data.statuses);
       callback(data);
     });
   }
