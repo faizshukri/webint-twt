@@ -2,12 +2,12 @@ var dbm = global.dbm || require('db-migrate');
 var type = dbm.dataType;
 
 exports.up = function(db, callback) {
-  db.createTable('user_contacts', {
+  db.createTable('user_retweets', {
     id: { type: 'int', primaryKey: true, autoIncrement: true},
-    originalUser: { 
-      type: 'string',
+    user_id: { 
+      type: 'int',
       foreignKey: {
-        name: 'user_keywords_fk', 
+        name: 'user_retweets_user_id_fk', 
         table: 'users', 
         mapping: 'id', 
         rules: {
@@ -16,10 +16,10 @@ exports.up = function(db, callback) {
         }
       }
     },
-  	contactedUser: { 
-      type: 'string',
+  	user_retweet_id: { 
+      type: 'int',
   		foreignKey: { 
-        name: 'user_keywords_fk', 
+        name: 'user_retweets_user_retweet_id_fk', 
         table: 'users', 
         mapping: 'id', 
         rules: {
@@ -32,5 +32,5 @@ exports.up = function(db, callback) {
 };
 
 exports.down = function(db, callback) {
-  db.dropTable('user_contacts', callback);
+  db.dropTable('user_retweets', callback);
 };

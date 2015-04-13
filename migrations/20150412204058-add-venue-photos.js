@@ -8,7 +8,7 @@ exports.up = function(db, callback) {
     venue_id: { 
       type: 'int', 
       foreignKey: { 
-        name: 'venue_photo_id_fk', 
+        name: 'venue_photos_venue_id_fk', 
         table: 'venues', 
         mapping: 'id', 
         rules: {

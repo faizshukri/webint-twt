@@ -5,8 +5,8 @@ exports.up = function(db, callback) {
   db.createTable('geographic_area', {
     id: { type: 'int', primaryKey: true, autoIncrement: true },
     name: {type:'string'},
-    x_coordinate: 'float',
-    y_coordinate: 'float'
+    x_coordinate: 'real',
+    y_coordinate: 'real'
   }, callback);
 };
 

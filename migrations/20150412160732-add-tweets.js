@@ -16,7 +16,9 @@ exports.up = function(db, callback) {
           onUpdate: 'RESTRICT'
         } 
       } 
-    }
+    },
+    retweeted: 'boolean',
+    retweeted_user_id: 'int'
   }, callback);
 };
 

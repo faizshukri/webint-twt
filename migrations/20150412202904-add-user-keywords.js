@@ -3,11 +3,11 @@ var type = dbm.dataType;
 
 exports.up = function(db, callback) {
   db.createTable('user_keywords', {
-    id: { type: 'int', primaryKey: true },
+    id: { type: 'int', primaryKey: true, autoIncrement: true },
     user_id: { 
-      type: 'string',
+      type: 'int',
       foreignKey: { 
-        name: 'user_keywords_fk', 
+        name: 'user_keywords_user_id_fk', 
         table: 'users', 
         mapping: 'id', 
         rules: {
@@ -19,7 +19,7 @@ exports.up = function(db, callback) {
     keyword_id: {
       type:'int',
       foreignKey: { 
-        name: 'keyword_user_fk', 
+        name: 'user_keywords_keyword_id_fk', 
         table: 'keywords', 
         mapping: 'id', 
         rules: {
@@ -28,8 +28,8 @@ exports.up = function(db, callback) {
         } 
       } 
     },
-    frequency:'int',
-    since_days:'int'
+    frequency: 'int',
+    since_days: 'datetime'
   }, callback);
 };
 
