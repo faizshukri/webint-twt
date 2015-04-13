@@ -102,11 +102,19 @@ database.storeTweets = function(tweets){
         
     // users is a User object only 
     } else {
-        database.storeUser(tweets.user, function(data){
-            var retweeted = tweets.retweeted_status ? 1 : 0;
-            var retweeted_user_id = retweeted ? tweets.retweeted_status.user.id_str : "";
-            query = start + "("+connection.escape(tweets.text)+","+connection.escape(data.insertId)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+")";
-            startQuery(query);
+        var tweet = tweets;
+        database.storeUser(tweet.user, function(data){
+            var user_id = data.insertId || data.id;
+
+            database.storeVenues(tweet.place, tweet.gplace, function(data){
+                
+                var venue_id = data.insertId || data.id;
+                var retweeted = tweet.retweeted_status ? 1 : 0;
+                var retweeted_user_id = retweeted ? tweet.retweeted_status.user.id_str : null;
+
+                query = start + "("+connection.escape(tweet.text)+","+connection.escape(user_id)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+","+connection.escape(venue_id)+")"
+                startQuery(query);
+            });
         });
     }
     
