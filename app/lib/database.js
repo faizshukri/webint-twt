@@ -124,7 +124,7 @@ database.storeTweets = function(tweets){
 
 database.getUserID= function (user, callback)
 {
-    connection.query('select id from Users where twitter_id = "'+user+'"',function(err, rows)
+    connection.query('select id from users where twitter_id = "'+user+'"',function(err, rows)
      {
         if(err)
             console.log(err)
@@ -160,7 +160,7 @@ database.getKeywordID = function(keyword,user,frequency,callback)
 /* Get users id's from database*/
 database.getUsernames = function(usr,callback)
     {
-    var query= 'select twitter_id from Users where twitter_id LIKE "' + usr+ '%"'
+    var query= 'select twitter_id from users where twitter_id LIKE "' + usr+ '%"'
                                 + 'OR id LIKE "% ' +usr+ '%"';
     connection.query(query,function(err, rows)
     {
@@ -226,7 +226,7 @@ database.getUserDetails = function(user,callback)
 		}
 	}
 
-    connection.query('select * from Users where Users.twitter_id="'+user+'"',function(err, rows)
+    connection.query('select * from users where users.twitter_id="'+user+'"',function(err, rows)
     {
     	if (err)
     		console.log(err)
