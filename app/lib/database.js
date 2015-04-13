@@ -9,12 +9,12 @@ database.storeUser= function (users, callback)
     if(users instanceof Array){
         var values = [];
         users.forEach(function(user){
-            values.push( "("+connection.escape(user.id_str)+","+connection.escape(user.screen_name)+","+connection.escape(user.description)+", "+connection.escape(user.location)+", "+connection.escape(user.profile_image_url)+")" );
+            values.push( "("+connection.escape(user.screen_name)+","+connection.escape(user.name)+","+connection.escape(user.description)+", "+connection.escape(user.location)+", "+connection.escape(user.profile_image_url)+")" );
         });
         query += values.join(', ');
     // users is a User object only 
     } else {
-        query += "("+connection.escape(users.id_str)+","+connection.escape(users.screen_name)+","+connection.escape(users.description)+", "+connection.escape(users.location)+", "+connection.escape(users.profile_image_url)+")";
+        query += "("+connection.escape(users.screen_name)+","+connection.escape(users.name)+","+connection.escape(users.description)+", "+connection.escape(users.location)+", "+connection.escape(users.profile_image_url)+")";
     }
 
     connection.query(query, function(err, rows)
@@ -23,7 +23,7 @@ database.storeUser= function (users, callback)
             throw err;
         }else{
             console.log('user is stored');
-            callback(rows);
+            if(callback) callback(rows);
         }
 
     });                         
@@ -36,7 +36,16 @@ database.storeVenues = function(place, gplace){
     var query = "INSERT INTO venues (`name`,`description`,`category`,`address`) VALUES "+
                 "('"+connection.escape(place.name)+"','"+connection.escape(place.full_name)+"', '"+connection.escape(place.place_type)+"', '"+connection.escape(gplace.name)+", "+connection.escape(gplace.formatted_address)+"')";
 
-    connection.query(query, function(err, rows)
+    connection.query(query, function(err, rows){
+
+    });
+
+}
+
+database.storeUserConnection=function(original,contact)
+{
+    var query = 'insert into user_retweets(id,user_retweet_id) values ("'+original+'""'+contact+'")';
+    connection.query(query,function(err, rows)
     {
         if (err)
             console.log("duplicate entry");
@@ -86,6 +95,19 @@ database.storeTweets = function(tweets){
     
 }
 
+/* store user details in database in the USERS table*/
+/*database.storeUser= function (data)
+{
+    var query = 'insert into Users (twitter_id,,name,description,location,photo) values("'+ data.screen_name+'""'+data.name+'""'+data.description+'""'+data.location+'""'+data.profile_image_url+'")';
+    connection.query('insert into Users (twitter_id,name,description,location,photo) values("'+ data.screen_name+'","'+data.name+'","'+data.description+'","'+data.location+'","'+data.profile_image_url+'")', function(err, rows)
+    {
+        if (err)
+            console.log("users insertion "+err);
+    });   
+    //console.log(data.user_mentions.length); 
+    //database.storeUserConnection(day)                     
+}*/
+
 /* store relation between user and keywords*/
 database.storeUserKeyword= function(keyword,user,frequncy)
 {
@@ -93,7 +115,7 @@ database.storeUserKeyword= function(keyword,user,frequncy)
 	connection.query('insert into user_keywords (user_id,keyword_id,frequency) values("'+ user+'","'+keyword+'","'+frequncy+'")', function(err, rows)
      {
         if(err)
-            console.log("duplicate entry")
+            console.log("user_keyword"+err)
    	 });                     
 }
 
@@ -155,7 +177,7 @@ database.storeKeywords= function (user,keyword,frequency,callback,nextcallback)
     connection.query('insert into keywords (keyword) values("'+ keyword+'")', function(err, rows)
                          {
                             if (err)
-                                console.log("duplicate entry");
+                                console.log("keyword err"+err);
                             callback(keyword,user,frequency,nextcallback);
                         });
    
@@ -173,11 +195,12 @@ database.getUserDetails = function(user,callback)
 		count=count+1
 		if (count==3)
 		{
+            console.log(user_contacted,venues,user_table)
 			callback(user_table,venues,user_contacted)
 		}
 	}
 
-    connection.query('select * from Users where Users.id="'+user+'"',function(err, rows)
+    connection.query('select * from Users where Users.twitter_id="'+user+'"',function(err, rows)
     {
     	if (err)
     		console.log(err)
@@ -187,7 +210,7 @@ database.getUserDetails = function(user,callback)
     	counting()
     });
 
-    connection.query('select venues.name from venues join user_venues on (user_venues.venue_id=venues.venue_id) where user_venues.user_id="'+user+'"',function(err, rows)
+    connection.query('select venues.name from venues join user_venues on (user_venues.venue_id=venues.id) where user_venues.user_id="'+user+'"',function(err, rows)
     {
     	if (err)
     		console.log(err)
@@ -197,7 +220,7 @@ database.getUserDetails = function(user,callback)
     	counting()
     });
 
-     connection.query('select * from user_contacts where originalUser="'+user+'"',function(err, rows)
+     connection.query('select * from user_retweets where user_id="'+user+'"',function(err, rows)
     {
     	if (err)
     		console.log(err)
@@ -209,7 +232,7 @@ database.getUserDetails = function(user,callback)
 }
 
 database.initializeStopwords = function(callback){
-    var keywords = [ 'a', 'about', 'above', 'after', 'again', 'against', 'all', 'am', 'an', 'and', 'any', 'are', 'as', 'at', 'be', 'because', 'been', 'before', 'being', 'below', 'between', 'both', 'but', 'by', 'could', 'did', 'do', 'does', 'doing', 'down', 'during', 'each', 'few', 'for', 'from', 'further', 'had', 'has', 'have', 'having', 'he', 'hed', 'hell', 'hes', 'her', 'here', 'heres', 'hers', 'herself', 'him', 'himself', 'his', 'how', 'hows', 'i', 'id', 'ill', 'im', 'ive', 'if', 'in', 'into', 'is', 'it', 'its', 'its', 'itself', 'lets', 'me', 'more', 'most', 'my', 'myself', 'no', 'nor', 'not', 'of', 'off', 'on', 'once', 'only', 'or', 'other', 'ought', 'our', 'ours', 'ourselves', 'out', 'over', 'own', 'same', 'she', 'shed', 'shell', 'shes', 'should', 'so', 'some', 'such', 'than', 'that', 'thats', 'the', 'their', 'theirs', 'them', 'themselves', 'then', 'there', 'theres', 'these', 'they', 'theyd', 'theyll', 'theyre', 'theyve', 'this', 'those', 'through', 'to', 'too', 'under', 'until', 'up', 'very', 'was', 'we', 'wed', 'well', 'were', 'weve', 'were', 'what', 'whats', 'when', 'whens', 'where', 'wheres', 'which', 'while', 'who', 'whos', 'whom', 'why', 'whys', 'with', 'wont', 'would', 'you', 'youd', 'youll', 'youre', 'youve', 'your', 'yours', 'yourself', 'yourselves' ];
+    var keywords = [ 'a', 'about', 'above', 'after', 'again', 'against', 'all', 'am', 'an', 'and', 'any', 'are', 'as', 'at', 'be', 'because', 'been', 'before', 'being', 'below', 'between', 'both', 'but', 'by', 'could', 'did', 'do', 'does', 'doing', 'down', 'during', 'each', 'few', 'for', 'from', 'further', 'had', 'has', 'have', 'having', 'he', 'hed', 'hell', 'hes', 'her', 'here', 'heres', 'hers', 'herself', 'him', 'himself', 'his', 'how', 'hows', 'i', 'id', 'ill', 'im', 'ive', 'if', 'in', 'into', 'is', 'it', 'its', 'its', 'itself', 'lets', 'me', 'more', 'most', 'my', 'myself', 'no', 'nor', 'not', 'of', 'off', 'on', 'once', 'only', 'or', 'other', 'ought', 'our', 'ours', 'ourselves', 'out', 'over', 'own', 'same', 'she', 'shed', 'shell', 'shes', 'should', 'so', 'some', 'such', 'than', 'that', 'thats', 'the', 'their', 'theirs', 'them', 'themselves', 'then', 'there', 'theres', 'these', 'they', 'theyd', 'theyll', 'theyre', 'theyve', 'this', 'those', 'through', 'to', 'too', 'under', 'until', 'up', 'very', 'was', 'we', 'wed', 'well', 'were', 'weve', 'were', 'what', 'whats', 'when', 'whens', 'where', 'wheres', 'which', 'while', 'who', 'whos', 'whom', 'why', 'whys', 'with', 'wont', 'would', 'you', 'youd', 'youll', 'youre', 'youve', 'your', 'yours', 'yourself', 'yourselves',"\n","" ];
     
     var query = "INSERT INTO `stopwords` (`id`, `words`) VALUES ";
     var values = [];
