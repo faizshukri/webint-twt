@@ -19,25 +19,32 @@ database.storeUser= function (users, callback)
 
     connection.query(query, function(err, rows)
     {
-        if (err){
-            throw err;
-        }else{
-            console.log('user is stored');
-            if(callback) callback(rows);
-        }
-
+        if(callback) callback(rows);
     });                         
 }
 
-database.storeVenues = function(place, gplace){
+database.storeVenues = function(place, gplace, callback){
 
-    if(!place || !gplace) return;
+    if(!place) return;
 
-    var query = "INSERT INTO venues (`name`,`description`,`category`,`address`) VALUES "+
-                "('"+connection.escape(place.name)+"','"+connection.escape(place.full_name)+"', '"+connection.escape(place.place_type)+"', '"+connection.escape(gplace.name)+", "+connection.escape(gplace.formatted_address)+"')";
+    var query = "INSERT INTO venues (`place_id`, `name`,`description`,`category`,`address`) VALUES ";
+
+    if(!gplace)
+        query += "("+connection.escape(place.id)+","+connection.escape(place.name)+","+connection.escape(place.full_name)+", "+connection.escape(place.place_type)+", "+connection.escape(place.full_name + ', ' + place.country)+")";
+    else
+        query += "("+connection.escape(place.id)+","+connection.escape(place.name)+","+connection.escape(place.full_name)+", "+connection.escape(place.place_type)+", "+connection.escape(gplace.name + ', ' + gplace.formatted_address)+")";
 
     connection.query(query, function(err, rows){
-
+        if (err){
+            connection.query("SELECT * FROM venues WHERE `place_id`="+connection.escape(place.id), function(err, data){
+                if(callback){
+                    if(data.length > 0) callback(data[0]);
+                    else callback({});
+                }
+            });
+        }else{
+            if(callback) callback(rows);
+        }
     });
 
 }
@@ -47,18 +54,13 @@ database.storeUserConnection=function(original,contact)
     var query = 'insert into user_retweets(id,user_retweet_id) values ("'+original+'""'+contact+'")';
     connection.query(query,function(err, rows)
     {
-        if (err)
-            console.log("duplicate entry");
-        else
-            console.log('venue is stored');
+        
     });
 }
 
 database.storeTweets = function(tweets){
 
-    console.log('try to store tweets');
-
-    var start = "INSERT INTO tweets (`text`,`user_id`,`retweeted`,`retweeted_user_id`) VALUES ";
+    var start = "INSERT INTO tweets (`text`,`user_id`,`retweeted`,`retweeted_user_id`,`venue_id`) VALUES ";
     
     // If user pass array of user
     if(tweets instanceof Array){
@@ -67,28 +69,29 @@ database.storeTweets = function(tweets){
         tweets.forEach(function(tweet, index){
             count++;
             database.storeUser(tweet.user, function(data){
-                var retweeted = tweet.retweeted_status ? 1 : 0;
-                var retweeted_user_id = retweeted ? tweet.retweeted_status.user.id_str : "";
-                console.log(data.insertId);
-                // values.push( "("+connection.escape(tweet.text)+","+connection.escape(data.insertId)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+")" );
                 
-                query = start + "("+connection.escape(tweet.text)+","+connection.escape(data.insertId)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+")"
-                // if(count === tweets.length){
-                    query += values.join(', ');
-                    console.log('array tweets');
+                var user_id = data.insertId;
+
+                database.storeVenues(tweet.place, tweet.gplace, function(data){
+                    
+                    var venue_id = data.insertId || data.id;
+                    var retweeted = tweet.retweeted_status ? 1 : 0;
+                    var retweeted_user_id = retweeted ? tweet.retweeted_status.user.id_str : "";
+
+                    query = start + "("+connection.escape(tweet.text)+","+connection.escape(data.insertId)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+","+connection.escape(venue_id)+")"
                     startQuery(query);
-                // }
+
+                });
+
             });
         });
         
     // users is a User object only 
     } else {
-        database.storeUser(tweet.user, function(data){
+        database.storeUser(tweets.user, function(data){
             var retweeted = tweets.retweeted_status ? 1 : 0;
             var retweeted_user_id = retweeted ? tweets.retweeted_status.user.id_str : "";
-            console.log(data.insertId);
-            query += "("+connection.escape(tweets.text)+","+connection.escape(data.insertId)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+")";
-            console.log('object tweet');
+            query = start + "("+connection.escape(tweets.text)+","+connection.escape(data.insertId)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+")";
             startQuery(query);
         });
     }

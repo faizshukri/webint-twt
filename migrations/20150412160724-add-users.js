@@ -4,7 +4,7 @@ var type = dbm.dataType;
 exports.up = function(db, callback) {
   db.createTable('users', {
     id: { type: 'int', primaryKey: true, autoIncrement: true },
-    twitter_id: 'string',
+    twitter_id: { type: 'string', unique: true },
     name: 'string',
     description: 'string',
     photo: 'string',
