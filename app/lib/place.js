@@ -63,7 +63,13 @@ place.filterPlaceName = function(tweets){
 
     // If the tweet come from foursquare, get the location from foursquare instead
     if( tweet.source.indexOf('Foursquare') != -1){
-      tweets[index].place_name = tweet.text.match(/I\'m at (.*) http|\(\@\ (.*)\)/).filter(function(n){ return n != undefined })[1].replace(/-\ \@(.*?)\ /, '');
+
+      // Get the place name from tweet
+      var found = tweet.text.match(/I\'m at (.*) http|\(\@\ (.*)\)/);
+      if(found)
+        tweets[index].place_name = found.filter(function(n){ return n != undefined })[1].replace(/-\ \@(.*?)\ /, '');
+      else
+        tweets[index].place_name = null;
 
     // If not, we get from twitter place
     } else if(tweet.place){

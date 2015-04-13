@@ -100,11 +100,11 @@ user.getUserTopics= function(params,callback)
     count+=1;
     if (count==users.length)
     {
-    for (var key of invIndex.keys()) 
+    for (var key in invIndex.keys()) 
         {
             var total_freq=0;
             // callculating total frequncy of each keyword
-            for (var value of invIndex.get(key).values())
+            for (var value in invIndex.get(key).values())
                 {
                     total_freq+=value
                 }
