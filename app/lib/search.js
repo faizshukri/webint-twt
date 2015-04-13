@@ -21,6 +21,7 @@ search.searchPlaces = function(location, count, callback){
 search.searchTweetNextResult = function(url, callback){
     var options = querystring.parse(url.slice(1));
     twitter.get('search/tweets', options, function(err, data, response){
+        db.storeTweets(data.statuses);
         callback(data);
     });
 }
