@@ -79,6 +79,7 @@ user.getUserTopics= function(params,callback)
     var stopwords =[];
     var shim = require('es6-shim');
     var invIndex=new shim.Map();
+   // var invIndex=new Map();
     
     var count =0;
     var count_callback=1;
@@ -101,17 +102,33 @@ user.getUserTopics= function(params,callback)
     count+=1;
     if (count==users.length)
     {
-    for (var key in invIndex.keys()) 
+        console.log("m here");
+
+        //console.log(JSON.stringify(invIndex.keys()));
+
+    invIndex.forEach(function(val,sum){
+        var total_freq=0;
+        val.forEach(function(value){
+            total_freq+=value
+            console.log(sum,value);
+        });
+        
+        freq_arr.push({'word':sum,'freq':total_freq});
+    });
+   // console.log(freq_arr);
+    /*for (var key of invIndex.keys()) 
         {
+            //console.log(key);
             var total_freq=0;
             if(!invIndex.get(key)) continue;
             // callculating total frequncy of each keyword
-            for (var value in invIndex.get(key).values())
+            for (var value of invIndex.get(key).values())
                 {
                     total_freq+=value
                 }
             freq_arr.push({'word':key,'freq':total_freq});
-        } 
+        } */
+
     // sorting the freq_array according to frequency        
     freq_arr.sort(function(a, b) 
         {
