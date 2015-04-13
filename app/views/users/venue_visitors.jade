@@ -44,6 +44,10 @@ block content
     if next_results
       #pagination
         a.next(href='/search/tweets?url='+next_results) Next result
+    else if statuses.length === 0
+      .well#spinner(align='center')
+        h3 Behold, streaming tweets may come soon &nbsp;&nbsp;
+          i.fa.fa-refresh.fa-spin
                         
 append footer
 
@@ -115,6 +119,7 @@ append footer
           '</div>'
         ).appendTo('.row-'+row).slideDown();
 
+        $('#spinner').fadeOut();
         $('.counter').text(counter);
       });
   

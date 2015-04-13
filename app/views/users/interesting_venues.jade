@@ -72,6 +72,10 @@ block content
                                 i #{review.text}
                                 br 
                                 | &mdash; #{review.author_name}
+    
+    .well#spinner(align='center')
+      h3 Behold, streaming places may come soon &nbsp;&nbsp;
+        i.fa.fa-refresh.fa-spin
 
 append footer
 
@@ -133,6 +137,7 @@ append footer
 
         html += '</tbody></table></div></div></div>';
 
-        $(html).prependTo('.statuses').slideDown();  
+        $('#spinner').fadeOut();
+        $(html).prependTo('.statuses').slideDown();
 
       });
