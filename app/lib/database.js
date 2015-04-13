@@ -92,7 +92,7 @@ database.storeTweets = function(tweets){
                     
                     var venue_id = data.insertId || data.id;
                     var retweeted = tweet.retweeted_status ? 1 : 0;
-                    var retweeted_user_id = retweeted ? tweet.retweeted_status.user.id_str : "";
+                    var retweeted_user_id = retweeted ? tweet.retweeted_status.user.id_str : null;
 
                     query = start + "("+connection.escape(tweet.text)+","+connection.escape(user_id)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+","+connection.escape(venue_id)+")"
                     startQuery(query);
