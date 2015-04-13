@@ -3,12 +3,13 @@
 */
 
 var mysql = require('mysql');
+var db_config = typeof(config) != 'undefined' ? config.database : require('../../database.json')['dev'];
 
 var connection = mysql.createConnection({
-  host     : config.database.host,
-  user     : config.database.user,
-  password : config.database.password,
-  database : config.database.database
+  host     : db_config.host,
+  user     : db_config.user,
+  password : db_config.password,
+  database : db_config.database
 });
 
 connection.connect();
