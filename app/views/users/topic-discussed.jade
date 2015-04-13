@@ -1,7 +1,7 @@
 extends ../layouts/main
 
 block content
-	h2 What Different users are talking about
+	h2 What different users are talking about
 	hr
 	each User,i in datasent
 		if i%2==0
@@ -9,10 +9,10 @@ block content
 				each User,j in datasent.slice(i,i+2)
 					.col-sm-6.col-xs-12
 						.row
-							.col-xs-2
+							.col-xs-3
 								.pull-right
 									img(src=User.data.profile_image_url.replace('normal', 'bigger'))
-							.col-xs-10.user_status
+							.col-xs-9.user_status
 								blockquote
 									h3 
 										a(href='/user/profile/'+User.data.screen_name) #{User.data.name}
