@@ -6,6 +6,7 @@ exports.up = function(db, callback) {
     id: { type: 'int', primaryKey: true, autoIncrement: true },
     user_id: { 
       type: 'int',
+      primaryKey: true,
       foreignKey: { 
         name: 'user_keywords_user_id_fk', 
         table: 'users', 
@@ -18,6 +19,7 @@ exports.up = function(db, callback) {
     },
     keyword_id: {
       type:'int',
+      primaryKey: true,
       foreignKey: { 
         name: 'user_keywords_keyword_id_fk', 
         table: 'keywords', 

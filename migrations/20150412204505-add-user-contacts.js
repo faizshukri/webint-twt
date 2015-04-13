@@ -6,6 +6,7 @@ exports.up = function(db, callback) {
     id: { type: 'int', primaryKey: true, autoIncrement: true},
     user_id: { 
       type: 'int',
+      primaryKey: true,
       foreignKey: {
         name: 'user_retweets_user_id_fk', 
         table: 'users', 
@@ -18,6 +19,7 @@ exports.up = function(db, callback) {
     },
   	user_retweet_id: { 
       type: 'int',
+      primaryKey: true,
   		foreignKey: { 
         name: 'user_retweets_user_retweet_id_fk', 
         table: 'users', 
