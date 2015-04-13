@@ -130,9 +130,13 @@ append footer
 
         $('.statuses').jscroll({
             loadingHtml: '<div class="well" align="center"><h3>Behold, new tweets are coming&nbsp;&nbsp;<i class="fa fa-refresh fa-spin"></i></h3></p>',
-            padding: 20,
-            debug: true,
-            nextSelector: '#pagination a.next'
+            nextSelector: '#pagination a.next',
+            callback: function(){
+              created_at = $('.jscroll-added:last').find('.created_at');
+              $.each(created_at, function(index, value){
+                $(value).text(moment($(value).text(), 'ddd MMM DD HH:mm:ss ZZ YYYY').fromNow());
+              });
+            }
           });
       });
 
