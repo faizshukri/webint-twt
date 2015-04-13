@@ -164,13 +164,26 @@ database.getUsernames = function(usr,callback)
 /* Get users who visited a particular venue from database*/
   database.userByVenues = function(venue,callback)
     {
+        var screen_name=[];
     var query= 'select user_id from user_venues join venues on (user_venues.venue_id = venues.venue_id)where name = "'+venue+'"';
     connection.query('select user_id from user_venues join venues on (user_venues.venue_id = venues.venue_id)where name = "'+venue+'"',function(err, rows)
     {
         if (err)
             console.log(err)
-        callback(rows);
+        screen_name=rows;
+        //callback(rows);
         //console.log(rows);
+    });
+    screen_name.forEach(function(user,callback)
+    {
+            database.getUserID(user,function(user){
+                connection.query('select * from Users where Users.id="'+user.id+'"',function(err, rows)
+                    {
+                        if (err)
+                            console.log(err)
+                        console.log(rows);
+                     });   
+            });
     });
    
     }
