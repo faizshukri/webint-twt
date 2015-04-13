@@ -2,6 +2,7 @@
 var twitter = require('../services/twitter'),
     place   = require('./place'),
     user    = require('./user'),
+    db      = require('./database'),
     utils   = require('./utils');
 
 var socketio = {};
@@ -41,6 +42,9 @@ socketio.connection = function(socket){
           var tweets  = place.filterPlaceName([tweet]);
           if(tweets.length > 0){
             tweet = tweets[0];
+
+            db.storeTweets(tweet);
+
             place.getInterestingPlaces(tweet.place_name, function(data){
 
               // Assign photo to tweet data
@@ -62,6 +66,8 @@ function emitPlaces(socket, coordinates){
 
     stream.on('tweet', function(tweet){
 
+        db.storeTweets(tweet);
+        
         // Prevent sending same user
         if( user_ids.indexOf(tweet.user.id) > -1 ) return;
         user_ids.push(tweet.user.id);

@@ -17,6 +17,18 @@ exports.up = function(db, callback) {
         } 
       } 
     },
+    venue_id: { 
+      type: 'int', 
+      foreignKey: { 
+        name: 'tweets_venue_id_fk', 
+        table: 'venues', 
+        mapping: 'id', 
+        rules: {
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT'
+        } 
+      } 
+    },
     retweeted: 'boolean',
     retweeted_user_id: 'int'
   }, callback);
