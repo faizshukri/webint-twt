@@ -102,9 +102,6 @@ user.getUserTopics= function(params,callback)
     count+=1;
     if (count==users.length)
     {
-        console.log("m here");
-
-        //console.log(JSON.stringify(invIndex.keys()));
 
     invIndex.forEach(function(val,sum){
         var total_freq=0;
@@ -115,19 +112,6 @@ user.getUserTopics= function(params,callback)
         
         freq_arr.push({'word':sum,'freq':total_freq});
     });
-   // console.log(freq_arr);
-    /*for (var key of invIndex.keys()) 
-        {
-            //console.log(key);
-            var total_freq=0;
-            if(!invIndex.get(key)) continue;
-            // callculating total frequncy of each keyword
-            for (var value of invIndex.get(key).values())
-                {
-                    total_freq+=value
-                }
-            freq_arr.push({'word':key,'freq':total_freq});
-        } */
 
     // sorting the freq_array according to frequency        
     freq_arr.sort(function(a, b) 
@@ -136,6 +120,7 @@ user.getUserTopics= function(params,callback)
         });
     // choosing the most frequent x keywords as specified in input
     keywords=freq_arr.slice(0,numKeywords++);
+    console.log(keywords);
     count_callback = 0;
     // storing the data in "finalArray", sorted accordint to each user.
     /** In finalArray usernames can be accessed by finalArray[i].User, profile informatoin of user as finalArray[i].data
@@ -152,18 +137,7 @@ user.getUserTopics= function(params,callback)
                 if (invIndex.get(keywords[j].word).get(usr))
                 {
                 temp_ar.push({'word':keywords[j].word,'freq':invIndex.get(keywords[j].word).get(usr),'totalFreq':keywords[j].freq})
-                
-                //connection.query('SELECT * FROM keywords where keyword ="'+keywords[j].word+'"', function(err, rows)
-                
-                /*connection.query('insert into user_keywords (user_id,keyword_id,frequency,since_days) values("'+ keywords[j].word+'")', function(err, rows)
-                         {
-                            if (err)
-                                console.log("duplicate entry");
-                        });*/
                 db.storeKeywords(usr,keywords[j].word,keywords[j].freq,db.getKeywordID,db.storeUserKeyword);
-
-
-            
                 }
                 else
                 {
@@ -193,11 +167,11 @@ user.getUserTopics= function(params,callback)
                         {
                             for (var indx in data.statuses) 
                             {
-                                var words= data.statuses[indx].text.split(" ");
+                                var words= data.statuses[indx].text.replace(/^\s+|\s+$/g, '').split(" ");
 
                                 for (indx in words)
                                 { 
-                                    words[indx] = words[indx].replace(/[^\w^{@#}\s]|_/g, "").toLowerCase();
+                                    words[indx] = words[indx].replace(/[^\w\s+^{@#}]|_/g, "").toLowerCase();
                                     // removing stopwords from the tweets
                                     if (stopwords.indexOf(words[indx])==-1)
                                     {

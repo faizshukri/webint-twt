@@ -27,7 +27,8 @@ router.get('/getUsers', function(req, res, next)
 });
 
 router.get('/usernames', function(req, res, next) {
-	database.getUsernames(function(users)
+  //console.log(req.query.usernames);
+	database.getUsernames(req.query.usernames,function(users)
 	{
  	  users = utils.pluckselect2( users, ['id', 'id'] );
       users = users.map(function(obj){
@@ -40,7 +41,7 @@ router.get('/usernames', function(req, res, next) {
 });
 
 router.get('/venues', function(req, res, next) {
-	database.getUsernames(function(venues)
+	database.getVenues(req.query.venue,function(venues)
 	{
  	  venues = utils.pluckselect2( venues, ['id', 'name'] );
       venues = venues.map(function(obj){

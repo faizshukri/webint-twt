@@ -32,10 +32,11 @@ database.getKeywordID = function(keyword,user,frequency,callback)
    
     }
 
-database.getUsernames = function(callback)
+database.getUsernames = function(usr,callback)
     {
-    var query= 'select id from Users';
-    connection.query('select id from Users',function(err, rows)
+    var query= 'select id from Users where id LIKE "' + usr+ '%"'
+                                + 'OR id LIKE "% ' +usr+ '%"';
+    connection.query(query,function(err, rows)
     {
         if (err)
             console.log(err)
@@ -46,8 +47,9 @@ database.getUsernames = function(callback)
 
   database.userByVenues = function(venue,callback)
     {
+        console.log("m here")
     var query= 'select user_id from user_venues join venues on (user_venues.venue_id = venues.venue_id)where name = "'+venue+'"';
-    connection.query('select user_id from user_venues join venues on (user_venues.venue_id = venues.id)where name = "'+venue+'"',function(err, rows)
+    connection.query('select user_id from user_venues join venues on (user_venues.venue_id = venues.venue_id)where name = "'+venue+'"',function(err, rows)
     {
         if (err)
             console.log(err)
@@ -60,7 +62,8 @@ database.getUsernames = function(callback)
 database.getVenues = function(venue,callback)
     {
     
-    connection.query('select * from venues',function(err, rows)
+    connection.query('select * from venues where name LIKE "' + venue+ '%"'
+                                + 'OR name LIKE "% ' +venue+ '%"',function(err, rows)
     {
         if (err)
             console.log(err)
