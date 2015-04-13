@@ -14,6 +14,7 @@ database.storeUser= function (users, callback)
         query += values.join(', ');
     // users is a User object only 
     } else {
+        //console.log(users.entities.screen_name);
         query += "("+connection.escape(users.screen_name)+","+connection.escape(users.name)+","+connection.escape(users.description)+", "+connection.escape(users.location)+", "+connection.escape(users.profile_image_url)+")";
     }
 
@@ -21,6 +22,8 @@ database.storeUser= function (users, callback)
     {
         if (err){
             // throw err;
+            console.log("user is already stored");
+
             connection.query("SELECT * FROM users WHERE `twitter_id`="+connection.escape(users.screen_name), function(err, data){
                 if(callback){
                     if(data.length > 0) callback(data[0]);
@@ -28,33 +31,21 @@ database.storeUser= function (users, callback)
                 }
             });
         }else{
+            console.log('user is stored');
             if(callback) callback(rows);
         }
     });                         
 }
 
-database.storeVenues = function(place, gplace, callback){
+database.storeVenues = function(place, gplace){
 
-    if(!place) return;
+    if(!place || !gplace) return;
 
-    var query = "INSERT INTO venues (`place_id`, `name`,`description`,`category`,`address`) VALUES ";
-
-    if(!gplace)
-        query += "("+connection.escape(place.id)+","+connection.escape(place.name)+","+connection.escape(place.full_name)+", "+connection.escape(place.place_type)+", "+connection.escape(place.full_name + ', ' + place.country)+")";
-    else
-        query += "("+connection.escape(place.id)+","+connection.escape(place.name)+","+connection.escape(place.full_name)+", "+connection.escape(place.place_type)+", "+connection.escape(gplace.name + ', ' + gplace.formatted_address)+")";
+    var query = "INSERT INTO venues (`name`,`description`,`category`,`address`) VALUES "+
+                "('"+connection.escape(place.name)+"','"+connection.escape(place.full_name)+"', '"+connection.escape(place.place_type)+"', '"+connection.escape(gplace.name)+", "+connection.escape(gplace.formatted_address)+"')";
 
     connection.query(query, function(err, rows){
-        if (err){
-            connection.query("SELECT * FROM venues WHERE `place_id`="+connection.escape(place.id), function(err, data){
-                if(callback){
-                    if(data.length > 0) callback(data[0]);
-                    else callback({});
-                }
-            });
-        }else{
-            if(callback) callback(rows);
-        }
+
     });
 
 }
@@ -64,13 +55,18 @@ database.storeUserConnection=function(original,contact)
     var query = 'insert into user_retweets(id,user_retweet_id) values ("'+original+'""'+contact+'")';
     connection.query(query,function(err, rows)
     {
-
+        if (err)
+            console.log("duplicate entry");
+        else
+            console.log('venue is stored');
     });
 }
 
 database.storeTweets = function(tweets){
 
-    var start = "INSERT INTO tweets (`text`,`user_id`,`retweeted`,`retweeted_user_id`,`venue_id`) VALUES ";
+    console.log('try to store tweets');
+
+    var start = "INSERT INTO tweets (`text`,`user_id`,`retweeted`,`retweeted_user_id`) VALUES ";
     
     // If user pass array of user
     if(tweets instanceof Array){
@@ -89,18 +85,18 @@ database.storeTweets = function(tweets){
 
                     query = start + "("+connection.escape(tweet.text)+","+connection.escape(user_id)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+","+connection.escape(venue_id)+")"
                     startQuery(query);
-
-                });
-
+                // }
             });
         });
         
     // users is a User object only 
     } else {
-        database.storeUser(tweets.user, function(data){
+        database.storeUser(tweet.user, function(data){
             var retweeted = tweets.retweeted_status ? 1 : 0;
             var retweeted_user_id = retweeted ? tweets.retweeted_status.user.id_str : "";
-            query = start + "("+connection.escape(tweets.text)+","+connection.escape(data.insertId)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+")";
+            console.log(data.insertId);
+            query += "("+connection.escape(tweets.text)+","+connection.escape(data.insertId)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+")";
+            console.log('object tweet');
             startQuery(query);
         });
     }
@@ -121,14 +117,29 @@ database.storeTweets = function(tweets){
 }*/
 
 /* store relation between user and keywords*/
+
+database.getUserID= function (user, callback)
+{
+    connection.query('select id from Users where twitter_id = "'+user+'"',function(err, rows)
+     {
+        if(err)
+            console.log(err)
+
+        if(callback) callback(rows);
+       } );    
+           
+}
 database.storeUserKeyword= function(keyword,user,frequncy)
 {
 
-	connection.query('insert into user_keywords (user_id,keyword_id,frequency) values("'+ user+'","'+keyword+'","'+frequncy+'")', function(err, rows)
-     {
-        if(err)
-            console.log("user_keyword"+err)
-   	 });                     
+    database.getUserID(user, function(data){
+        //console.log(data[0].id);
+    	 connection.query('insert into user_keywords (user_id,keyword_id,frequency) values("'+ data[0].id+'","'+keyword+'","'+frequncy+'")', function(err, rows)
+         {
+             if(err)
+                 console.log("relation already stored")
+        	 });                     
+    });
 }
 
 /* Get id of keyword from database*/
@@ -146,7 +157,7 @@ database.getKeywordID = function(keyword,user,frequency,callback)
 /* Get users id's from database*/
 database.getUsernames = function(usr,callback)
     {
-    var query= 'select id from Users where id LIKE "' + usr+ '%"'
+    var query= 'select twitter_id from Users where twitter_id LIKE "' + usr+ '%"'
                                 + 'OR id LIKE "% ' +usr+ '%"';
     connection.query(query,function(err, rows)
     {
@@ -189,7 +200,7 @@ database.storeKeywords= function (user,keyword,frequency,callback,nextcallback)
     connection.query('insert into keywords (keyword) values("'+ keyword+'")', function(err, rows)
                          {
                             if (err)
-                                console.log("keyword err"+err);
+                                console.log("keyword already stored");
                             callback(keyword,user,frequency,nextcallback);
                         });
    
