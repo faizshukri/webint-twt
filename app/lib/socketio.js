@@ -1,12 +1,14 @@
 
 var twitter = require('../services/twitter'),
+    place   = require('./place'),
+    user    = require('./user'),
     utils   = require('./utils');
 
 var socketio = {};
 
 socketio.connection = function(socket){
 
-    socket.on('start_stream', function(options){
+    socket.on('start_stream_tweet', function(options){
 
         if(options.location){
             twitter.get('geo/id/:id', { id: options.location }, function(err, data, response){
@@ -27,6 +29,29 @@ socketio.connection = function(socket){
         }
     });
 
+    socket.on('start_stream_place', function(options){
+
+      user.getUser(options.username, function(user_obj){
+
+        var place_stream = twitter.stream('statuses/filter', { follow: user_obj.id_str });
+
+        place_stream.on('tweet', function(tweet) {
+
+          // Proceed only if tweet has place
+          var tweets  = place.filterPlaceName([tweet]);
+          if(tweets.length > 0){
+            tweet = tweets[0];
+            place.getInterestingPlaces(tweet.place_name, function(data){
+
+              // Assign photo to tweet data
+              tweet.gplace = data;
+              socket.emit('show_place', { tweet: tweet, api_key: config.google.api_key });
+            });
+          }
+        });
+      });
+    });
+
 }
 
 function emitPlaces(socket, coordinates){
@@ -40,7 +65,6 @@ function emitPlaces(socket, coordinates){
         // Prevent sending same user
         if( user_ids.indexOf(tweet.user.id) > -1 ) return;
         user_ids.push(tweet.user.id);
-
         socket.emit('show_tweet', tweet);
     });
 }

@@ -54,6 +54,11 @@ router.get('/profile/:username', function(req, res, next) {
 router.get('/interesting-venues', function(req, res, next) {
   var params = req.query;
 
+  if(params.days_limit == 0){
+    res.render('users/interesting_venues', { path: 'user', username: params.username, tweets: [], days: params.days_limit });
+    return;
+  }
+
   user.getUserTweetSince(params.username, params.days_limit, 300, function(data){
 
     var tweets  = place.filterPlaceName(data.statuses),

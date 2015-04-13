@@ -6,69 +6,133 @@ block content
     | within last #{days} days.
   hr
 
-  if tweets.length <= 0
+  if tweets.length <= 0 && days > 0
     .row
       .col-sm-12
         .alert.alert-danger
           strong Aw, Snap! &nbsp;
           | No places found
   else
-    each tweet in tweets
-      .row
-        .col-sm-8.col-sm-offset-2
-          .well.interesting-venues
-            table
-              tbody
-                tr
-                  td
-                    .pull-right Name: &nbsp;
-                  td #{tweet.place_name}
-                if Object.keys(tweet.gplace).length === 0
-                  tr
-                    td &nbsp;
-                    td
-                      .alert.alert-danger(style='margin-bottom: 0px;') No details found for this place
-                else
+    .statuses
+      each tweet in tweets
+        .row
+          .col-sm-8.col-sm-offset-2
+            .well.interesting-venues
+              table
+                tbody
                   tr
                     td
-                      .pull-right Categories: &nbsp;
-                    td 
-                      each type in tweet.gplace.types
-                        span.label.label-success.type #{type}
-                        | &nbsp;
-                  tr
-                    td
-                     .pull-right Address: &nbsp;
-                    td #{tweet.gplace.name}, #{tweet.gplace.formatted_address}
-                      br
-                      br
-                      iframe.map(width='100%', height=250, frameborder=0, src='https://www.google.com/maps/embed/v1/place?key=#{api_key}&q=#{tweet.place_name_query}')
-                  tr
-                    td
-                     .pull-right URL: &nbsp;
-                    td
-                      a.btn.btn-primary.btn-xs(href='#{tweet.gplace.website || tweet.gplace.url}', target='_blank') Visit page
-                  tr
-                    td
-                     .pull-right Photos: &nbsp;
-                    td
-                      .row
-                        if tweet.gplace.photo_urls.length <= 0
-                          .col-sm-3
-                            img(src='/images/no_img.jpg', width='100%')
-                        else
-                          each photo in tweet.gplace.photo_urls
-                            .col-sm-4
-                              img(src='#{photo}', width='100%')
-                  if tweet.gplace.reviews
+                      .pull-right Name: &nbsp;
+                    td #{tweet.place_name}
+                  if Object.keys(tweet.gplace).length === 0
+                    tr
+                      td &nbsp;
+                      td
+                        .alert.alert-danger(style='margin-bottom: 0px;') No details found for this place
+                  else
                     tr
                       td
-                       .pull-right Reviews: &nbsp;
+                        .pull-right Categories: &nbsp;
                       td 
-                        if tweet.gplace.reviews
+                        each type in tweet.gplace.types
+                          span.label.label-success.type #{type}
+                          | &nbsp;
+                    tr
+                      td
+                       .pull-right Address: &nbsp;
+                      td #{tweet.gplace.name}, #{tweet.gplace.formatted_address}
+                        br
+                        br
+                        iframe.map(width='100%', height=250, frameborder=0, src='https://www.google.com/maps/embed/v1/place?key=#{api_key}&q=#{tweet.place_name_query}')
+                    tr
+                      td
+                       .pull-right URL: &nbsp;
+                      td
+                        a.btn.btn-primary.btn-xs(href='#{tweet.gplace.website || tweet.gplace.url}', target='_blank') Visit page
+                    tr
+                      td
+                       .pull-right Photos: &nbsp;
+                      td
+                        .row
+                          if tweet.gplace.photo_urls.length <= 0
+                            .col-sm-3
+                              img(src='/images/no_img.jpg', width='100%')
+                          else
+                            each photo in tweet.gplace.photo_urls
+                              .col-sm-4
+                                img(src='#{photo}', width='100%')
+                    if tweet.gplace.reviews
+                      tr
+                        td
+                         .pull-right Reviews: &nbsp;
+                        td 
                           each review in tweet.gplace.reviews
                             div.alert.alert-info
                               small
                                 i #{review.text}
                                 br 
                                 | &mdash; #{review.author_name}
+
+append footer
+
+  //- Integrate socket io only when days is 0
+  if days == 0
+    script(src='/socket.io/socket.io.js')
+    script.
+      var socket = io.connect('http://localhost:3000');
+
+      socket.on('connect', function(){
+        socket.emit('start_stream_place', {username: '#{username}'});
+      });
+
+      socket.on('show_place', function(data){
+
+        var html = '<div class="row" style="display: none;">'+
+          '<div class="col-sm-8 col-sm-offset-2">'+
+              '<div class="well interesting-venues">'+
+                  '<table><tbody>'+
+                      '<tr><td><div class="pull-right">Name: &nbsp;</div></td><td>'+data.tweet.place_name+'</td></tr>';
+
+        if(Object.keys(data.tweet.gplace).length === 0){
+          html += '<tr><td>&nbsp;</td><td><div class="alert alert-danger" style="margin-bottom: 0px;">No details found for this place</div></td></tr>';
+        } else {
+
+          // Categories
+          html += '<tr><td><div class="pull-right">Categories: &nbsp;</div></td><td>';
+            data.tweet.gplace.types.forEach(function(val){
+              html += '<span class="label label-success type">'+val+'</span>&nbsp;';
+            });
+          html += '</td></tr>';
+
+          // Address
+          html += '<tr><td><div class="pull-right">Address: &nbsp;</div></td><td>'+data.tweet.gplace.name+', '+data.tweet.gplace.formatted_address+'<br><br><iframe width="100%" height="250" frameborder="0" src="https://www.google.com/maps/embed/v1/place?key='+data.api_key+'&amp;q='+data.tweet.place_name_query+'" class="map"></iframe></td></tr>';
+
+          // URL
+          html += '<tr><td><div class="pull-right">URL: &nbsp;</div></td><td><a href="'+(data.tweet.gplace.website || data.tweet.gplace.url)+'" target="_blank" class="btn btn-primary btn-xs">Visit page</a></td></tr>';
+
+          // Photo
+          html += '<tr><td><div class="pull-right">Photos: &nbsp;</div></td><td><div class="row">';
+            if(data.tweet.gplace.photo_urls.length <= 0)
+              html += '<div class="col-sm-3"><img src="/images/no_img.jpg" width="100%"></div>';
+            else
+              data.tweet.gplace.photo_urls.forEach(function(val){
+                html += '<div class="col-sm-4"><img src="'+val+'" width="100%"></div>';
+              });
+          html += '</div></td></tr>';
+
+          // Review
+          if(data.tweet.gplace.reviews){
+            html += '<tr><td><div class="pull-right">Reviews: &nbsp;</div></td><td>';
+              data.tweet.gplace.reviews.forEach(function(val){
+                html += '<div class="alert alert-info"><small><i>'+val.text+'</i><br>— '+val.author_name+'</small></div>';
+              });
+            html += '</td></tr>';
+          }
+
+        }
+
+        html += '</tbody></table></div></div></div>';
+
+        $(html).prependTo('.statuses').slideDown();  
+
+      });

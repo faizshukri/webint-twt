@@ -57,7 +57,7 @@ append footer
         var options = {};
         if('#{location}') options.location = '#{location}';
         else options.coordinates = '#{place_name}';
-        socket.emit('start_stream', options);
+        socket.emit('start_stream_tweet', options);
       });
 
       var counter  = 0,
