@@ -41,7 +41,7 @@ function emitPlaces(socket, coordinates){
         if( user_ids.indexOf(tweet.user.id) > -1 ) return;
         user_ids.push(tweet.user.id);
 
-        socket.emit('tweet', tweet);
+        socket.emit('show_tweet', tweet);
     });
 }
 

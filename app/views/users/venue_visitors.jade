@@ -65,7 +65,7 @@ append footer
 
       $('.counter').show();
 
-      socket.on('tweet', function(val){
+      socket.on('show_tweet', function(val){
         counter++;
         row = Math.ceil(counter/col);
 

@@ -71,7 +71,7 @@ router.get('/interesting-venues', function(req, res, next) {
         counter++;
 
         if(counter == tweets.length)
-          res.render('users/interesting_venues', { path: 'user', username: params.username, tweets: tweets, days: params.days_limit, api_key: config.app.google.api_key });
+          res.render('users/interesting_venues', { path: 'user', username: params.username, tweets: tweets, days: params.days_limit, api_key: config.google.api_key });
       });
     });
   });
