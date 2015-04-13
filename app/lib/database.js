@@ -19,7 +19,17 @@ database.storeUser= function (users, callback)
 
     connection.query(query, function(err, rows)
     {
-        if(callback) callback(rows);
+        if (err){
+            // throw err;
+            connection.query("SELECT * FROM users WHERE `twitter_id`="+connection.escape(users.screen_name), function(err, data){
+                if(callback){
+                    if(data.length > 0) callback(data[0]);
+                    else callback({});
+                }
+            });
+        }else{
+            if(callback) callback(rows);
+        }
     });                         
 }
 
@@ -54,7 +64,7 @@ database.storeUserConnection=function(original,contact)
     var query = 'insert into user_retweets(id,user_retweet_id) values ("'+original+'""'+contact+'")';
     connection.query(query,function(err, rows)
     {
-        
+
     });
 }
 
@@ -69,8 +79,7 @@ database.storeTweets = function(tweets){
         tweets.forEach(function(tweet, index){
             count++;
             database.storeUser(tweet.user, function(data){
-                
-                var user_id = data.insertId;
+                var user_id = data.insertId || data.id;
 
                 database.storeVenues(tweet.place, tweet.gplace, function(data){
                     
@@ -78,7 +87,7 @@ database.storeTweets = function(tweets){
                     var retweeted = tweet.retweeted_status ? 1 : 0;
                     var retweeted_user_id = retweeted ? tweet.retweeted_status.user.id_str : "";
 
-                    query = start + "("+connection.escape(tweet.text)+","+connection.escape(data.insertId)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+","+connection.escape(venue_id)+")"
+                    query = start + "("+connection.escape(tweet.text)+","+connection.escape(user_id)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+","+connection.escape(venue_id)+")"
                     startQuery(query);
 
                 });
