@@ -3,19 +3,19 @@ var type = dbm.dataType;
 
 exports.up = function(db, callback) {
   db.createTable('venue_photos', {
-    id: { type: 'int', primaryKey: true ,autoIncrement: true},
+    id: { type: 'int', primaryKey: true, autoIncrement: true},
     link: 'string',
     venue_id: { 
-        type: 'int', 
-        foreignKey: { 
-            name: 'venue_photo_id_fk', 
-            table: 'venues', 
-            mapping: 'id', 
-            rules: {
-                onDelete: 'CASCADE',
-                onUpdate: 'RESTRICT'
-            } 
+      type: 'int', 
+      foreignKey: { 
+        name: 'venue_photo_id_fk', 
+        table: 'venues', 
+        mapping: 'id', 
+        rules: {
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT'
         } 
+      } 
     }
   }, callback);
 };

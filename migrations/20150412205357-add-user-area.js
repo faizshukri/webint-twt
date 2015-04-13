@@ -3,25 +3,31 @@ var type = dbm.dataType;
 
 exports.up = function(db, callback) {
   db.createTable('user_area', {
-    user_id: { type: 'string', primaryKey: true,
+    id: { type: 'int', primaryKey: true, autoIncrement: true},
+    user_id: { 
+      type: 'string',
 			foreignKey: { 
-            name: 'user_area_fk', 
-            table: 'users', 
-            mapping: 'id', 
-            rules: {
-                onDelete: 'CASCADE',
-                onUpdate: 'RESTRICT'
-            } } },
-    area_id: {type:'int', primaryKey:true,
-				foreignKey: { 
-	            name: 'area_user_fk', 
-	            table: 'geographic_area', 
-	            mapping: 'id', 
-	            rules: {
-	                onDelete: 'CASCADE',
-	                onUpdate: 'RESTRICT'
-            } } },
-
+        name: 'user_area_fk', 
+        table: 'users', 
+        mapping: 'id', 
+        rules: {
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT'
+        }
+      }
+    },
+    area_id: {
+      type:'int',
+			foreignKey: { 
+        name: 'area_user_fk', 
+        table: 'geographic_area', 
+        mapping: 'id', 
+        rules: {
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT'
+        }
+      }
+    },
   }, callback);
 };
 

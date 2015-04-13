@@ -3,10 +3,11 @@ var type = dbm.dataType;
 
 exports.up = function(db, callback) {
   db.createTable('stopwords', {
-    words: { type: 'string', primaryKey: true}
+    id: { type: 'int', primaryKey: true, autoIncrement: true},
+    words: { type: 'string' }
   }, callback);
 };
 
 exports.down = function(db, callback) {
-  db.dropTable('topwords', callback);
+  db.dropTable('stopwords', callback);
 };

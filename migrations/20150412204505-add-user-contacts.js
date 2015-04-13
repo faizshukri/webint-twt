@@ -3,24 +3,31 @@ var type = dbm.dataType;
 
 exports.up = function(db, callback) {
   db.createTable('user_contacts', {
-    originalUser: { type: 'string', primaryKey: true,
-			foreignKey: { 
-            name: 'user_keywords_fk', 
-            table: 'users', 
-            mapping: 'id', 
-            rules: {
-                onDelete: 'CASCADE',
-                onUpdate: 'RESTRICT'
-            } } },
-	contactedUser: { type: 'string', primaryKey: true,
-				foreignKey: { 
-	            name: 'user_keywords_fk', 
-	            table: 'users', 
-	            mapping: 'id', 
-	            rules: {
-	                onDelete: 'CASCADE',
-	                onUpdate: 'RESTRICT'
-	            } } }
+    id: { type: 'int', primaryKey: true, autoIncrement: true},
+    originalUser: { 
+      type: 'string',
+      foreignKey: {
+        name: 'user_keywords_fk', 
+        table: 'users', 
+        mapping: 'id', 
+        rules: {
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT'
+        }
+      }
+    },
+  	contactedUser: { 
+      type: 'string',
+  		foreignKey: { 
+        name: 'user_keywords_fk', 
+        table: 'users', 
+        mapping: 'id', 
+        rules: {
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT'
+        }
+      }
+    }
   }, callback);
 };
 

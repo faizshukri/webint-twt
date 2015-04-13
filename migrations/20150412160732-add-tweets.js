@@ -3,19 +3,19 @@ var type = dbm.dataType;
 
 exports.up = function(db, callback) {
   db.createTable('tweets', {
-    id: { type: 'int', primaryKey: true ,autoIncrement: true},
+    id: { type: 'int', primaryKey: true, autoIncrement: true},
     text: 'string',
     user_id: { 
-        type: 'int', 
-        foreignKey: { 
-            name: 'tweets_user_id_fk', 
-            table: 'users', 
-            mapping: 'id', 
-            rules: {
-                onDelete: 'CASCADE',
-                onUpdate: 'RESTRICT'
-            } 
+      type: 'int', 
+      foreignKey: { 
+        name: 'tweets_user_id_fk', 
+        table: 'users', 
+        mapping: 'id', 
+        rules: {
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT'
         } 
+      } 
     }
   }, callback);
 };
