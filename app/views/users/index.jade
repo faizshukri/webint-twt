@@ -26,10 +26,10 @@ block content
           legend Interesting Venues
           .form-group
             label(for='username') Username
-            input.form-control(id='username' type='text', name='username', placeholder='Username')
+            input.form-control(id='username' type='text', name='username', placeholder='Username', required)
           .form-group
             label(for='days_limit') Days Limit
-            input.form-control(id='days_limit' type='number', name='days_limit', min=0, max=9, placeholder='Days Limit')
+            input.form-control(id='days_limit' type='number', name='days_limit', min=0, max=9, placeholder='Days Limit', required)
             span(style='color: gray; font-size: 0.85em;')
               i Enter 0 for streaming places
           button.btn.btn-primary.btn-block.btn-lg(type='submit') Search 
@@ -47,7 +47,7 @@ block content
               #place.tab-pane.fade.in.active(role='tabpanel')
                 .form-group
                   label(for='location') Place
-                  input.form-control(id='location' type='text', name='location', placeholder='Location')
+                  input.form-control(id='location' type='text', name='location', placeholder='Location', required)
               #coordinate.tab-pane.fade(role='tabpanel')
                 .row
                   .col-xs-12.col-sm-6
@@ -61,7 +61,7 @@ block content
 
           .form-group
             label(for='days_limit') Days Limit
-            input.form-control(id='days_limit' type='number', name='days_limit', min=0, max=9, placeholder='Days Limit')
+            input.form-control(id='days_limit' type='number', name='days_limit', min=0, max=9, placeholder='Days Limit', required)
             span(style='color: gray; font-size: 0.85em;')
               i Enter 0 for streaming tweets
             input(id='place_name', name='place_name', hidden)
@@ -91,12 +91,12 @@ append footer
       currentTab = $(currentTab);
 
       // Remove tab that is active, and set current tab as active
-      currentTab.parent().find('.active').removeClass('active');
+      currentTab.parent().find('.active').removeClass('active').find('input,select').removeAttr('required');
       currentTab.addClass('active');
 
       // Disable field for inactive tab content
-      $('.tab-content').find('input, select, textarea').prop('disabled', true);
-      $('#'+currentTab.attr('aria-controls')).find('input, select, textarea').prop('disabled', false);
+      $('.tab-content').find('input, select, textarea').prop('disabled', true).prop('required', false);
+      $('#'+currentTab.attr('aria-controls')).find('input, select, textarea').prop('disabled', false).not('.select2-input,.select2-focusser,.select2-offscreen').prop('required', true);
     }
 
     function initializeSelect2AjaxSearch(id, url, placeholder, tag){
