@@ -5,8 +5,7 @@ block content
   .container
     .page-header
       h1 Discussions on "#{keyword}":
-
-
+ 
   .row
     .col-xs-12
       each status, i in tweets
@@ -33,6 +32,7 @@ block content
                         else
                           | #{tweet.text}
                     p Retweet Count: #{tweet.retweet_count}
+
 
 append footer
   script.
