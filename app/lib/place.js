@@ -67,7 +67,7 @@ place.filterPlaceName = function(tweets){
       // Get the place name from tweet
       var found = tweet.text.match(/I\'m at (.*) http|\(\@\ (.*)\)/);
       if(found)
-        tweets[index].place_name = found.filter(function(n){ return n != undefined })[1].replace(/-\ \@(.*?)\ /, '');
+        tweets[index].place_name = found.filter(function(n){ return n != undefined })[1].replace(/\ -\ \@(.*?)(\ |$)/, '');
 
     // If not, we get from twitter place
     } else if(tweet.place){
