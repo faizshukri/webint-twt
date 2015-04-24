@@ -38,9 +38,9 @@ socketio.connection = function(socket){
 
       user.getUser(options.username, function(user_obj){
 
-        var place_stream = twitter.stream('statuses/filter', { follow: user_obj.id_str });
+        socketio.stream = twitter.stream('statuses/filter', { follow: user_obj.id_str });
 
-        place_stream.on('tweet', function(tweet) {
+        socketio.stream.on('tweet', function(tweet) {
 
           // Proceed only if tweet has place
           var tweets  = place.filterPlaceName([tweet]);
