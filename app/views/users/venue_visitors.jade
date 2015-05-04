@@ -1,7 +1,7 @@
 extends ../layouts/main
 
 block content
-  h2 Users visit #{location} within last #{days} days &nbsp;
+  h2 Users visit #{params.location || params.latitude+','+params.longitude} within last #{params.days_limit} days &nbsp;
     span.label.label-primary.counter(style='display: none;') 0
   hr
 
@@ -41,25 +41,25 @@ block content
                             | &nbsp;
                             span.label.label-success Retweet
 
-    if next_results != 'undefined'
+    if typeof(next_results) != 'undefined'
       #pagination(style='display: none')
         a.next(href='/search/tweets?url='+next_results) Next result
-    else if days === 0 && statuses.length === 0
+    else if parseInt(params.days_limit) === 0 && statuses.length === 0
       .well#spinner(align='center')
         h3 Behold, streaming tweets may come soon &nbsp;&nbsp;
           i.fa.fa-refresh.fa-spin
                         
 append footer
   //- Integrate socket io only when days is 0
-  if days == 0
+  if params.days_limit == 0
     script(src='/socket.io/socket.io.js')
     script.
       var socket = io.connect('http://localhost:3000');
 
       socket.on('connect', function(){
         var options = {};
-        if('#{location}') options.location = '#{location}';
-        else options.coordinates = '#{place_name}';
+        if('#{params.location}') options.location = '#{params.location}';
+        else options.coordinates = '#{params.latitude+","+params.longitude}';
         socket.emit('start_stream_tweet', options);
       });
 

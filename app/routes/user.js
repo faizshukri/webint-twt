@@ -89,7 +89,7 @@ router.get('/venue-visitors', function(req, res, next) {
 
   if(params.days_limit == 0){
 
-    res.render('users/venue_visitors', { path: 'user', location: params.location, statuses: [], days: params.days_limit });
+    res.render('users/venue_visitors', { path: 'user', params: params, statuses: [] });
     return;
   }
   // If some parameter is not exist, we redirect back to /user
@@ -98,7 +98,7 @@ router.get('/venue-visitors', function(req, res, next) {
 
   user.getVenueVisitors(params, 20, function(data){
     var statuses = utils.removeDuplicateObjectInArray(data.statuses, 'user.id');
-    res.render('users/venue_visitors', { path: 'user', location: params.location, statuses: statuses, days: params.days_limit, next_results: require('querystring').escape(data.search_metadata.next_results) });
+    res.render('users/venue_visitors', { path: 'user', params: params, statuses: statuses, next_results: require('querystring').escape(data.search_metadata.next_results) });
   });
 });
 
