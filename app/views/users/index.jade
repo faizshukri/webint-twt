@@ -46,8 +46,9 @@ block content
             .tab-content
               #place.tab-pane.fade.in.active(role='tabpanel')
                 .form-group
-                  label(for='location') Place
-                  input.form-control(id='location' type='text', name='location', placeholder='Location', required)
+                  label(for='location_id') Place
+                  input.form-control(id='location_id' type='text', name='location_id', placeholder='Location', required, onchange='$("#location").val($(this).select2("data").text.replace(/(<([^>]+)>)/ig,""))')
+                  input(id='location', type='hidden', name='location')
               #coordinate.tab-pane.fade(role='tabpanel')
                 .row
                   .col-xs-12.col-sm-6
@@ -77,7 +78,7 @@ append footer
     $(function(){
 
       initializeSelect2AjaxSearch('usernames', 'search/users', 'Search for users', {tag: true});
-      initializeSelect2AjaxSearch('location', 'search/places', 'Search for place', {position: true});
+      initializeSelect2AjaxSearch('location_id', 'search/places', 'Search for place', {position: true});
       initializeSelect2AjaxSearch('username', 'search/users', 'Search for users');
 
       // Reset position to client position if available

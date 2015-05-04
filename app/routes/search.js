@@ -6,7 +6,7 @@ var utils   = require('../lib/utils'),
 
 /* GET tweet page. */
 router.get('/places', function(req, res, next) {
-  if(req.query.location){
+  if(req.query.location_id){
     search.searchPlaces(req.query, 10, function(places){
       res.send(places);
     });

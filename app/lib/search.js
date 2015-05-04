@@ -10,9 +10,9 @@ var search = {};
 *   @return Array of places object
 */
 search.searchPlaces = function(query, count, callback){
-  foursquare.Venues.search( query.x, query.y, null, { query: query.location, limit: count }, foursquare.access_token, function(err, data) {
+  foursquare.Venues.search( query.x, query.y, null, { query: query.location_id, limit: count }, foursquare.access_token, function(err, data) {
     if(err) throw err;
-    places = utils.pluckselect2( data.venues, ['name', 'name'], 'foursquare');
+    places = utils.pluckselect2( data.venues, ['id', 'name'], 'foursquare');
     callback(places);
   });
 }
