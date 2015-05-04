@@ -1,7 +1,7 @@
 extends ../layouts/main
 
 block content
-  h2 Users visit #{place_name} within last #{days} days &nbsp;
+  h2 Users visit #{location} within last #{days} days &nbsp;
     span.label.label-primary.counter(style='display: none;') 0
   hr
 
@@ -44,13 +44,12 @@ block content
     if next_results != 'undefined'
       #pagination(style='display: none')
         a.next(href='/search/tweets?url='+next_results) Next result
-    else if statuses.length === 0
+    else if days === 0 && statuses.length === 0
       .well#spinner(align='center')
         h3 Behold, streaming tweets may come soon &nbsp;&nbsp;
           i.fa.fa-refresh.fa-spin
                         
 append footer
-
   //- Integrate socket io only when days is 0
   if days == 0
     script(src='/socket.io/socket.io.js')
@@ -134,15 +133,15 @@ append footer
         });
 
         $('.statuses').jscroll({
-            loadingHtml: '<div class="well" align="center"><h3>Behold, new tweets are coming&nbsp;&nbsp;<i class="fa fa-refresh fa-spin"></i></h3></p>',
-            nextSelector: '#pagination a.next',
-            callback: function(){
-              created_at = $('.jscroll-added:last').find('.created_at');
-              $.each(created_at, function(index, value){
-                $(value).text(moment($(value).text(), 'ddd MMM DD HH:mm:ss ZZ YYYY').fromNow());
-              });
-            }
-          });
+          loadingHtml: '<div class="well" align="center"><h3>Behold, new tweets are coming&nbsp;&nbsp;<i class="fa fa-refresh fa-spin"></i></h3></p>',
+          nextSelector: '#pagination a.next',
+          callback: function(){
+            created_at = $('.jscroll-added:last').find('.created_at');
+            $.each(created_at, function(index, value){
+              $(value).text(moment($(value).text(), 'ddd MMM DD HH:mm:ss ZZ YYYY').fromNow());
+            });
+          }
+        });
       });
 
 

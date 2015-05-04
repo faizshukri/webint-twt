@@ -6,10 +6,8 @@ var utils   = require('../lib/utils'),
 
 /* GET tweet page. */
 router.get('/places', function(req, res, next) {
-  var location = req.query.location;
-  if(location){
-    search.searchPlaces(location, 10, function(places){
-      places = utils.pluckselect2( places.result.places, ['id', 'full_name'] );
+  if(req.query.location){
+    search.searchPlaces(req.query, 10, function(places){
       res.send(places);
     });
   }
@@ -31,6 +29,7 @@ router.get('/users', function(req, res, next) {
 router.get('/tweets', function(req, res, next){
   var url = req.query.url;
   search.searchTweetNextResult(url, function(data){
+    console.log(data);
     var statuses = utils.removeDuplicateObjectInArray(data.statuses, 'user.id');
     res.render('users/venue_visitors_next', { statuses: statuses, next_results: require('querystring').escape(data.search_metadata.next_results) });
   });

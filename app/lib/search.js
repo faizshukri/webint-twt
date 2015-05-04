@@ -1,4 +1,5 @@
 var twitter     = require('../services/twitter'),
+    foursquare  = require('../services/foursquare'),
     utils       = require('./utils')
     querystring = require('querystring');
 
@@ -8,10 +9,11 @@ var search = {};
 *   Search places from location provided
 *   @return Array of places object
 */
-search.searchPlaces = function(location, count, callback){
-  twitter.get('geo/search', { query: location, max_results: count }, function(err, data, response){
+search.searchPlaces = function(query, count, callback){
+  foursquare.Venues.search( query.x, query.y, null, { query: query.location, limit: count }, foursquare.access_token, function(err, data) {
     if(err) throw err;
-    callback(data);
+    places = utils.pluckselect2( data.venues, ['name', 'name'], 'foursquare');
+    callback(places);
   });
 }
 

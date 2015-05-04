@@ -64,9 +64,8 @@ block content
             input.form-control(id='days_limit' type='number', name='days_limit', min=0, max=9, placeholder='Days Limit', required)
             span(style='color: gray; font-size: 0.85em;')
               i Enter 0 for streaming tweets
-            input(id='place_name', name='place_name', hidden)
 
-          button.btn.btn-primary.btn-block.btn-lg(type='submit') Search 
+          button.btn.btn-primary.btn-block.btn-lg(type='submit') Search
 
 append footer
   script(src='/assets/jquery-geolocation/jquery.geolocation.min.js')
@@ -81,12 +80,13 @@ append footer
       initializeSelect2AjaxSearch('location', 'search/places', 'Search for place', {position: true});
       initializeSelect2AjaxSearch('username', 'search/users', 'Search for users');
 
-      // Listen to input changes. Place name is needed to be pass to the next view
-      $('#location, #latitude, #longitude').change(function(){
-        if($(this).attr('id')=='location')
-          $('#place_name').val($('#place .select2-chosen').text());
-        else
-          $('#place_name').val($('#latitude').val() + ',' + $('#longitude').val())
+      // Reset position to client position if available
+      $.geolocation.get({
+        win: function(pos){
+          //- If we get current user location, we update the position 
+          position.x = pos.coords.latitude;
+          position.y = pos.coords.longitude;
+        }
       });
 
     });
