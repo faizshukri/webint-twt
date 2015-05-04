@@ -1,4 +1,5 @@
 var twitter     = require('../services/twitter'),
+    utils       = require('./utils')
     querystring = require('querystring');
 
 var search = {};
@@ -32,7 +33,12 @@ search.searchTweetNextResult = function(url, callback){
 search.searchUsers = function(username, count, callback){
   twitter.get('users/search', { q: username, count: count }, function(err, data, response){
     if(err) throw err;
-    callback(data);
+    users = utils.pluckselect2( data, ['screen_name', 'screen_name'], 'twitter');
+    users = users.map(function(obj){
+      obj['text'] = '@'+obj['text'];
+      return obj;
+    });
+    callback(users);
   });
 }
 

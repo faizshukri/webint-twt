@@ -4,11 +4,17 @@ var utils = {};
 *   Create array structure that acceptable by Select2
 *   @return array of objects with only id and text properties
 */
-utils.pluckselect2 = function(obj, key) {
-  return obj.map(function(elem){
+utils.pluckselect2 = function(objs, keys, source) {
+  if(typeof(source) == 'undefined') source = null;
+
+  function pluckSplitByComma(obj,key){
+    return key.split(',').map(function(item){return obj[item]}).filter(function(n){ return n != undefined }).join(' ');
+  }
+  return objs.map(function(elem){
     return {
-      id   : elem[key[0]],
-      text : elem[key[1]]
+      id     : pluckSplitByComma(elem,keys[0]),
+      text   : pluckSplitByComma(elem,keys[1]),
+      source : source
     };
   });
 };
