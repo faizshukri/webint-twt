@@ -15,13 +15,14 @@ router.get('/discussions', function(req, res, next)
 {
 	var input = req.query;
 
-	tweet.searchKeywordTweets(input.keyword, input.geocode, input.count, function(result)
-	 {
-	 	// pass to view
-	 	res.render('tweets/discussions', { path: 'tweet', keyword: input.keyword, tweets: result.statuses});
-  	});
+    tweet.getGeoDetails(input.location_id, function(result){
+        tweet.searchKeywordTweets(input.keyword, [result.centroid[1], result.centroid[0], '2mi'].join(','), input.count, function(result)
+         {
+            // pass to view
+            res.render('tweets/discussions', { path: 'tweet', keyword: input.keyword, tweets: result.statuses});
+        });
+    });
 });	
-  	
 
 router.get('/retweet', function(req, res, next) 
 {

@@ -9,12 +9,20 @@ var search = {};
 *   Search places from location provided
 *   @return Array of places object
 */
-search.searchPlaces = function(query, count, callback){
-  foursquare.Venues.search( query.x, query.y, null, { query: query.location_id, limit: count }, foursquare.access_token, function(err, data) {
-    if(err) throw err;
-    places = utils.pluckselect2( data.venues, ['id', 'name'], 'foursquare');
-    callback(places);
-  });
+search.searchPlaces = function(query, count, source, callback){
+  if(source == 'foursquare'){
+    foursquare.Venues.search( query.x, query.y, null, { query: query.location_id, limit: count }, foursquare.access_token, function(err, data) {
+      if(err) throw err;
+      places = utils.pluckselect2( data.venues, ['id', 'name'], 'foursquare');
+      callback(places);
+    });
+  } else if (source == 'twitter'){
+      twitter.get('geo/search', { query: query.location_id, max_results: count }, function(err, data, response){
+        if(err) throw err;
+        places = utils.pluckselect2( data.result.places, ['id', 'full_name'], 'twitter');
+        callback(places);
+      });
+  }
 }
 
 /**
