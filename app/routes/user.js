@@ -2,6 +2,7 @@ var express = require('express'),
     router  = express.Router();
 
 var db         = require('../services/db'),
+    foursquare = require('../services/foursquare'),
     user       = require('../lib/user'),
     place      = require('../lib/place'),
     utils      = require('../lib/utils');
@@ -88,7 +89,7 @@ router.get('/venue-visitors', function(req, res, next) {
 
   if(params.days_limit == 0){
 
-    res.render('users/venue_visitors', { path: 'user', place_name: params.place_name, location: params.location, statuses: [], days: params.days_limit });
+    res.render('users/venue_visitors', { path: 'user', params: params, statuses: [] });
     return;
   }
   // If some parameter is not exist, we redirect back to /user
@@ -97,7 +98,7 @@ router.get('/venue-visitors', function(req, res, next) {
 
   user.getVenueVisitors(params, 20, function(data){
     var statuses = utils.removeDuplicateObjectInArray(data.statuses, 'user.id');
-    res.render('users/venue_visitors', { path: 'user', place_name: params.place_name, statuses: statuses, days: params.days_limit, next_results: require('querystring').escape(data.search_metadata.next_results) });
+    res.render('users/venue_visitors', { path: 'user', params: params, statuses: statuses, next_results: require('querystring').escape(data.search_metadata.next_results) });
   });
 });
 

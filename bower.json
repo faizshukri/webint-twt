@@ -25,7 +25,8 @@
     "select2-bootstrap-css": "~1.4.6",
     "momentjs": "~2.9.0",
     "ihover": "~1.0.0",
-    "jquery.jscroll": "~2.2.4",
-    "font-awesome": "~4.3.0"
+    "jquery.jscroll": "git@github.com:faizshukri/jscroll.git#master",
+    "font-awesome": "~4.3.0",
+    "jquery-geolocation": "*"
   }
 }

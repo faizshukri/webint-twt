@@ -1,4 +1,6 @@
 var twitter     = require('../services/twitter'),
+    foursquare  = require('../services/foursquare'),
+    utils       = require('./utils')
     querystring = require('querystring');
 
 var search = {};
@@ -7,11 +9,20 @@ var search = {};
 *   Search places from location provided
 *   @return Array of places object
 */
-search.searchPlaces = function(location, count, callback){
-  twitter.get('geo/search', { query: location, max_results: count }, function(err, data, response){
-    if(err) throw err;
-    callback(data);
-  });
+search.searchPlaces = function(query, count, source, callback){
+  if(source == 'foursquare'){
+    foursquare.Venues.search( query.x, query.y, null, { query: query.location_id, limit: count }, foursquare.access_token, function(err, data) {
+      if(err) throw err;
+      places = utils.pluckselect2( data.venues, ['id', 'name'], 'foursquare');
+      callback(places);
+    });
+  } else if (source == 'twitter'){
+      twitter.get('geo/search', { query: query.location_id, max_results: count }, function(err, data, response){
+        if(err) throw err;
+        places = utils.pluckselect2( data.result.places, ['id', 'full_name'], 'twitter');
+        callback(places);
+      });
+  }
 }
 
 /**
@@ -32,7 +43,12 @@ search.searchTweetNextResult = function(url, callback){
 search.searchUsers = function(username, count, callback){
   twitter.get('users/search', { q: username, count: count }, function(err, data, response){
     if(err) throw err;
-    callback(data);
+    users = utils.pluckselect2( data, ['screen_name', 'screen_name'], 'twitter');
+    users = users.map(function(obj){
+      obj['text'] = '@'+obj['text'];
+      return obj;
+    });
+    callback(users);
   });
 }
 

@@ -11,11 +11,32 @@ block content
       .col-sm-6.col-sm-offset-3
         input.form-control(id= 'keyword', type='text', name='keyword', placeholder='Insert your keyword (topics or hashtags)')
         br
+        label(for='location_id') Place
+        input.form-control(id='location_id' type='text', name='location_id', placeholder='Location', required)
+        br
         input.form-control(id= 'geocode', type='text', name='geocode', placeholder='(Optional) Insert your location coordinate')
         br
         input.form-control(id= 'count', type='text', name='count', placeholder='(Optional) Number of messages')
         br
         input.btn.btn-primary.btn-lg(type='submit', value='Submit')
 
-  
 
+append footer
+  script(src='/assets/jquery-geolocation/jquery.geolocation.min.js')
+  script(src='/javascripts/place_helper.js')
+  script.
+    $(function(){
+      // By default, user location is at regent court
+      var position = {x:53.3809766, y:-1.4807708};
+
+      // Reset position to client position if available
+      $.geolocation.get({
+        win: function(pos){
+          //- If we get current user location, we update the position 
+          position.x = pos.coords.latitude;
+          position.y = pos.coords.longitude;
+        }
+      });
+
+      initializeSelect2AjaxSearch('location_id', 'search/places', 'Search for place', { x: position.x, y: position.y, source: 'twitter'});
+    });

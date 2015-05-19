@@ -39,7 +39,7 @@ user.getUserTweetSince = function(username, days, count, callback){
 */
 user.getVenueVisitors = function(params, count, callback){
   if(params.location){
-    twitter.get('search/tweets', { q: 'place:' + params.location + ' since:' + this.getLastFewDaysDate(params.days_limit), count: count }, function(err, data, response) {
+    twitter.get('search/tweets', { q: params.location+' swarmapp since:' + this.getLastFewDaysDate(params.days_limit), count: count }, function(err, data, response) {
       db.storeTweets(data.statuses);
       callback(data);
     });

@@ -24,6 +24,14 @@ tweet.getRetweetNum = function(id_str, count, callback)
 			callback(data)
 		});
 }
+
+tweet.getGeoDetails = function(geo_id, callback)
+{
+    twitter.get('geo/id/:id', { id: geo_id }, function(err, data, response){
+        if (err) throw err;
+        callback(data);
+    });
+}
 // keyword_string, count:count
 
 module.exports = tweet;
