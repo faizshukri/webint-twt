@@ -39,20 +39,21 @@ function initializeSelect2AjaxSearch(id, url, placeholder, opts){
     options['tag'] = true;
     options['multiple'] = true;
     options['maximumSelectionSize']=10;
-  } else {
-    function format(item){
-      return $('<span>' + item.text + '<i class="fa fa-'+item.source+' pull-right"></i></span>');
-    }
-
-    options['formatResult'] = function(item, container, query, escapeMarkup){
-      if (!item.id) { return item.text; }
-      var markup=[];
-      markMatch2(item.text, query.term, markup, escapeMarkup);
-      item.text = markup.join("");
-      return format(item);
-    };
-    options['formatSelection'] = format;
   }
+  
+  function format(item){
+    return $('<span>' + item.text + '<i class="fa fa-'+item.source+' pull-right"></i></span>');
+  }
+
+  options['formatResult'] = function(item, container, query, escapeMarkup){
+    if (!item.id) { return item.text; }
+    var markup=[];
+    markMatch2(item.text, query.term, markup, escapeMarkup);
+    item.text = markup.join("");
+    return format(item);
+  };
+  options['formatSelection'] = format;
+
   $('#'+id).select2(options);
 }
 
