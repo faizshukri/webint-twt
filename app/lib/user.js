@@ -111,12 +111,19 @@ user.getUserTopics= function(params,callback)
 
     invIndex.forEach(function(val,word){
         var total_freq=0;
+        var temp=0
         val.forEach(function(value){
             total_freq+=value
-            
+            temp=temp+1
+        //console.log(temp)    
         });
-        
-        freq_arr.push({'word':word,'freq':total_freq});
+        if (temp==users.length)
+        {
+            console.log("yey");
+            console.log(temp);
+            freq_arr.push({'word':word,'freq':total_freq});
+        }
+        //freq_arr.push({'word':word,'freq':total_freq});
     });
 
     // sorting the freq_array according to frequency        

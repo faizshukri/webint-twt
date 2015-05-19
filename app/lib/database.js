@@ -180,8 +180,10 @@ database.getUsernames = function(usr,callback)
   database.userByVenues = function(venue,callback)
     {
         var screen_name=[];
+        console.log("m here");
     var query= 'select user_id from user_venues join venues on (user_venues.venue_id = venues.venue_id)where name = "'+venue+'"';
-    connection.query('select user_id from user_venues join venues on (user_venues.venue_id = venues.venue_id)where name = "'+venue+'"',function(err, rows)
+    console.log(query);
+    connection.query('select user_id from user_venues join venues on (user_venues.venue_id = venues.id)where name = "'+venue+'"',function(err, rows)
     {
         if (err)
             console.log(err)
@@ -189,16 +191,18 @@ database.getUsernames = function(usr,callback)
         //callback(rows);
         //console.log(rows);
     });
+    console.log(screen_name);
     screen_name.forEach(function(user,callback)
     {
-            database.getUserID(user,function(user){
+        console.log("usr"+user);
+           /* database.getUserID(user,function(user){
                 connection.query('select * from Users where Users.id="'+user.id+'"',function(err, rows)
                     {
                         if (err)
                             console.log(err)
                         console.log(rows);
                      });   
-            });
+            });*/
     });
    
     }

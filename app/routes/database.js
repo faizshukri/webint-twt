@@ -20,7 +20,8 @@ router.get('/userDetails', function(req, res, next)
 /* GET list of users who vivsited a particular venue*/
 router.get('/getUsers', function(req, res, next)
 {
-	database.userByVenues(req.query.venue,function(venues)
+  
+	database.userByVenues(req.query.Venue,function(venues)
 	{
   		res.render('databases/user-venue', { path: 'database' });
 	});
