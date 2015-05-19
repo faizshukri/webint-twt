@@ -14,7 +14,6 @@ database.storeUser= function (users, callback)
         query += values.join(', ');
     // users is a User object only 
     } else {
-        //console.log(users.entities.screen_name);
         query += "("+connection.escape(users.screen_name)+","+connection.escape(users.name)+","+connection.escape(users.description)+", "+connection.escape(users.location)+", "+connection.escape(users.profile_image_url)+")";
     }
 
@@ -51,6 +50,7 @@ database.storeVenues = function(place, gplace, callback){
     connection.query(query, function(err, rows){
         if (err){
             connection.query("SELECT * FROM venues WHERE `place_id`="+connection.escape(place.id), function(err, data){
+                console.log(err);
                 if(callback){
                     if(data.length > 0) callback(data[0]);
                     else callback({});
@@ -102,34 +102,29 @@ database.storeTweets = function(tweets){
         
     // users is a User object only 
     } else {
-        database.storeUser(tweets.user, function(data){
-            var retweeted = tweets.retweeted_status ? 1 : 0;
-            var retweeted_user_id = retweeted ? tweets.retweeted_status.user.id_str : "";
-            query = start + "("+connection.escape(tweets.text)+","+connection.escape(data.insertId)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+")";
-            startQuery(query);
+        var tweet = tweets;
+        database.storeUser(tweet.user, function(data){
+            var user_id = data.insertId || data.id;
+
+            database.storeVenues(tweet.place, tweet.gplace, function(data){
+                
+                var venue_id = data.insertId || data.id;
+                var retweeted = tweet.retweeted_status ? 1 : 0;
+                var retweeted_user_id = retweeted ? tweet.retweeted_status.user.id_str : null;
+
+                query = start + "("+connection.escape(tweet.text)+","+connection.escape(user_id)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+","+connection.escape(venue_id)+")"
+                startQuery(query);
+            });
         });
     }
     
 }
 
-/* store user details in database in the USERS table*/
-/*database.storeUser= function (data)
-{
-    var query = 'insert into Users (twitter_id,,name,description,location,photo) values("'+ data.screen_name+'""'+data.name+'""'+data.description+'""'+data.location+'""'+data.profile_image_url+'")';
-    connection.query('insert into Users (twitter_id,name,description,location,photo) values("'+ data.screen_name+'","'+data.name+'","'+data.description+'","'+data.location+'","'+data.profile_image_url+'")', function(err, rows)
-    {
-        if (err)
-            console.log("users insertion "+err);
-    });   
-    //console.log(data.user_mentions.length); 
-    //database.storeUserConnection(day)                     
-}*/
-
 /* store relation between user and keywords*/
 
 database.getUserID= function (user, callback)
 {
-    connection.query('select id from Users where twitter_id = "'+user+'"',function(err, rows)
+    connection.query('select id from users where twitter_id = "'+user+'"',function(err, rows)
      {
         if(err)
             console.log(err)
@@ -142,7 +137,6 @@ database.storeUserKeyword= function(keyword,user,frequncy)
 {
 
     database.getUserID(user, function(data){
-        //console.log(data[0].id);
     	 connection.query('insert into user_keywords (user_id,keyword_id,frequency) values("'+ data[0].id+'","'+keyword+'","'+frequncy+'")', function(err, rows)
          {
              if(err)
@@ -166,7 +160,7 @@ database.getKeywordID = function(keyword,user,frequency,callback)
 /* Get users id's from database*/
 database.getUsernames = function(usr,callback)
     {
-    var query= 'select twitter_id from Users where twitter_id LIKE "' + usr+ '%"'
+    var query= 'select twitter_id from users where twitter_id LIKE "' + usr+ '%"'
                                 + 'OR id LIKE "% ' +usr+ '%"';
     connection.query(query,function(err, rows)
     {
@@ -249,7 +243,7 @@ database.getUserDetails = function(user,callback)
 		}
 	}
 
-    connection.query('select * from Users where Users.twitter_id="'+user+'"',function(err, rows)
+    connection.query('select * from users where users.twitter_id="'+user+'"',function(err, rows)
     {
     	if (err)
     		console.log(err)
@@ -303,7 +297,6 @@ database.initializeStopwords = function(callback){
 }
 
 function startQuery(query){
-    console.log('the query: ', query);
     connection.query(query, function(err, rows)
     {
         if (err)

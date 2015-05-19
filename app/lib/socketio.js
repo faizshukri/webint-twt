@@ -5,9 +5,13 @@ var twitter = require('../services/twitter'),
     db      = require('./database'),
     utils   = require('./utils');
 
-var socketio = {};
+var socketio = { stream: null };
 
 socketio.connection = function(socket){
+
+    socket.on('disconnect', function () {
+        socketio.stream.stop();
+    });
 
     socket.on('start_stream_tweet', function(options){
 
@@ -34,9 +38,9 @@ socketio.connection = function(socket){
 
       user.getUser(options.username, function(user_obj){
 
-        var place_stream = twitter.stream('statuses/filter', { follow: user_obj.id_str });
+        socketio.stream = twitter.stream('statuses/filter', { follow: user_obj.id_str });
 
-        place_stream.on('tweet', function(tweet) {
+        socketio.stream.on('tweet', function(tweet) {
 
           // Proceed only if tweet has place
           var tweets  = place.filterPlaceName([tweet]);
@@ -60,11 +64,11 @@ socketio.connection = function(socket){
 
 function emitPlaces(socket, coordinates){
 
-    var stream = twitter.stream('statuses/filter', { locations: coordinates });
+    socketio.stream = twitter.stream('statuses/filter', { locations: coordinates });
 
     var user_ids = [];
 
-    stream.on('tweet', function(tweet){
+    socketio.stream.on('tweet', function(tweet){
 
         db.storeTweets(tweet);
         
