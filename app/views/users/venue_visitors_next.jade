@@ -26,7 +26,7 @@ each status, i in statuses
                     cite(title='Source Title') &nbsp;
                       span.label.label-warning.created_at #{tweet.created_at}
                       | &nbsp;near 
-                      span.label.label-warning #{tweet.place ? tweet.place.full_name : tweet.retweeted_status ? tweet.retweeted_status.place.full_name : ''}
+                      span.label.label-warning #{tweet.place ? tweet.place.full_name : (tweet.retweeted_status && tweet.retweeted_status.place) ? tweet.retweeted_status.place.full_name : ''}
                       | &nbsp;via 
                       span.label.label-warning !{tweet.source}
                       if tweet.retweeted_status

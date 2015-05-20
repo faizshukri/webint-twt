@@ -14,16 +14,10 @@ router.get('/places', function(req, res, next) {
 });
 
 router.get('/users', function(req, res, next) {
-  var username = req.query.username;
-  if (!username)
-  {
-    username=req.query.usernames
-  }
-  if(username){
-    search.searchUsers(username, 10, function(data){
-      res.send(data);
-    });
-  }
+  var username = req.query.username || req.query.usernames;
+  search.searchUsers(username, 10, function(data){
+    res.send(data);
+  });
 });
 
 router.get('/tweets', function(req, res, next){
