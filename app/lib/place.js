@@ -1,7 +1,8 @@
 var locations   = require('../services/google_place'),
     utils       = require('./utils'),
     querystring = require('querystring'),
-    entities    = require('entities');
+    entities    = require('entities'),
+    foursquare  = require('../services/foursquare.js');
 
 
 var place = {};
