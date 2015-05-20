@@ -15,13 +15,21 @@ router.get('/discussions', function(req, res, next)
 {
 	var input = req.query;
 
-    tweet.getGeoDetails(input.location_id, function(result){
-        tweet.searchKeywordTweets(input.keyword, [result.centroid[1], result.centroid[0], '2mi'].join(','), input.count, function(result)
+	var searchKeyword = function(geocode){
+		tweet.searchKeywordTweets(input.keyword, geocode, input.count, function(result)
          {
             // pass to view
             res.render('tweets/discussions', { path: 'tweet', keyword: input.keyword, tweets: result.statuses});
         });
-    });
+	}
+
+	if(input.location_id){
+	    tweet.getGeoDetails(input.location_id, function(result){
+	        searchKeyword([result.centroid[1], result.centroid[0], '2mi'].join(','));
+	    });
+	} else {
+		searchKeyword(null);
+	}
 });	
 
 router.get('/retweet', function(req, res, next) 

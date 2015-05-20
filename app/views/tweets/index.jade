@@ -9,14 +9,14 @@ block content
   form(action='/tweet/discussions', accept-charset='UTF-8')
     .row
       .col-sm-6.col-sm-offset-3
-        input.form-control(id= 'keyword', type='text', name='keyword', placeholder='Insert your keyword (topics or hashtags)')
+        label(for=keyword) Keyword
+        input.form-control(id= 'keyword', type='text', name='keyword', placeholder='Insert your keyword (topics or hashtags)', required)
         br
         label(for='location_id') Place
-        input.form-control(id='location_id' type='text', name='location_id', placeholder='Location', required)
+        input.form-control(id='location_id' type='text', name='location_id', placeholder='(Optional) Location')
         br
-        input.form-control(id= 'geocode', type='text', name='geocode', placeholder='(Optional) Insert your location coordinate')
-        br
-        input.form-control(id= 'count', type='text', name='count', placeholder='(Optional) Number of messages')
+        label(for=count) Count
+        input.form-control(id= 'count', type='number', name='count', max=30, placeholder='(Optional) Number of messages')
         br
         input.btn.btn-primary.btn-lg(type='submit', value='Submit')
 
