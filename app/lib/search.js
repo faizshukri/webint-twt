@@ -92,6 +92,8 @@ var params = {
                 Venue_obj.url=venues.response[indx][idx].url
                 Venue_obj.description=venues.response[indx][idx].name
                 Venue_obj.address=venues.response[indx][idx].location.formattedAddress
+                Venue_obj.latitude=venues.response[indx][idx].location.lat
+                Venue_obj.longitude=venues.response[indx][idx].location.lng
                 //console.log(Venue_obj.name);
                 if (venues.response[indx][idx].categories[0])
                 {
@@ -130,7 +132,8 @@ var params = {
         venues.link=results[indx].bindings[idx].isPrimaryTopicOf.value
         venues.description=results[indx].bindings[idx].description.value
         venues.address=results[indx].bindings[idx].address.value
-
+        venues.latitude=results[indx].bindings[idx].lat.value
+        venues.longitude=results[indx].bindings[idx].long.value
         category=results[indx].bindings[idx].category.value.split(":",3)
         venues.category=category[2]
         arr[idx]=venues
