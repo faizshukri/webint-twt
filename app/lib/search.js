@@ -68,51 +68,32 @@ function allVenues(arr)
   finalArray=finalArray.concat(arr)
   if(count==3)
   {
-    console.log("yeye"+finalArray[0].name)
     callback(finalArray);
   }
 }
 //var longitude=-73.983994
 //var latitude=40.721294
+  foursquare.Venues.search(latitude, longitude, '', [], config.foursquare.access_token, function(error, venues) {
+    if (!error) {
+      venues.venues.forEach(function(venue){
+        var Venue_obj = new Object();
+        Venue_obj.name        = venue.name
+        Venue_obj.photo       = ""
+        Venue_obj.link        = "www.foursquare.com/v/"+venue.id
+        Venue_obj.url         = venue.url
+        Venue_obj.description = venue.name
+        Venue_obj.address     = venue.location.formattedAddress
+        Venue_obj.latitude    = venue.location.lat
+        Venue_obj.longitude   = venue.location.lng
+        Venue_obj.category    = (venue.categories.length > 0) ? venue.categories[0].name : "";
+        
+        // Add venue to object array
+        foursquare_arr.push(Venue_obj)
+      });
 
-var params = {
-        "ll": latitude+","+longitude,
-        "limit":"10"
-    };
-    foursquare_venues.venues.search(params, function(error, venues) {
-        if (!error) {
-            //console.log(venues);
-            var Venue_obj= new Object();
-            for (var indx in venues.response) {
-              for (var idx in venues.response[indx])
-              {
-                Venue_obj.name=venues.response[indx][idx].name
-                Venue_obj.photo=""
-                Venue_obj.link="www.foursquare.com/v/"+venues.response[indx][idx].id
-                Venue_obj.url=venues.response[indx][idx].url
-                Venue_obj.description=venues.response[indx][idx].name
-                Venue_obj.address=venues.response[indx][idx].location.formattedAddress
-                Venue_obj.latitude=venues.response[indx][idx].location.lat
-                Venue_obj.longitude=venues.response[indx][idx].location.lng
-                //console.log(Venue_obj.name);
-                if (venues.response[indx][idx].categories[0])
-                {
-                
-                Venue_obj.category=venues.response[indx][idx].categories[0].name
-                }
-                else
-                {
-                  Venue_obj.category=""
-                }
-                //console.log(venues.response[indx])
-                //console.log("name: "+Venue_obj.name+"\n"+"photo:"+Venue_obj.photo+"\n"+"url: "+Venue_obj.url+"\n"+"description: "+Venue_obj.description+"\n"+"address: "+Venue_obj.address+"\n"+"category: "+Venue_obj.category+"\n"+"link:"+Venue_obj.link+"\n \n");
-                foursquare_arr[idx]=Venue_obj
-              }
-              //console.log(foursquare_arr.length)
-            }
-            allVenues(foursquare_arr)
-        }
-    });
+      allVenues(foursquare_arr)
+    }
+  });
   var query='PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> SELECT ?subject ?label ?lat ?long ?isPrimaryTopicOf ?description ?address ?photo SAMPLE(?category) as ?category WHERE {?subject geo:lat ?lat.?subject geo:long ?long. ?subject rdfs:label ?label. ?subject foaf:isPrimaryTopicOf ?isPrimaryTopicOf. ?subject dbpedia-owl:abstract ?description. ?subject dbpprop:location ?address. ?subject dbpprop:hasPhotoCollection ?photo. ?subject dcterms:subject ?category. FILTER(xsd:double(?lat) -'+latitude+'<= 0.050).FILTER('+latitude+' - xsd:double(?lat) <= 0.05).FILTER(xsd:double(?long) - '+longitude+' <= 0.05).FILTER('+longitude+' - xsd:double(?long) <= 0.05 && lang(?label) = "en" ).} LIMIT 10'
   var client = new SparqlClient(endpoint);
 //console.log("Query to " + endpoint);

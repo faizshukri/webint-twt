@@ -8,6 +8,5 @@ var client = foursquare({
 });
 
 client.access_token = config.foursquare.access_token;
-var foursquare_venues = require('node-foursquare-venues')(config.foursquare.client_id, config.foursquare.client_secret)
 
 module.exports = client;
