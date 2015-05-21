@@ -45,5 +45,26 @@ a {
     text-transform: capitalize; }
   .tweetstream .interesting-venues iframe.map {
     border: 1px solid #ccc; }
+  .tweetstream #nearby-places-container > div {
+    height: 600px;
+    overflow: auto; }
+  .tweetstream #nearby-places-container #map-col {
+    padding-left: 0px; }
+  .tweetstream #nearby-places-container #place-list-col {
+    padding-right: 0px; }
+  .tweetstream #nearby-places-container #map-canvas {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0; }
+  @media (max-width: 767px) {
+    .tweetstream #nearby-places-container #map-col, .tweetstream #nearby-places-container #place-list-col {
+      padding-right: 15px;
+      padding-left: 15px; }
+    .tweetstream #nearby-places-container #map-col {
+      height: 320px; } }
+  @media (min-width: 768px) {
+    .tweetstream .placesNearby .modal-dialog {
+      width: 800px; } }
 
 /*# sourceMappingURL=style.css.map */

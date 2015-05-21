@@ -1,0 +1,35 @@
+//- extends ../layouts/main
+
+//- block content
+.row#nearby-places-container
+  .col-sm-7.col-sm-push-5#map-col
+    #map-canvas
+
+  .col-sm-5.col-sm-pull-7#place-list-col
+    #accordion.panel-group(role='tablist', aria-multiselectable='true')
+      each place, index in places
+        .panel.panel-default
+          .panel-heading(role='tab')
+            h4.panel-title
+              a(data-toggle='collapse', data-parent='#accordion', href='#collapse-#{index}', aria-expanded='true', aria-controls='collapse-#{index}')= place.name
+                span.pull-right
+                  i(class='fa fa-#{place.source}')
+
+          |     
+          .panel-collapse.collapse(id='collapse-#{index}', role='tabpanel', aria-labelledby='headingOne')
+            .panel-body= place.description
+
+//- append footer
+style.
+
+
+script.
+  function initialize() {
+    var mapOptions = {
+      center: { lat: -34.397, lng: 150.644},
+      zoom: 8
+    };
+    var map = new google.maps.Map(document.getElementById('map-canvas'),
+        mapOptions);
+  }
+  initialize();

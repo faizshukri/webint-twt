@@ -5,6 +5,7 @@ var db         = require('../services/db'),
     foursquare = require('../services/foursquare'),
     user       = require('../lib/user'),
     place      = require('../lib/place'),
+    search     = require('../lib/search'),
     utils      = require('../lib/utils');
 
 /* GET user page. */
@@ -73,7 +74,7 @@ router.get('/interesting-venues', function(req, res, next) {
     tweets.forEach(function(tweet, index){
       place.getInterestingPlaces(tweet.place_name, function(data){
 
-        // Assign photo to tweet data
+        // Assign data to tweet.gplace
         tweets[index].gplace = data;
         counter++;
 
@@ -99,6 +100,14 @@ router.get('/venue-visitors', function(req, res, next) {
   user.getVenueVisitors(params, 20, function(data){
     var statuses = utils.removeDuplicateObjectInArray(data.statuses, 'user.id');
     res.render('users/venue_visitors', { path: 'user', params: params, statuses: statuses, next_results: require('querystring').escape(data.search_metadata.next_results) });
+  });
+});
+
+router.get('/nearby-places', function(req, res, next){
+  var params = req.query;
+
+  search.getNearbyVenues(params.x, params.y, function(data){
+    res.render('users/nearby_places', { places: data });
   });
 });
 

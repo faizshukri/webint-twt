@@ -73,7 +73,7 @@ function allVenues(arr)
 }
 //var longitude=-73.983994
 //var latitude=40.721294
-  foursquare.Venues.search(latitude, longitude, '', [], config.foursquare.access_token, function(error, venues) {
+  foursquare.Venues.search(latitude, longitude, null, { limit: 10 }, config.foursquare.access_token, function(error, venues) {
     if (!error) {
       venues.venues.forEach(function(venue){
         var Venue_obj = new Object();
@@ -86,6 +86,7 @@ function allVenues(arr)
         Venue_obj.latitude    = venue.location.lat
         Venue_obj.longitude   = venue.location.lng
         Venue_obj.category    = (venue.categories.length > 0) ? venue.categories[0].name : "";
+        Venue_obj.source      = 'foursquare';
         
         // Add venue to object array
         foursquare_arr.push(Venue_obj)
@@ -117,6 +118,7 @@ function allVenues(arr)
         venues.longitude=results[indx].bindings[idx].long.value
         category=results[indx].bindings[idx].category.value.split(":",3)
         venues.category=category[2]
+        venues.source = 'wikipedia';
         arr[idx]=venues
       }
       //console.log(results[indx].bindings[idx].label.value)

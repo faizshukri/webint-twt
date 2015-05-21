@@ -91,6 +91,40 @@ a {
         }
     }
 
+    #nearby-places-container {
+        > div {
+            height: 600px;
+            overflow: auto;
+        }
+
+        #map-col {
+            padding-left: 0px;
+        }
+
+        #place-list-col {
+            padding-right: 0px;
+        }
+
+        #map-canvas {
+            height: 100%; width: 100%; margin: 0; padding: 0;
+        }
+
+        @media (max-width: 767px){
+            #map-col, #place-list-col {
+                padding-right: 15px;
+                padding-left: 15px;
+            }
+            #map-col {
+                height: 320px;
+            }
+        }
+
+    }
+    @media (min-width: 768px){
+        .placesNearby .modal-dialog {
+            width: 800px;
+        }
+    }
 }
 
 // .select2-hidden {
