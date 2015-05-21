@@ -26,7 +26,7 @@ block content
                     td #{tweet.place_name}
                       if Object.keys(tweet.gplace).length > 0
                         br
-                        a.btn.btn-primary.btn-xs(data-toggle='modal', data-target='.placesNearby', href='/user/nearby-places?x=#{tweet.gplace.geometry.location.lat}&y=#{tweet.gplace.geometry.location.lng}') &nbsp; Show Nearby Places &nbsp; 
+                        a.btn.btn-primary.btn-xs(data-target='.placesNearby', href='/user/nearby-places?x=#{tweet.gplace.geometry.location.lat}&y=#{tweet.gplace.geometry.location.lng}') &nbsp; Show Nearby Places &nbsp; 
                           i.fa.fa-external-link
 
                   if Object.keys(tweet.gplace).length === 0
@@ -90,6 +90,16 @@ block content
 
 append footer
   script(src='https://maps.googleapis.com/maps/api/js')
+  script.
+    $("a[data-target='.placesNearby']").click(function(e) {
+      e.preventDefault();
+      var target = $(this).attr("href");
+
+      // load the url and show modal on success
+      $(".placesNearby .modal-body").load(target, function() { 
+           $(".placesNearby").modal("show"); 
+      });
+    });
 
   //- Integrate socket io only when days is 0
   if days == 0
