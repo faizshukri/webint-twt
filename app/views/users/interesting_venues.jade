@@ -91,16 +91,19 @@ block content
 append footer
   script(src='https://maps.googleapis.com/maps/api/js')
   script.
-    $("a[data-target='.placesNearby']").click(function(e) {
-      e.preventDefault();
-      var target = $(this).attr("href");
+    function initPlaceNearby(){
+      $("a[data-target='.placesNearby']").click(function(e) {
+        e.preventDefault();
+        var target = $(this).attr("href");
 
-      // load the url and show modal on success
-      $(".placesNearby .modal-body").load(target, function() { 
-           $(".placesNearby").modal("show"); 
+        // load the url and show modal on success
+        $(".placesNearby .modal-body").load(target, function() { 
+             $(".placesNearby").modal("show"); 
+        });
       });
-    });
+    }
 
+    initPlaceNearby();
   //- Integrate socket io only when days is 0
   if days == 0
     script(src='/socket.io/socket.io.js')
@@ -117,7 +120,9 @@ append footer
           '<div class="col-sm-8 col-sm-offset-2">'+
               '<div class="well interesting-venues">'+
                   '<table><tbody>'+
-                      '<tr><td><div class="pull-right">Name: &nbsp;</div></td><td>'+data.tweet.place_name+'</td></tr>';
+                      '<tr><td><div class="pull-right">Name: &nbsp;</div></td><td>'+data.tweet.place_name+
+                      ((Object.keys(data.tweet.gplace).length > 0) ? '<br /><a class="btn btn-primary btn-xs" data-target=".placesNearby" href="/user/nearby-places?x='+data.tweet.gplace.geometry.location.lat+'&y='+data.tweet.gplace.geometry.location.lng+'">Show Nearby Places <i class="fa fa-external-link"></i></a>' : '' ) +
+                      '</td></tr>';
 
         if(Object.keys(data.tweet.gplace).length === 0){
           html += '<tr><td>&nbsp;</td><td><div class="alert alert-danger" style="margin-bottom: 0px;">No details found for this place</div></td></tr>';
@@ -162,4 +167,5 @@ append footer
         $('#spinner').fadeOut();
         $(html).prependTo('.statuses').slideDown();
 
+        initPlaceNearby();
       });

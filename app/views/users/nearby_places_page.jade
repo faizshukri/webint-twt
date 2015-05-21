@@ -1,0 +1,8 @@
+extends ../layouts/main
+
+block content
+  include nearby_places
+
+append header
+  script(src='/assets/jquery/dist/jquery.min.js')
+  script(src='https://maps.googleapis.com/maps/api/js')
