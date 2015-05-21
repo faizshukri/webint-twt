@@ -79,7 +79,7 @@ function allVenues(arr)
         var Venue_obj = new Object();
         Venue_obj.name        = venue.name
         Venue_obj.photo       = ""
-        Venue_obj.link        = "www.foursquare.com/v/"+venue.id
+        Venue_obj.link        = "https://foursquare.com/v/"+venue.id
         Venue_obj.url         = venue.url
         Venue_obj.description = venue.name
         Venue_obj.address     = venue.location.formattedAddress

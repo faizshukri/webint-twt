@@ -10,18 +10,19 @@
       each place, index in places
         .panel.panel-default(id='panel-#{index}',typeof='Venue')
           .panel-heading(role='tab')
-            h4.panel-title
-              a(data-toggle='collapse', data-parent='#accordion', href='#collapse-#{index}', aria-expanded='true', aria-controls='collapse-#{index}', property='name')= place.name
+            h4.panel-title(property='name')
+              a(data-toggle='collapse', data-parent='#accordion', href='#collapse-#{index}', aria-expanded='true', aria-controls='collapse-#{index}')= place.name
                 span.pull-right
                   i(class='fa fa-#{place.source}')
 
           |     
           .panel-collapse.collapse(id='collapse-#{index}', role='tabpanel', aria-labelledby='headingOne')
-            .panel-body(property='description')
-              div= place.description 
+            .panel-body
+              div(property='description')= place.description 
                 &nbsp; 
-                a(href = place.link) Visit Page
-              div=place.address
+              a(href = place.link, property='URL-venue') Visit Page
+              div(property='address')=place.address
+              div(property='category')=place.category
 
 //- append footer
 //-   script(src='https://maps.googleapis.com/maps/api/js')
