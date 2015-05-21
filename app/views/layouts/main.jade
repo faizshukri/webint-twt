@@ -1,10 +1,11 @@
-doctype html(xmlns='http://www.w3.org/1999/xhtml')
-head
-  include header
+doctype html
+html(xmlns='http://www.w3.org/1999/xhtml')
+  head
+    include header
 
-body(vocab='/rdf/WebSchema.rdf#')
-  include navigation
+  body(vocab='/rdf/WebSchema.rdf#')
+    include navigation
 
-  .container.tweetstream
-    block content
-    include footer
+    .container.tweetstream
+      block content
+      include footer
