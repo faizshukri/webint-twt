@@ -19,11 +19,12 @@ block content
           .col-sm-8.col-sm-offset-2
             .well.interesting-venues
               table
-                tbody
+                tbody(typeof='Venue')
                   tr
-                    td
+                    td 
                       .pull-right Name: &nbsp;
-                    td #{tweet.place_name}
+                    td 
+                      span(property='name') #{tweet.place_name}
                       if Object.keys(tweet.gplace).length > 0
                         br
                         a.btn.btn-primary.btn-xs(data-target='.placesNearby', href='/user/nearby-places?x=#{tweet.gplace.geometry.location.lat}&y=#{tweet.gplace.geometry.location.lng}') &nbsp; Show Nearby Places &nbsp; 
@@ -33,6 +34,7 @@ block content
                     tr
                       td &nbsp;
                       td
+                        span(property='category')
                         .alert.alert-danger(style='margin-bottom: 0px;') No details found for this place
                   else
                     tr
@@ -40,12 +42,14 @@ block content
                         .pull-right Categories: &nbsp;
                       td
                         each type in tweet.gplace.types
-                          span.label.label-success.type #{type}
+                          span(property='category')
+                            span.label.label-success.type #{type}
                           | &nbsp;
                     tr
                       td
                        .pull-right Address: &nbsp;
-                      td #{tweet.gplace.name}, #{tweet.gplace.formatted_address}
+                      td 
+                        span(property='address') #{tweet.gplace.name}, #{tweet.gplace.formatted_address}
                         br
                         br
                         iframe.map(width='100%', height=250, frameborder=0, src='https://www.google.com/maps/embed/v1/place?key=#{api_key}&q=#{tweet.place_name_query}')
@@ -53,7 +57,7 @@ block content
                       td
                        .pull-right URL: &nbsp;
                       td
-                        a.btn.btn-primary.btn-xs(href='#{tweet.gplace.website || tweet.gplace.url}', target='_blank') Visit page
+                        a.btn.btn-primary.btn-xs(href='#{tweet.gplace.website || tweet.gplace.url}', target='_blank', property='URL-venue') Visit page
                     tr
                       td
                        .pull-right Photos: &nbsp;
@@ -61,11 +65,11 @@ block content
                         .row
                           if tweet.gplace.photo_urls.length <= 0
                             .col-sm-3
-                              img(src='/images/no_img.jpg', width='100%')
+                              img(src='/images/no_img.jpg', width='100%', property='Image')
                           else
                             each photo in tweet.gplace.photo_urls
                               .col-sm-4
-                                img(src='#{photo}', width='100%')
+                                img(src='#{photo}', width='100%',property='Image')
                     if tweet.gplace.reviews
                       tr
                         td
