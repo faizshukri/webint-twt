@@ -107,7 +107,7 @@ router.get('/nearby-places', function(req, res, next){
   var params = req.query;
 
   search.getNearbyVenues(params.x, params.y, function(data){
-    res.render('users/nearby_places', { places: data });
+    res.render('users/nearby_places', { places: data, coordinates: { x: params.x, y: params.y} });
   });
 });
 

@@ -8,7 +8,7 @@
   .col-sm-5.col-sm-pull-7#place-list-col
     #accordion.panel-group(role='tablist', aria-multiselectable='true')
       each place, index in places
-        .panel.panel-default
+        .panel.panel-default(id='panel-#{index}')
           .panel-heading(role='tab')
             h4.panel-title
               a(data-toggle='collapse', data-parent='#accordion', href='#collapse-#{index}', aria-expanded='true', aria-controls='collapse-#{index}')= place.name
@@ -20,16 +20,76 @@
             .panel-body= place.description
 
 //- append footer
-style.
-
-
+//-   script(src='https://maps.googleapis.com/maps/api/js')
 script.
+
+  var places = !{JSON.stringify(places)};
+  var activeInfoWindow = null;
+  var markers = [];
+  var map = null;
+
   function initialize() {
     var mapOptions = {
-      center: { lat: -34.397, lng: 150.644},
-      zoom: 8
+      center: { lat: parseFloat('#{coordinates.x}'), lng: parseFloat('#{coordinates.y}') },
+      zoom: 13
     };
-    var map = new google.maps.Map(document.getElementById('map-canvas'),
+    map = new google.maps.Map(document.getElementById('map-canvas'),
         mapOptions);
+
+    drawMarkers(map);
+      //- google.maps.event.trigger(map,'resize');
   }
-  initialize();
+
+  function drawMarkers(map){
+    places.forEach(function(place, index){
+
+      var marker = new google.maps.Marker({
+        position: new google.maps.LatLng( parseFloat(place.latitude), parseFloat(place.longitude) ),
+        title: place.name
+      });
+
+      google.maps.event.addListener(marker, 'click', function() {
+        changeMarkerActive(map, marker, place.description);
+
+        $('.panel-collapse').collapse('hide');
+        $('#collapse-'+index).collapse('show');
+        scrollTo('#panel-'+index);
+      });
+
+      // To add the marker to the map, call setMap();
+      marker.setMap(map);
+      markers.push(marker);
+    });
+  }
+
+  function changeMarkerActive(map, marker, description){
+    var infowindow = new google.maps.InfoWindow({
+        content: "<div>"+description+"</div>",
+        maxWidth: 200
+      });
+
+    map.setZoom(15);
+    map.panTo(marker.getPosition());
+
+    if(activeInfoWindow) activeInfoWindow.close();
+    activeInfoWindow = infowindow;
+
+    infowindow.open(map, marker);
+  }
+
+  function scrollTo(selector) {
+    $('#place-list-col').animate({ scrollTop: $(selector).offset().top - 75 }, 'fast');
+    return false;
+  }
+
+  $('.panel-collapse').on('show.bs.collapse', function(e){
+    var index = $(this).prop('id').replace('collapse-','');
+    index = parseInt(index);
+
+    changeMarkerActive(map, markers[ index ], places[index].description );
+  });
+
+  setTimeout(function(){
+    initialize();
+  }, 500);
+    
