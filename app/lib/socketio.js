@@ -1,9 +1,9 @@
 
-var twitter = require('../services/twitter'),
-    place   = require('./place'),
-    user    = require('./user'),
-    db      = require('./database'),
-    utils   = require('./utils');
+var twitter     = require('../services/twitter'),
+    place       = require('./place'),
+    user        = require('./user'),
+    db          = require('./database'),
+    utils       = require('./utils');
 
 var socketio = { stream: null };
 
@@ -14,23 +14,19 @@ socketio.connection = function(socket){
     });
 
     socket.on('start_stream_tweet', function(options){
+        if(options.location_id){
 
-        if(options.location){
-            twitter.get('geo/id/:id', { id: options.location }, function(err, data, response){
-                var x = [], y = [];
-                data.bounding_box.coordinates[0].forEach(function(location){
-                    x.push(location[0]),
-                    y.push(location[1]);
-                });
+            // Get the place details from foursquare, to get it's location
+            place.getFoursquarePlaceDetails(options.location_id, function(result){
+                var location = result.venue.location;
 
-                x = utils.removeDuplicateValuesInArray(x);
-                y = utils.removeDuplicateValuesInArray(y);
-
-                emitPlaces(socket, [ x[0], y[0], x[1], y[1] ]);
+                // Using it's location, we stream twitter from surrounding
+                emitPlaces(socket, [ location.lng - 0.0003, location.lat - 0.0003, location.lng + 0.0003, location.lat + 0.0003 ]);
             });
+
         } else if(options.coordinates) {
             options.coordinates = options.coordinates.split(',');
-            emitPlaces(socket, [parseFloat(options.coordinates[1]) - 0.1, parseFloat(options.coordinates[0]) - 0.1, parseFloat(options.coordinates[1]) + 0.1, parseFloat(options.coordinates[0]) + 0.1]);
+            emitPlaces(socket, [parseFloat(options.coordinates[1]) - 0.0004, parseFloat(options.coordinates[0]) - 0.0004, parseFloat(options.coordinates[1]) + 0.0004, parseFloat(options.coordinates[0]) + 0.0004]);
         }
     });
 

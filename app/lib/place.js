@@ -2,7 +2,7 @@ var locations   = require('../services/google_place'),
     utils       = require('./utils'),
     querystring = require('querystring'),
     entities    = require('entities'),
-    foursquare  = require('../services/foursquare.js');
+    foursquare  = require('../services/foursquare');
 
 
 var place = {};
@@ -82,6 +82,14 @@ place.filterPlaceName = function(tweets){
   });
 
   return utils.removeDuplicateObjectInArray(tweets, 'place_name');
+}
+
+place.getFoursquarePlaceDetails = function(id, callback){
+  foursquare.Venues.getVenue(id, config.foursquare.access_token, function(err, result){
+    if(err) throw err;
+
+    callback(result);
+  });
 }
 
 module.exports = place;
