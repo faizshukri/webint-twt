@@ -20,8 +20,8 @@ database.storeUser= function (users, callback)
     connection.query(query, function(err, rows)
     {
         if (err){
-            // throw err;
-            console.log("user is already stored");
+            
+            console.log(err);
 
             connection.query("SELECT * FROM users WHERE `twitter_id`="+connection.escape(users.screen_name), function(err, data){
                 if(callback){
@@ -30,7 +30,7 @@ database.storeUser= function (users, callback)
                 }
             });
         }else{
-            console.log('user is stored');
+            //console.log('user is stored');
             if(callback) callback(rows);
         }
     });                         
@@ -40,13 +40,13 @@ database.storeUserVenues = function(user,venue)
 {
 
             var query='INSERT into user_venues (`user_id`,`venue_id`) VALUES("'+user+'","'+venue+'")';
-            console.log(query)
+            
             connection.query(query,function(err, rows)
             {
                 if (err)
-                console.log("duplicate entry user_venue");
-                 else
-                console.log('venue_user is stored');
+                console.log("err");
+                
+                //console.log('venue_user is stored');
             });
 
 }
@@ -79,19 +79,18 @@ database.storeVenues = function(place, gplace, callback){
 }
 
 
-
+/*store the users a user has contacted*/
 database.storeUserConnection=function(original,contact)
 {
     var query = 'insert into user_retweets(id,user_retweet_id) values ("'+original+'""'+contact+'")';
     connection.query(query,function(err, rows)
     {
         if (err)
-            console.log("duplicate entry");
-        else
-            console.log('venue is stored');
+            console.log("err");
+        
     });
 }
-
+/*store tweets in database*/
 database.storeTweets = function(tweets){
 
     var start = "INSERT INTO tweets (`text`,`user_id`,`retweeted`,`retweeted_user_id`,`venue_id`) VALUES ";
@@ -171,7 +170,7 @@ database.storeUserKeyword= function(keyword,user,frequncy)
     	 connection.query('insert into user_keywords (user_id,keyword_id,frequency) values("'+ data[0].id+'","'+keyword+'","'+frequncy+'")', function(err, rows)
          {
              if(err)
-                 console.log("relation already stored")
+                 console.log(err)
         	 });                     
     });
 }
@@ -207,23 +206,22 @@ database.getUsernames = function(usr,callback)
         var screen_name=[];
         
         console.log("m here");
-        
+       /*get id of venue from database*/ 
     database.getVenueID(venue,function(data)
     {
         var venue_id=data[0];
         
         var query= 'select user_id from user_venues join venues on (user_venues.venue_id = venues.id)where name = "'+venue+'"'
     
-   
+   /*get user id's of the users who have visited the venue*/
     connection.query('select user_id from user_venues join venues on (user_venues.venue_id = venues.id)where name = "'+venue+'"',function(err, rows)
     {
         if (err)
             console.log(err)
         screen_name=rows;
-        console.log(rows.length);
          var user_details=[]
 
-      
+      /*get details for each user who have visited the venue*/
        screen_name.forEach(function(user)
     {   
         
@@ -233,7 +231,6 @@ database.getUsernames = function(usr,callback)
                             console.log(err)
                         else
                         {
-                            console.log(rows[0].name);
                             user_details.push({'name':rows[0].name,'id':rows[0].twitter_id})
                             
 
@@ -241,12 +238,11 @@ database.getUsernames = function(usr,callback)
                         if (user_details.length==screen_name.length)
                      {
 
-                        console.log("lenhhjkhjkh"+user_details[0].id);
+                        
                         callback(user_details)
                      } 
                         
-                     })
-                       
+                     })                  
         
     })
             
@@ -276,7 +272,7 @@ database.storeKeywords= function (user,keyword,frequency,callback,nextcallback)
     connection.query('insert into keywords (keyword) values("'+ keyword+'")', function(err, rows)
                          {
                             if (err)
-                                console.log("keyword already stored");
+                                console.log(err);
                             callback(keyword,user,frequency,nextcallback);
                         });
    
@@ -288,17 +284,17 @@ database.getUserDetails = function(user,callback)
 	var user_contacted=[];
 	var venues=[];
 	var count=0;
-
+    /*when all information needed is retrieved, callback function is called*/
 	function counting()
 	{
 		count=count+1
 		if (count==3)
 		{
-            console.log(user_contacted,venues,user_table)
+            
 			callback(user_table,venues,user_contacted)
 		}
 	}
-
+    /*get user details from database*/
     connection.query('select * from users where users.twitter_id="'+user+'"',function(err, rows)
     {
     	if (err)
@@ -310,7 +306,7 @@ database.getUserDetails = function(user,callback)
     });
     database.getUserID(user, function(data){
     var query1='select venues.name from venues join user_venues on (user_venues.venue_id=venues.id) where user_venues.user_id="'+data[0].id+'"'
-    console.log(query1)
+    /*get the venues user has visited*/
     connection.query('select venues.name from venues join user_venues on (user_venues.venue_id=venues.id) where user_venues.user_id="'+data[0].id+'"',function(err, rows)
     {
     	if (err)
@@ -321,7 +317,7 @@ database.getUserDetails = function(user,callback)
     	counting()
     });
 });
-
+    /*get the users the user has contacted if any*/
      connection.query('select * from user_retweets where user_id="'+user+'"',function(err, rows)
     {
     	if (err)
@@ -332,7 +328,7 @@ database.getUserDetails = function(user,callback)
     	counting()
     });
 }
-
+/* function to store stopwords in database when the system is intalled for the first time*/
 database.initializeStopwords = function(callback){
     var keywords = [ 'a', 'about', 'above', 'after', 'again', 'against', 'all', 'am', 'an', 'and', 'any', 'are', 'as', 'at', 'be', 'because', 'been', 'before', 'being', 'below', 'between', 'both', 'but', 'by', 'could', 'did', 'do', 'does', 'doing', 'down', 'during', 'each', 'few', 'for', 'from', 'further', 'had', 'has', 'have', 'having', 'he', 'hed', 'hell', 'hes', 'her', 'here', 'heres', 'hers', 'herself', 'him', 'himself', 'his', 'how', 'hows', 'i', 'id', 'ill', 'im', 'ive', 'if', 'in', 'into', 'is', 'it', 'its', 'its', 'itself', 'lets', 'me', 'more', 'most', 'my', 'myself', 'no', 'nor', 'not', 'of', 'off', 'on', 'once', 'only', 'or', 'other', 'ought', 'our', 'ours', 'ourselves', 'out', 'over', 'own', 'same', 'she', 'shed', 'shell', 'shes', 'should', 'so', 'some', 'such', 'than', 'that', 'thats', 'the', 'their', 'theirs', 'them', 'themselves', 'then', 'there', 'theres', 'these', 'they', 'theyd', 'theyll', 'theyre', 'theyve', 'this', 'those', 'through', 'to', 'too', 'under', 'until', 'up', 'very', 'was', 'we', 'wed', 'well', 'were', 'weve', 'were', 'what', 'whats', 'when', 'whens', 'where', 'wheres', 'which', 'while', 'who', 'whos', 'whom', 'why', 'whys', 'with', 'wont', 'would', 'you', 'youd', 'youll', 'youre', 'youve', 'your', 'yours', 'yourself', 'yourselves',"\n","" ];
     
@@ -354,7 +350,7 @@ database.initializeStopwords = function(callback){
     });
     
 }
-
+/*general function to excecute queries*/
 function startQuery(query){
     connection.query(query, function(err, rows)
     {
