@@ -1,4 +1,9 @@
 extends ../layouts/main
 
 block content
-  h3 Users visiting this place
+	h3 Users who visited #{venue}
+	each user in users
+		.row
+			&nbsp; &nbsp; &nbsp; &nbsp;
+			a(href='/database/userDetails?username='+user.id) #{user.name} 
+		

@@ -35,7 +35,22 @@ database.storeUser= function (users, callback)
         }
     });                         
 }
+/* store relation between user venues in database*/
+database.storeUserVenues = function(user,venue)
+{
 
+            var query='INSERT into user_venues (`user_id`,`venue_id`) VALUES("'+user+'","'+venue+'")';
+            console.log(query)
+            connection.query(query,function(err, rows)
+            {
+                if (err)
+                console.log("duplicate entry user_venue");
+                 else
+                console.log('venue_user is stored');
+            });
+
+}
+/* store venue details in database*/
 database.storeVenues = function(place, gplace, callback){
 
     if(!place) return;
@@ -62,6 +77,8 @@ database.storeVenues = function(place, gplace, callback){
     });
 
 }
+
+
 
 database.storeUserConnection=function(original,contact)
 {
@@ -96,6 +113,7 @@ database.storeTweets = function(tweets){
 
                     query = start + "("+connection.escape(tweet.text)+","+connection.escape(user_id)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+","+connection.escape(venue_id)+")"
                     startQuery(query);
+                    database.storeUserVenues(user_id,venue_id);
                 });
             });
         });
@@ -114,14 +132,26 @@ database.storeTweets = function(tweets){
 
                 query = start + "("+connection.escape(tweet.text)+","+connection.escape(user_id)+", "+connection.escape(retweeted)+", "+connection.escape(retweeted_user_id)+","+connection.escape(venue_id)+")"
                 startQuery(query);
+                database.storeUserVenues(user_id,venue_id);
             });
         });
     }
     
 }
 
-/* store relation between user and keywords*/
+/*get id of a particular venue from database*/
+database.getVenueID=function(Venue,callback)
+{
+    connection.query('select id from venues where place_id ="'+Venue+'"',function(err,rows)
+    {
+        if(err)
+            console.log(err)
 
+        if(callback) callback(rows);
+
+    } )
+}
+/*get id of a particular user from databse given the twitterID*/
 database.getUserID= function (user, callback)
 {
     connection.query('select id from users where twitter_id = "'+user+'"',function(err, rows)
@@ -133,6 +163,7 @@ database.getUserID= function (user, callback)
        } );    
            
 }
+/* store relation between user and keywords*/
 database.storeUserKeyword= function(keyword,user,frequncy)
 {
 
@@ -174,31 +205,56 @@ database.getUsernames = function(usr,callback)
   database.userByVenues = function(venue,callback)
     {
         var screen_name=[];
+        
         console.log("m here");
-    var query= 'select user_id from user_venues join venues on (user_venues.venue_id = venues.venue_id)where name = "'+venue+'"';
-    console.log(query);
+        
+    database.getVenueID(venue,function(data)
+    {
+        var venue_id=data[0];
+        
+        var query= 'select user_id from user_venues join venues on (user_venues.venue_id = venues.id)where name = "'+venue+'"'
+    
+   
     connection.query('select user_id from user_venues join venues on (user_venues.venue_id = venues.id)where name = "'+venue+'"',function(err, rows)
     {
         if (err)
             console.log(err)
         screen_name=rows;
-        //callback(rows);
-        //console.log(rows);
-    });
-    console.log(screen_name);
-    screen_name.forEach(function(user,callback)
-    {
-        console.log("usr"+user);
-           /* database.getUserID(user,function(user){
-                connection.query('select * from Users where Users.id="'+user.id+'"',function(err, rows)
+        console.log(rows.length);
+         var user_details=[]
+
+      
+       screen_name.forEach(function(user)
+    {   
+        
+                connection.query('select * from Users where Users.id="'+user.user_id+'"',function(err, rows)
                     {
                         if (err)
                             console.log(err)
-                        console.log(rows);
-                     });   
-            });*/
+                        else
+                        {
+                            console.log(rows[0].name);
+                            user_details.push({'name':rows[0].name,'id':rows[0].twitter_id})
+                            
+
+                        }
+                        if (user_details.length==screen_name.length)
+                     {
+
+                        console.log("lenhhjkhjkh"+user_details[0].id);
+                        callback(user_details)
+                     } 
+                        
+                     })
+                       
+        
+    })
+            
     });
-   
+    
+    
+    })
+       
     }
 /* GET venue names from database*/
 database.getVenues = function(venue,callback)
@@ -252,8 +308,10 @@ database.getUserDetails = function(user,callback)
     		user_table=rows;
     	counting()
     });
-
-    connection.query('select venues.name from venues join user_venues on (user_venues.venue_id=venues.id) where user_venues.user_id="'+user+'"',function(err, rows)
+    database.getUserID(user, function(data){
+    var query1='select venues.name from venues join user_venues on (user_venues.venue_id=venues.id) where user_venues.user_id="'+data[0].id+'"'
+    console.log(query1)
+    connection.query('select venues.name from venues join user_venues on (user_venues.venue_id=venues.id) where user_venues.user_id="'+data[0].id+'"',function(err, rows)
     {
     	if (err)
     		console.log(err)
@@ -262,6 +320,7 @@ database.getUserDetails = function(user,callback)
     		venues=rows;
     	counting()
     });
+});
 
      connection.query('select * from user_retweets where user_id="'+user+'"',function(err, rows)
     {

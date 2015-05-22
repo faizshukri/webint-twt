@@ -21,9 +21,10 @@ router.get('/userDetails', function(req, res, next)
 router.get('/getUsers', function(req, res, next)
 {
   
-	database.userByVenues(req.query.Venue,function(venues)
+	database.userByVenues(req.query.venue,function(user_details)
 	{
-  		res.render('databases/user-venue', { path: 'database' });
+    console.log("in routes"+user_details[0].name)
+  		res.render('databases/user-venue', { path: 'database',users:user_details,venue:req.query.venue});
 	});
 });
 
