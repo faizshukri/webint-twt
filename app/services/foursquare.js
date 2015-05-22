@@ -1,3 +1,7 @@
+/**
+*   Foursquare object
+*/
+
 var foursquare = require('node-foursquare');
 var client = foursquare({
   'secrets' : {

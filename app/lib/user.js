@@ -18,10 +18,6 @@ user.getLastFewDaysDate = function(days){
   return y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
 }
 
-user.getInterestingVenues = function(){
-
-}
-
 /**
 *   Get user tweets since last few days
 *   @return Array of tweet object

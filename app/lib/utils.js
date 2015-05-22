@@ -38,6 +38,10 @@ utils.removeDuplicateObjectInArray = function(arr, path){
   });
 }
 
+/**
+*   Remove duplicate value in array
+*   @return New array without duplication
+*/
 utils.removeDuplicateValuesInArray = function(arr){
   var hash = {}, result = [];
   for ( var i = 0, l = arr.length; i < l; ++i ) {

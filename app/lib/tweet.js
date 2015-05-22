@@ -1,10 +1,10 @@
-// yang deal dgn API. 
-
 var twitter = require('../services/twitter');
-
 var tweet = {};
 
-// keyword_string, count, 
+/**
+*   Search keyword tweets
+*   @return Array of tweet object
+*/
 tweet.searchKeywordTweets = function(keyword_string, geocode, count, callback)
 {
 	var options = {q: keyword_string, count: count };
@@ -16,6 +16,10 @@ tweet.searchKeywordTweets = function(keyword_string, geocode, count, callback)
     });
 }
 
+/**
+*   Search retweet
+*   @return Array of tweet object
+*/
 tweet.getRetweetNum = function(id_str, count, callback)
 {
 	twitter.get('statuses/retweets/:id', {id: id_str, count: count}, function(err, data, response)
@@ -24,6 +28,10 @@ tweet.getRetweetNum = function(id_str, count, callback)
 	});
 }
 
+/**
+*   Search geo details base on its id
+*   @return Geo object
+*/
 tweet.getGeoDetails = function(geo_id, callback)
 {
     twitter.get('geo/id/:id', { id: geo_id }, function(err, data, response)
@@ -32,6 +40,5 @@ tweet.getGeoDetails = function(geo_id, callback)
         callback(data);
     });
 }
-// keyword_string, count:count
 
 module.exports = tweet;
