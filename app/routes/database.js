@@ -3,12 +3,17 @@ var express = require('express'),
     database=require('../lib/database');
 var utils   = require('../lib/utils');
 
-/* GET home page. */
+/**
+* GET /database
+*/
 router.get('/', function(req, res, next) 
 {
   res.render('databases/index', { path: 'database' });
 });
-/* GET details of a particular user*/
+
+/**
+* GET /database/userDetails
+*/
 router.get('/userDetails', function(req, res, next) 
 {
 	database.getUserDetails(req.query.username,function(user_details,venues,contacts)
@@ -17,7 +22,10 @@ router.get('/userDetails', function(req, res, next)
 	});
   
 });
-/* GET list of users who vivsited a particular venue*/
+
+/**
+* GET /database/getUsers
+*/
 router.get('/getUsers', function(req, res, next)
 {
   
@@ -28,7 +36,9 @@ router.get('/getUsers', function(req, res, next)
 	});
 });
 
-/* GET list of users from database */
+/**
+* GET /database/usernames
+*/
 router.get('/usernames', function(req, res, next) {
   //console.log(req.query.usernames);
 	database.getUsernames(req.query.usernames,function(users)
@@ -42,7 +52,10 @@ router.get('/usernames', function(req, res, next) {
     });
   
 });
-/* GET list of venues from database */
+
+/**
+* GET /database/venues
+*/
 router.get('/venues', function(req, res, next) {
 	database.getVenues(req.query.venue,function(venues)
 	{
@@ -55,4 +68,5 @@ router.get('/venues', function(req, res, next) {
     });
   
 });
+
 module.exports = router;

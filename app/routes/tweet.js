@@ -4,13 +4,17 @@ var express = require('express'),
 var twitter = require('../services/twitter'),
     tweet   = require('../lib/tweet');
 
-/* GET tweet page. */
-
+/**
+* GET /tweet
+*/
 router.get('/', function(req, res, next) {
 
   res.render('tweets/index', { path: 'tweet'});
 });
 
+/**
+* GET /tweet/discussions
+*/
 router.get('/discussions', function(req, res, next) 
 {
 	var input = req.query;
@@ -32,6 +36,9 @@ router.get('/discussions', function(req, res, next)
 	}
 });	
 
+/**
+* GET /tweet/retweet
+*/
 router.get('/retweet', function(req, res, next) 
 {
 	var params = req.query;
@@ -43,24 +50,11 @@ router.get('/retweet', function(req, res, next)
  	});	
  });
 
-//keyword: params.keyword, tweets: result.statuses 
 
 router.get('search/tweets', function(req, res, next){
 
 });
 
 module.exports = router;
-
-// {q: 'london'},
-// function(err,data,response) {console.log(data)})
-
-/*
-jade punya code;
-  ul
-   each tweet in tweets
-    li= tweet.text
-*/
-
-
 
 

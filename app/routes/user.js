@@ -8,11 +8,17 @@ var db         = require('../services/db'),
     search     = require('../lib/search'),
     utils      = require('../lib/utils');
 
-/* GET user page. */
+
+/**
+* GET /user
+*/
 router.get('/', function(req, res, next) {
   res.render('users/index', { path: 'user'});
 });
 
+/**
+* GET /user/topic-discussed
+*/
 router.get('/topic-discussed', function(req, res, next) {
   var params = req.query
   if(!params.username)
@@ -31,6 +37,9 @@ router.get('/topic-discussed', function(req, res, next) {
   
 });
 
+/**
+* GET /user/profile/{username}
+*/
 router.get('/profile/:username', function(req, res, next) {
 
   var username = req.params.username;
@@ -54,6 +63,9 @@ router.get('/profile/:username', function(req, res, next) {
   
 });
 
+/**
+* GET /user/interesting-venues
+*/
 router.get('/interesting-venues', function(req, res, next) {
   var params = req.query;
 
@@ -62,6 +74,7 @@ router.get('/interesting-venues', function(req, res, next) {
     return;
   }
 
+  // Get user tweets since
   user.getUserTweetSince(params.username, params.days_limit, 300, function(data){
 
     var tweets  = place.filterPlaceName(data.statuses),
@@ -85,11 +98,14 @@ router.get('/interesting-venues', function(req, res, next) {
   });
 });
 
+/**
+* GET /user/venue-visitors
+*/
 router.get('/venue-visitors', function(req, res, next) {
   var params = req.query;
 
+  // If days_limit is 0, we stream it.
   if(params.days_limit == 0){
-
     res.render('users/venue_visitors', { path: 'user', params: params, statuses: [] });
     return;
   }
@@ -97,19 +113,26 @@ router.get('/venue-visitors', function(req, res, next) {
   if(!params.location && ( !params.latitude || !params.longitude ) && !params.days_limit)
     res.redirect('/user');
 
+  // Get visitors for a specific venue
   user.getVenueVisitors(params, 20, function(data){
     var statuses = utils.removeDuplicateObjectInArray(data.statuses, 'user.id');
     res.render('users/venue_visitors', { path: 'user', params: params, statuses: statuses, next_results: require('querystring').escape(data.search_metadata.next_results) });
   });
 });
 
+/**
+* GET /user/nearby-places
+*/
 router.get('/nearby-places', function(req, res, next){
   var params = req.query;
 
+  // Get the nearby venues using coordinates
   search.getNearbyVenues(params.x, params.y, function(data){
     var options = { places: data, coordinates: { x: params.x, y: params.y} };
 
+    // If the url is access by ajax, render just the content
     if(req.xhr) res.render('users/nearby_places', options);
+    // Else render the whole page
     else res.render('users/nearby_places_page', options);
 
   });
