@@ -52,7 +52,9 @@ search.searchUsers = function(username, count, callback){
     callback(users);
   });
 }
-
+/**
+get nearby venues using foursquare and dbpedia
+**/
 search.getNearbyVenues=function(latitude,longitude,callback)
 {
   var endpoint = 'http://dbpedia.org/sparql';
@@ -60,21 +62,23 @@ search.getNearbyVenues=function(latitude,longitude,callback)
   var finalArray = new Array()
   var arr = new Array();
   var foursquare_arr=new Array();
+  /*concatinating venues recieved from foursquare and dbpedia and returning the combined array list*/
 function allVenues(arr)
 {
   count=count+1;
-  //console.log("m in function"+count)
-  //console.log(arr.length)
+  
   finalArray=finalArray.concat(arr)
   if(count==3)
   {
     callback(finalArray);
   }
 }
-//var longitude=-73.983994
-//var latitude=40.721294
+/**
+getting venues from foursquare
+**/
   foursquare.Venues.search(latitude, longitude, null, { limit: 10 }, config.foursquare.access_token, function(error, venues) {
     if (!error) {
+      /*storing venues in an array of objects*/
       venues.venues.forEach(function(venue){
         var Venue_obj = new Object();
         Venue_obj.name        = venue.name
@@ -95,16 +99,19 @@ function allVenues(arr)
       allVenues(foursquare_arr)
     }
   });
+  /**
+  getting venues from dbpedia
+  **/
   var query='PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> SELECT ?subject ?label ?lat ?long ?isPrimaryTopicOf ?description ?address ?photo SAMPLE(?category) as ?category WHERE {?subject geo:lat ?lat.?subject geo:long ?long. ?subject rdfs:label ?label. ?subject foaf:isPrimaryTopicOf ?isPrimaryTopicOf. ?subject dbpedia-owl:abstract ?description. ?subject dbpprop:location ?address. ?subject dbpprop:hasPhotoCollection ?photo. ?subject dcterms:subject ?category. FILTER(xsd:double(?lat) -'+latitude+'<= 0.050).FILTER('+latitude+' - xsd:double(?lat) <= 0.05).FILTER(xsd:double(?long) - '+longitude+' <= 0.05).FILTER('+longitude+' - xsd:double(?long) <= 0.05 && lang(?label) = "en" ).} LIMIT 10'
   var client = new SparqlClient(endpoint);
-//console.log("Query to " + endpoint);
-//console.log("Query: " + query);
+
   client.query(query)
 
   .execute(function(error, results) 
   {  
     for (var indx in results)
     {
+      /*storing venues in an array of objects*/
       for (var idx in results[indx].bindings)
       {
         var venues= new Object();
@@ -121,15 +128,11 @@ function allVenues(arr)
         venues.source = 'wikipedia';
         arr[idx]=venues
       }
-      //console.log(results[indx].bindings[idx].label.value)
-      //console.log(arr.length)
-      //console.log("m here");
-      //console.log("-----------------------------")
-      //console.log("name: "+venues.name+"\n"+"photo:"+venues.photo+"\n"+"url: "+venues.url+"\n"+"description: "+venues.description+"\n"+"address: "+venues.address+"\n"+"category: "+venues.category+"\n"+"link:"+venues.link+"\n \n");
+      
       arr[idx]=venues
       allVenues(arr)
     }
-  //process.stdout.write(util.inspect(arguments, null, 5, true)+"\n");1
+  
 });
 
 }

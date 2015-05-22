@@ -111,12 +111,11 @@ user.getUserTopics= function(params,callback)
         val.forEach(function(value){
             total_freq+=value
             temp=temp+1
-        //console.log(temp)    
+            
         });
+        // adding only those words to the array which are common to all users
         if (temp==users.length)
         {
-            console.log("yey");
-            console.log(temp);
             freq_arr.push({'word':word,'freq':total_freq});
         }
         //freq_arr.push({'word':word,'freq':total_freq});

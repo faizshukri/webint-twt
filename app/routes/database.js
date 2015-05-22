@@ -13,6 +13,7 @@ router.get('/', function(req, res, next)
 
 /**
 * GET /database/userDetails
+GET details of each user
 */
 router.get('/userDetails', function(req, res, next) 
 {
@@ -25,13 +26,13 @@ router.get('/userDetails', function(req, res, next)
 
 /**
 * GET /database/getUsers
+GET users according to the venues they have visited
 */
 router.get('/getUsers', function(req, res, next)
 {
   
 	database.userByVenues(req.query.venue,function(user_details)
 	{
-    console.log("in routes"+user_details[0].name)
   		res.render('databases/user-venue', { path: 'database',users:user_details,venue:req.query.venue});
 	});
 });
@@ -40,8 +41,7 @@ router.get('/getUsers', function(req, res, next)
 * GET /database/usernames
 */
 router.get('/usernames', function(req, res, next) {
-  //console.log(req.query.usernames);
-	database.getUsernames(req.query.usernames,function(users)
+  	database.getUsernames(req.query.usernames,function(users)
 	{
  	  users = utils.pluckselect2( users, ['twitter_id', 'twitter_id'] );
       users = users.map(function(obj){
