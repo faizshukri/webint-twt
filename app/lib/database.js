@@ -225,7 +225,7 @@ database.getUsernames = function(usr,callback)
        screen_name.forEach(function(user)
     {   
         
-                connection.query('select * from Users where Users.id="'+user.user_id+'"',function(err, rows)
+                connection.query('select * from users where users.id="'+user.user_id+'"',function(err, rows)
                     {
                         if (err)
                             console.log(err)
