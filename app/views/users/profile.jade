@@ -1,30 +1,30 @@
 extends ../layouts/main
 
 block content
-  .row
+  .row(typeof='User')
     .col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3
       .well.user_profile
         .row
           .col-xs-4
             .pull-right
-              img(style='width: 100%;', src=author.profile_image_url.replace('_normal', ''))
+              img(style='width: 100%;', src=author.profile_image_url.replace('_normal', ''), property='Image')
           .col-xs-8
-            h3 #{author.name}
+            h3(property='name') #{author.name}
             .row
               .col-xs-6
                 div
                   b Username
-                div @#{author.screen_name}
+                div(property='userID') @#{author.screen_name}
               .col-xs-6
               if author.location
                 div 
                   b From 
-                div #{author.location}
+                div(property='UserVenue') #{author.location}
             br
             if author.description
               div
                 b About me
-              div #{author.description}
+              div(property='description') #{author.description}
   .row
     .col-sm-12.col-md-10.col-md-offset-1
       each status, i in tweets

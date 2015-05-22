@@ -11,23 +11,23 @@ block content
         .row
           each tweet, j in statuses.slice(i, i+2)
             .col-sm-6.col-xs-12
-              .row
+              .row(typeof='User')
                 .col-xs-3
                   .pull-right
                     img(src=tweet.user.profile_image_url.replace('normal', 'bigger'))
                 .col-xs-9.user_status
                   blockquote
-                    h3 
+                    h3(property='name')
                       a(href='/user/profile/'+tweet.user.screen_name) #{tweet.user.name}
-                      span(style='color: gray; font-size: 0.7em;') &nbsp;@#{tweet.user.screen_name} 
+                      span(style='color: gray; font-size: 0.7em;',property='userID') &nbsp;@#{tweet.user.screen_name} 
 
                     p(style='font-size: 0.7em; color: gray; margin-top: -5px;')
-                      i #{tweet.user.description}
+                      i(property='description') #{tweet.user.description}
                         if tweet.user.location
                           if tweet.user.description
                             br
                           | - from 
-                          b #{tweet.user.location}
+                          b(property='UserVenue') #{tweet.user.location}
                     hr
                     p #{tweet.text}
                       footer
