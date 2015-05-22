@@ -9,13 +9,13 @@ block content
 	.row
 		.col-sm-6.col-sm-offset-3
 			.panel.panel-info
-				.panel-heading
+				.panel-heading(typeof='user')
 					center 
-						img.img-circle(src=tweets[0].retweeted_status.user.profile_image_url.replace('normal', 'bigger'))
+						img.img-circle(src=tweets[0].retweeted_status.user.profile_image_url.replace('normal', 'bigger'),property='Image')
 					center
 							b #{tweets[0].retweeted_status.user.name}
 								br
-							a(href='/user/profile/'+tweets[0].retweeted_status.user.screen_name) @#{tweets[0].retweeted_status.user.screen_name}
+							a(href='/user/profile/'+tweets[0].retweeted_status.user.screen_name,property='userID') @#{tweets[0].retweeted_status.user.screen_name}
 
 				.panel-body
 					center #{tweets[0].retweeted_status.text}
