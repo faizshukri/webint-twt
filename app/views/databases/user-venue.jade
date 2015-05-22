@@ -1,6 +1,13 @@
 extends ../layouts/main
 
 block content
+	ol.breadcrumb
+		li
+			a(href='/') Home
+		li
+			a(href='/database') Database
+		li User Venue
+
 	h3 Users who visited #{venue}
 	each user in users
 		.row

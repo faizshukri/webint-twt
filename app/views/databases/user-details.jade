@@ -1,6 +1,13 @@
 extends ../layouts/main
 
 block content
+  ol.breadcrumb
+    li
+      a(href='/') Home
+    li
+      a(href='/database') Database
+    li User Details
+    
   .row
     .col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3
       .well.user_profile
